@@ -1,0 +1,62 @@
+---
+description: JavaScript conventions for Advency Sound System
+globs: **/*.js
+alwaysApply: false
+---
+
+# JavaScript Standards
+
+## Stack
+
+- **ES modules** under `js/` (entry: `js/app.js`). jQuery for DOM/events. **localStorage** for persistence. **Spotify API** for playlist metadata.
+- No bundler — native `type="module"` in `index.html`.
+
+## Module layout
+
+| Path | Responsibility |
+|------|----------------|
+| `js/config.js` | Constants |
+| `js/lib/` | Pure helpers (`normalize-title.js`, `shuffle.js`, `track-utils.js`) |
+| `js/services/` | Spotify API + localStorage persistence |
+| `js/game/` | State, setlist, difficulty, audio, scoring, round flow |
+| `js/ui/` | Leaderboard, stats, favorites |
+| `js/app.js` | Init, event wiring |
+
+## DOM Access
+
+- Query via `.js-*` selectors in jQuery. Toggle UI state through CSS classes (`visible`, `active`, `game_started`), not inline styles.
+
+```javascript
+// ❌ BAD
+$('.panel').css('display', 'block');
+
+// ✅ GOOD
+$('.js-settings').addClass('visible');
+```
+
+## Data & Async
+
+- Persistence goes through `js/services/local-storage.js`. Handle parse/save errors meaningfully.
+- Game constants belong in `js/config.js` or `js/game/state.js`. Name new constants in `SCREAMING_SNAKE_CASE`.
+- Prefer `const` / `let` over `var` in new code.
+
+## HTML Generation
+
+- When building DOM with jQuery, escape user-facing strings.
+- Reuse existing builders in `js/ui/leaderboard.js` as patterns.
+
+## Game Logic
+
+- Difficulty levels 1–5 drive behavior (`gameState.difficultyLevel`). Changes to scoring, audio, or answer validation must respect all five modes.
+- Answers: typed song title validated via `js/lib/normalize-title.js` (normalized exact match).
+- Audio: `#audio_player` (normal) and `#audio_player_hardcore` (glitched). Volume crossfade is intentional — preserve it.
+
+## Scope Discipline
+
+- Shared mutable state lives in `gameState` (`js/game/state.js`). Do not introduce parallel global state.
+- Extract helpers only when logic is duplicated or a function exceeds reasonable complexity.
+
+## Import paths
+
+- Entry file `js/app.js` imports siblings with `./` (e.g. `./config.js`, `./game/state.js`).
+- Subfolder modules import from parent with `../` (e.g. `js/game/state.js` → `../config.js`).

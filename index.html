@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advency Sound System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Yarndings+12&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>  
+    <div id="wrapper" class="js-wrapper">
+        <div class="bar_top js-bar-top">
+            <button class="bar_top__logout js-logout-button" aria-label="Déconnexion" title="Déconnexion">
+                <img class="bar_top__icon" src="assets/logout.svg"  role="decoration"/>
+            </button>
+            <button class="bar_top__back js-quit-game" aria-label="Quitter la partie" title="Quitter la partie">
+                <img class="bar_top__icon" src="assets/arrow-left.svg" role="decoration"/>
+            </button>
+            <button class="bar_top__menu js-close-leaderboard" aria-label="Retour au menu" title="Retour au menu">
+                <img class="bar_top__icon" src="assets/arrow-left.svg" role="decoration"/>
+            </button>
+            <span class="bar_top__title">
+                <span class="text_no_glitch">Advency Sound System</span>
+                <span class="text_glitch">Á̶̱͚̬͓͎̮̔́ḑ̸͎̖̜́v̴͖̙̝̗̝͕͔̘̂̂͂e̸͈̓͂͛͊̋̓ͅn̷̛͙̭̼̈́̇̆c̶̩̠͕͍̒̽͛́̿͜y̵̩̻̟̜̗̳͂͛̈́͜ ̴̡͕̙̹̇̑͒̂̇ͅS̷̳͓̣̭͎̫̟̪͂̓̚͠͝o̶̳̣̪̬̭̳͂̋̋̍̄̚ų̸̛͔͕̩̌̐̈́̓̇̉̕̚n̴̡̦̘͉͙̰̈́̄̑͂̕ḏ̴̏͂̾͋̓̆͘ ̴̘͎͙̦͑͆́̈́͊̇͝S̶͍̻̗̖͍͔̥̬͊̍̈́́y̷͈̱͇͍̓̓̈́̊̄̈́s̷̘̱̱̖̦̬̻͕͂̈́͋t̶̫̜̖̃̓̓͊̏́̑ë̷̼͇̼̹̮̺͋͒͜m̶͈̲̬͕͍͓̮͂̂̈́̌͘</span>
+            </span>
+            <button class="bar_top__leaderboard js-display-leaderboard" aria-label="Afficher les scores" title="Hall of fame">
+                <img class="bar_top__icon" src="assets/trophy.svg"/>
+            </button>
+        </div>
+        <div class="login_panel panel_box visible js-login">
+            <span class="panel_box__title">Connexion</span>
+            <div class="panel_box__box">
+                <label class="login_panel__label panel_label" for="username">Nom d'utilisateur</label>
+                <input type="text" class="login_panel__input panel_input js-username" id="username" autocomplete="username"/>
+                <button class="button_big js-login-button">Se connecter</button>
+            </div>
+        </div>
+        <div class="settings_panel panel_box js-settings">
+            <span class="panel_box__title">
+                <span class="text_no_glitch">Paramètres</span>
+                <span class="text_glitch">P̶̹͆̏̋̂̍̋͠ͅa̵̟̅͋̊̿̔͒̚r̶̬̩̞͇̯̯͋̕a̷̩̫͈̱̓̿͋͆́̎̈́ͅm̶̨̝̭̮̓̂̀̅̓̓̇̏̐è̸̹͇̗̂̕t̴̫̺̫͍͙̘͂̓̓͆̋͑͘͘͝r̶̫̟̿ͅe̵͙͌́͗͒͐̇̄̂̈ş̴̗̬̜̾̋</span>
+            </span>
+            <div class="settings_panel__box panel_box__box">
+                <div class="settings_panel__inner">
+                    <div class="settings_panel__line">
+                        <div class="settings_panel__label_wrapper">
+                            <label class="settings_panel__label panel_label" for="tracksAmount">
+                                <span class="text_no_glitch">Nombre de morceaux par partie</span>
+                                <span class="text_glitch">N̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝o̶̺̭̣̖̿m̵̡̧̭̤͕̯̫͆̽̓͆̕b̵̠͊̾̀̚ȑ̵̞͒ê̴͇̤̳͇͔̹͇̈́̐̊͊͑͘ ̷̨̧͓̲̝͚̭̪̹͊͊̀d̸̖̗̭̲̠͚͐̑͛̀̒̿̋͋̌e̵̬͓̳͎͖̻͍̋̂͌ ̵̧̰̠̖̠͓͇̏̋͗͛͂̕͝m̶̛̛̠̻̯̱͐͛̑͒͛͝o̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝r̵̡̹̼͚̠͓͍͖͒ͅc̴̤͍̪̖̿͊̉̍͛̃̎̿͝ẽ̵̱̯̲̳͕̯̱͂͊͋́̅̌͐̌a̵̬͉̞̳͉̺̳̿̐̊̿ų̵̮̣̖̪͍̭̥̄̾̌̽̃͜x̵̖̒ ̶̨̧̯͔̤͉͝p̵̘̹̭̉ä̵̘͓͕͙̲̫͕̼́͂́͘r̵̢̢̳̰̜̹̠͎͋͗͗̑̀̓̊̃̄ ̵͙̺͓̯̞͑̋̈́ͅp̵͇͙͇̖̖̙̮̥̅̍͐̑̈̂͠͝á̸̤̮͓̜̞̼͊̊̌̅̎r̵͍̠̤̗̖͙͂̌̿͘ͅţ̶̘̗̻̠̩̜͉̜̈́͑͘̚i̷͖̣̋͋͋͋͑͐̿̒͝ȩ̵̜͓̖̦͒</span>
+                            </label>
+                            <span class="settings_panel__description">                            
+                                <span class="text_no_glitch">Valeur par défaut : 40.</span>
+                                <span class="text_glitch">Ṽ̸̻̫̩͍̬̮͙͍̈́͠ä̶̯́̓l̶̗̄̏̍ȇ̷̙̑͗̈́́̔͂ù̷̲͙̠̖͈̉̆̎̎͗͋͐͜r̶̳͑̅̽ ̶̥̬͇̠̫͑̇̓͛́̈́̿̀̚p̴̨̰̰̆͌̍͝a̴̧̹͔͎͕̞͉͊̔͊r̸̨̯̗̝̼̳̣͔̝͒̋̽̌͆̽̈́̅̓ ̷̖̠̓̿̑͂͒d̴̡̳̱̞̪̰̭͖̮̋̾ḙ̴͓͕̺̘̼́̂f̶̤̭͇̰̦̃̊̑̈ą̸̝̲̍̃̈́̃̐̑̈́u̵̡͓̼͙̟͌t̵̗͍̿͘ ̸̢̡̧̗͍̬̖̰̊́ͅ:̶̥̥̏̎͐̈́̽̋̾ ̸̢̦̮̳̥̮͓͖̲̅̏͐̊͒̉̕͠4̸̨̳̻̠̦̱̹̌͐͐̇̆͐͝0̵̝̰̺̱́̃͠͝.̷̛̞̰̹̭̰̈́̓͝</span>
+                            </span>
+                        </div>
+                        <input class="settings_panel__number panel_input text_symbol js-nb-tracks" type="number" id="tracksAmount" min="1" max="1000" value="40"/>
+                    </div>
+                    <div class="settings_panel__line">
+                        <label class="settings_panel__label settings_panel__label--full panel_label">
+                            <span class="text_no_glitch">Niveau de difficulté</span>
+                            <span class="text_glitch">Ń̵̗͖̤̠̲͓̟͉̳i̶̛̩̩͇̳͈̰̊͛̽͝v̶̪̖̬̺̉͌̐̌̈́̾̃̊͘e̷̡̥̮̙̱̹͗͛͊̆̈͝ͅá̴̡̡̛̛̦̱̘̟̠̋̍̑̅̋͠u̶̫͇̱̮̺̙̞͚͋̌̀̊̈́͋͂̚͜͝ ̶̧͇̮̬̠̋͜d̵̨̲̱̪̮̫͑̽͐̒ê̶̪͗̋̂̽͆̌̐́ ̸̻̎͌̿̓͝͠d̷̗̣͍̪̺̹̙̹̈́͂̎ḯ̵̘̹̰͍̚͝f̵̢͔̙̓̒̈́͠͝f̶̨̛̟̪̬͖̣̞̄̽̽̒̕̚̕͝i̵̬̺͙̤̘̖̳̹̇ͅc̸̛̩̈́͑ṳ̵̦͇͕̝̗͎̿̉̆̚͘̕͜͝ͅl̶̘̠͓͍̗̙̀́ṭ̵̛̜͐͛̎̊̂̈é̶͍͇͙͔͈̼̼͔̀͂̽͑́͘͝</span>
+                        </label>
+                        <div class="settings_difficulty__inputs">
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--1 js-input-difficulty" name="difficultyLevel" id="difficultyLevel1" value="1" checked/>
+                            <label class="default_transition" for="difficultyLevel1">
+                                <span class="default_transition">
+                                    <span class="text_no_glitch">Normal</span>
+                                    <span class="text_glitch">N̴͍͖͇̝͎͇̅͜o̵̞̿̂̊͐r̷͈͔̭̝̫̆̔̾̌̔̄͗̍͝m̵͚̬̬̯͍̒̆͐͋̇a̴̛̺̜̙̩̋̀͋̇̕̚̕͝l̴̛͉͖̖͓͙̝͈̿̽͋͐́</span>
+                                </span>
+                            </label>
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2"/>
+                            <label class="default_transition" for="difficultyLevel2">
+                                <span class="default_transition">
+                                    <span class="text_no_glitch">Difficile</span>
+                                    <span class="text_glitch">Ḑ̴̻̍̈́̃̅̔i̷̧̢̡̙̯̯̮̯̥̐̽͗͋̿͌f̵̢̛̻̝̺̳̹̱̹̗͗̑̽͑͑̂̕f̵̦͚̺͖̯́̈́̊̈́̽́̀̀͠i̴̧͖͓̘͖̮͎̜̓́̄́ç̷͕̰̜̓͂i̸̥͉͛̒͗͒̉̔͘l̶̻̺̼̝̘͈̒̃͊͐̂̒͠e̶̟̮̎</span>                                    
+                                </span>
+                            </label>
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--3 js-input-difficulty" name="difficultyLevel" id="difficultyLevel3" value="3"/>
+                            <label class="default_transition" for="difficultyLevel3">
+                                <span class="default_transition">
+                                    <span class="text_no_glitch">Infernal</span>
+                                    <span class="text_glitch">I̸̤̦̣̹͙̋͂̄͆̔̚n̷̦̺̘͖̒͝f̴͖̟̦̙̌͠è̷͚͚̼͔͍̦͇̃̀̇́͝͠r̵̢͔̮̣͎̣͎̠̓̎̇̋͜ň̷͉̹͔͕͔͓̊ã̸̭͙͔̀̑̋̾̋͑̔̈́l̴̢̟͚̥̣̼̻̜͔̈́́̆̎͒̎̍̈́͝</span> 
+                                </span>
+                            </label>
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--4 js-input-difficulty" name="difficultyLevel" id="difficultyLevel4" value="4"/>
+                            <label class="default_transition" for="difficultyLevel4">
+                                <span class="default_transition">
+                                    <span class="text_no_glitch">Extrême</span>
+                                    <span class="text_glitch">E̸̛̛͚̙͖̯̲̒̅̓̐̆̌͝x̵͇͇́́̆̎̎͐̽̕t̷̛̤̮̊͌̽͋͒͝ṟ̶̈́͑̈́̂̀̎ę̵̟͈̳̼̂̓̈́̍̃͛̈́̃͆̚͜m̴̢͈̻̂̔͆̓͛̈̋͝ͅͅe̵͓͎͌͆͋̔͂̓̒͐̍</span> 
+                                </span>
+                            </label>
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--5 js-input-difficulty" name="difficultyLevel" id="difficultyLevel5" value="5"/>
+                            <label class="default_transition" for="difficultyLevel5">
+                                <span class="default_transition">
+                                    <span class="text_no_glitch">Glitched</span>
+                                    <span class="text_glitch">G̵͍̪̾̒̆̀̈́̈́l̶͉͔͆̒͒́̋̋͑̏̐͒̈́͘͘̚ī̴̠̺͎̤͔̜̻̣̮̺͈̍t̴̛͎̬̞̹̫͎͍͈̲̻̱̳̩̪̎̓̓͆́́̍̃̕͝͝͝c̴̠̱̒̓̔̑̋͝h̶̠̥͇̺͈͓̮̱̤̠͚̐̒̇͜͝͝ͅe̴͉͍̗̱̝̤̝͎͈̥͎͇͑͗͆d̸̫̋̓̒̔́ͅ</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="settings_difficulty__row">
+                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-1 visible">
+                                <span class="settings_panel__label  panel_label settings_difficulty__title settings_difficulty__title--1">Normal</span>
+                                <ul class="settings_panel__description settings_difficulty__description">
+                                    <li><span>Les extraits durent <b><u>30 secondes</u></b></span></li>
+                                    <li><span>Les extraits <b><u>sont joués en entier</u></b></span></li>
+                                    <li><span>Les informations des morceaux sont <b><u>affichées</u></b></span></li>
+                                    <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
+                                    <li><span>Multiplicateur de points : <b><u style="color: green">x1</u></b></span></li>
+                                </ul>
+                            </div>
+                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-2">
+                                <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--2">Difficile</span>
+                                <ul class="settings_panel__description settings_difficulty__description">
+                                    <li><span>Les extraits durent <b><u>30 secondes</u></b></span></li>
+                                    <li><span>Les extraits <b><u>sont joués en entier</u></b></span></li>
+                                    <li><span>Les informations des morceaux sont <b><u style="color: #0000FF">cachées</u></b></span></li>
+                                    <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
+                                    <li><span>Multiplicateur de points : <b><u style="color: #0000FF">x2</u></b></span></li>
+                                </ul>
+                            </div>
+                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-3">
+                                <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--3">Infernal</span>
+                                <ul class="settings_panel__description settings_difficulty__description">
+                                    <li><span>Les extraits durent <b><u style="color: #FF0000">5 secondes</u></b></span></li>
+                                    <li><span>La portion jouée de chaque extrait est <b><u style="color: #FF0000">aléatoire</u></b></span></li>
+                                    <li><span>Les informations des morceaux sont <b><u>cachées</u></b></span></li>
+                                    <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
+                                    <li><span>Multiplicateur de points : <b><u style="color: #FF0000">x3</u></b></span></li>
+                                </ul>
+                            </div>
+                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-4">
+                                <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--4">Extrême</span>
+                                <ul class="settings_panel__description settings_difficulty__description">
+                                    <li><span>Les extraits durent <b><u>5 secondes</u></b></span></li>
+                                    <li><span>La portion jouée de chaque extrait est <b><u>aléatoire</u></b></span></li>
+                                    <li><span>Les informations des morceaux sont <b><u>cachées</u></b></span></li>
+                                    <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
+                                    <li><span>Extrait <b><u style="color: #800080">plus court et aléatoire</u></b></span></li>
+                                    <li><span>Multiplicateur de points : <b><u style="color: #800080">x4</u></b></span></li>
+                                </ul>
+                            </div>
+                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-5">
+                                <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--5">G̵͍̪̾̒̆̀̈́̈́l̶͉͔͆̒͒́̋̋͑̏̐͒̈́͘͘̚ī̴̠̺͎̤͔̜̻̣̮̺͈̍t̴̛͎̬̞̹̫͎͍͈̲̻̱̳̩̪̎̓̓͆́́̍̃̕͝͝͝c̴̠̱̒̓̔̑̋͝h̶̠̥͇̺͈͓̮̱̤̠͚̐̒̇͜͝͝ͅe̴͉͍̗̱̝̤̝͎͈̥͎͇͑͗͆d̸̫̋̓̒̔́ͅ</span>
+                                <ul class="settings_panel__description settings_difficulty__description">
+                                    <li><span>L̶̨͊͑̈ȩ̷͍͛̀̌s̴̫̿̆ ̴̱̣̊̔͜e̸̩̕x̴̱̭̆̂t̵̓̌͠ͅr̵̼̖͙̉̾̈́à̴͇̫́̐ï̸̗̉͊t̴̰͇̺͗̔͝s̷̬̍ ̵͙͎̠̿d̸̜͒͗̏u̷͚̭̾͘͜r̵͎̈́͑̀e̸̻͆͆͗n̷̡̙͈̄͝t̴̞̥̃ ̶̮͖̩̄̏<b><u>5̸̝͚̲́ ̶̮͍͛s̶̟̏e̷͓̥̰̓c̶̻̞̻̈ó̵̩̍̈́ǹ̵̥d̴̡̧̝͌͝ȅ̸͍̤̫͑s̸̖͒ </u></b></span></li>
+                                    <li><span>L̵͉̐͐ą̸̩̘͆̐̚ ̶̬̟͑p̵̻͇̯̌̐͠o̷̟͋ṛ̶͉̿t̸͓͌ͅí̶̢̬͔ǒ̶͚͉n̶̻̻͈̋ ̸̬͊̾j̷̩͔̬̒̅͛ȯ̷̰͝ȕ̸̧̜͍̈̀é̵̙͗͆͒e̶̡̚ ̴̪͎̗͑ḓ̵̑̅̂e̷̜̼͆͌͠ ̷̡̹͖̎c̵̞͕̟͊́̈́h̵͓͉̾͆à̵͍̫́q̵͈͔̘̈u̸͌̾͜ḛ̶̦̄͌ ̴̰͒̓e̴̹͠x̶͖̯̒̉̀t̸̰̭̅r̷̡͚̙̽̍̚á̴̘͗ͅi̷̱̦͓̾t̵̛͔͓͉̚ ̶̢̣̳̑͑e̶̠͠s̸̤̝̖̕̕t̵̪̾ <b><u>g̶͕̩̹̀̾̆l̴̲̠̏ȉ̸̭̝t̸͉̰͆̈c̶̨̩̮̿̑h̶͕̺͕̓̊̒é̶̡͕͓͊̔ẻ̴̡̤̹̚</u></b></span></li>
+                                    <li><span>Ĺ̴̥̻͘ĕ̷̡͇̻̒ș̵̝̒ͅ ̵̰̭͚̈́̄i̵͚̖̩̾̈́ň̷̬̝̯̅͠f̶̯̀̈́͝ò̶̫̿͝ȓ̵̘̫m̵͈͉̤̃͗͝ą̸̲̺̌̓͝t̸͙̽i̸̫͔̓ỏ̵̬̹̝͐̒n̸̖͋̃͝s̴͉̙͝͠ ̴̨͕̕d̸̖̠̗̄̑ë̸̞̱̰́ś̷̢̭̟ ̴̬͓̊m̷͓̹̌̑̈́o̷̲̊̕͘r̴̠̺̄̂͜c̴̥̄̋̓ę̵̥͚̐̚a̸̠͋̂ụ̶͎̭̐̎̓ẍ̴̤̬̜́͋ ̶̬̞͕̐̅́s̷̜̥͙͐͛͘ǫ̴̭̫̍ñ̷͔̃̀t̷͉̑͝ <b><u>c̷̺͙̍a̷̒͂͜͠c̵̘̪̒̂͗h̴̢̯͝é̴̛͎̳̠̈ë̸̳͎̭́̈̒s̸̭̯͐̂̊</u></b></span></li>
+                                    <li><span><b><u style="color: #000000">S̵̝̆̾a̷̰̓̂ḭ̸͗ͅs̷̓̂i̸͗e̷̓ ̂d̸͗ũ̷ ̔t̶̹̏i̸̊t̶̏r̸̆ẽ̷</u></b> du morceau</span></li>
+                                    <li><span>Extrait <b><u style="color: #000000">glitché</u></b> et portions aléatoires</span></li>
+                                    <li><span>M̶̗͆u̶̲͂ĺ̶̼͚t̸͇̆i̵͇̦̣̐̀͆p̸͙͈̮͐͘l̵̨̝̭͛̑͘i̴̤̾̅̃c̴͓̣͌́ā̶̭̻͊͝ṭ̶̿̈̋e̶̠̲̹͒u̵͓͍̹̾͛̎ṛ̴̰̟̆͝ ̵̡̉d̵̩͉̈̌̃ę̸͍͐͜ ̸̛͓͈p̵̛̘͜ͅǫ̷͓̓͘ḯ̸̱͂̏n̶̤͙̩͐͗t̸̢͙̼̂̽s̶̩̖̭̉̄ ̵̼͈̭͋̇̕:̷̞̘̔̃̅ <b><u style="color: #000000">x̵̮̗͖̅5̶̲̟̇͂</u></b></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="start_game button_big js-play-track">
+                    <span class="text_no_glitch">Lancer la partie</span>
+                    <span class="text_glitch">Ļ̸͔̺̮̞͉͉̦͓̠͕̜͇̮̏͛̉à̴̢̱͚̝̹̱̐̏̈́͐͋̓̒̽͐̽̕͘͜͜͝n̸͗͊͜c̸̡͉̐̀̉̌͑̐̓̊̃̏̃͛̈́̕e̴̥̼̻̫͔͖̠̿̈͋̐̒̋͊͜ṙ̶̢̧̝̯̹̐ ̴̥͝l̶̰̱̬̬̻̱̦͓̽̒̐̀͆͌͘ą̸͉̺̻͔͓̙͖̟͚͎̤̒̔̒̄́̄͆͐̕ͅ ̵̼̣̥̖̥̺͕̔̿̚̚͘͝p̸̡̢̖̭̹̳̖̦͎̘̩̍̓̏͂̕ͅa̵̜̫̜̠̖̘̳͊͑́͆r̵̨̨̨͚̦̩̣̖͇̲̩͉͚̅̇́̌̊́ṫ̴̡̰̼̓̀̃̿̇͛͐̐̅͑͒͐̎̒ī̶̙͐̂͐̍͂͋̄̿̃̈́̇̊͠e̶̡̨̛͙̟͓̬͚</span>
+                </button>
+            </div>
+        </div>
+        <div class="end_game">
+            <span class="end_game__title">Jeu terminé</span>
+            <div class="end_game__score_wrapper">
+                <span class="end_game__score"><span class="end_game__label">Difficulté</span><span class="end_game__value js-difficulty" data-difficulty="1">Normal</span></span>
+                <span class="end_game__score"><span class="end_game__label">Score</span><span class="end_game__value js-score"></span></span>
+            </div>
+            <span class="end_game__message js-message"></span>
+            <button class="replay_game js-replay-game">Rejouer</button>
+            <button class="back_to_menu js-back-menu">Retour au menu</button>
+        </div>
+        <audio id="audio_player" class="audio_player js-audio-player" src=""></audio>
+        <audio id="audio_player_hardcore" class="audio_player js-audio-player-hardcore" loop="true" src=""></audio>
+        <div class="game_display">            
+            <span class="score_wrapper text_symbol_halfgame js-score-wrapper">
+                <div class="score_wrapper__col">
+                    <div class="score_wrapper__box">
+                        <span class="score_multiplicator default_tooltip__wrapper js-multiplicator-wrapper" data-value="1">
+                            <span class="score_multiplicator__prefix">x</span>
+                            <span class="js-multiplicator">1</span>                        
+                            <span class="default_tooltip default_transition">Le multiplicateur de points</span>
+                        </span>
+                        <span class="score_main default_tooltip__wrapper">
+                            <span class="js-score">0</span>
+                            <span class="default_tooltip default_transition">Le score</span>
+                        </span>
+                    </div>
+                    <span class="score_streak default_tooltip__wrapper js-streak-wrapper">
+                        <span class="js-streak"></span>
+                        <span class="default_tooltip default_transition">Le bonus de chaîne</span>
+                    </span>
+                </div>
+                <button class="track_display__like default_tooltip__wrapper js-like-track js-like-button" data-liked="false">
+                    <span class="track_display__like_legend default_tooltip default_transition" data-liked="true">Retirer des favoris</span>
+                    <span class="track_display__like_legend default_tooltip default_transition" data-liked="false">Ajouter aux favoris</span>
+                </button>
+            </span>
+            <div class="track_display__wrapper text_symbol">
+                <span class="game_top_bar">
+                    <div class="game_top_bar__tracks">
+                        <span class="js-track-number">0</span>/<span class="js-track-total">40</span>
+                    </div>
+                </span>
+                <div class="track_display">
+                    <div class="track_display__half track_display__half--cover js-track-cover">
+                        <img class="track_display__cover js-cover" src=""/>
+                    </div>
+                    <div class="track_display__details track_display__half track_display__half--details">
+                        <div class="track_display__content">
+                            <div class="track_display__name js-name"></div>
+                            <div class="track_display__artist js-artist"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form class="answer_form js-answer-form" autocomplete="off">
+                <input type="text"
+                       class="answer_form__input js-answer-input"
+                       placeholder="Tapez le titre du morceau…"
+                       aria-label="Titre du morceau"
+                       autocomplete="off"
+                       spellcheck="false"
+                       disabled />
+                <button type="submit" class="answer_form__submit button_big js-answer-submit" disabled>
+                    <span class="text_no_glitch">Valider</span>
+                    <span class="text_glitch">V̸͔̏͛̉à̴̐̏l̸̏͛̉ì̴̐d̸̏͛è̴̐ȑ̸͛</span>
+                </button>
+                <p class="answer_form__feedback js-answer-feedback" aria-live="polite"></p>
+            </form>
+            <div class="bar_countdown__wrapper text_symbol">
+                <div class="bar_countdown">
+                    <div class="bar_countdown__inner js-countdown-bar"></div>
+                </div>
+                <span class="track_display__countdown js-countdown"></span>
+            </div>
+        </div>
+        <div class="leaderboard panel_box js-leaderboard">
+            <div class="panel_tabs__tabs js-tabs-wrapper">
+                <button class="panel_box__title panel_tabs__tab active js-tab" rel="leaderboard">Classement</button>
+                <button class="panel_box__title panel_tabs__tab js-tab" rel="stats">Statistiques</button>
+                <button class="panel_box__title panel_tabs__tab js-tab" rel="favorites">Favoris</button>
+                <button class="panel_box__title panel_tabs__tab js-tab" rel="trophies">Trophées</button>
+            </div>
+            <div class="panel_tabs__section js-tab-section active" rel="leaderboard">
+                <div class="panel_box__box js-leaderboard-content"></div>
+            </div>   
+            <div class="statistics panel_tabs__section js-tab-section" rel="stats">
+                <div class="panel_box__box">
+                    <div class="stats_row hide_mobile">                 
+                        <span class="stats_cell stats_cell--first"></span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Normal</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Difficile</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span>
+                    </div>
+                    <div class="stats_row">  
+                        <span class="stats_cell stats_cell--first stats_label">Parties jouées</span>
+                        <div class="stats_row stats_row--mobile hide_desktop">
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Difficile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span>
+                        </div>
+                        <span class="stats_cell stats_value js-games-played" rel="Normal">0</span>
+                        <span class="stats_cell stats_value js-games-played" rel="Difficile">0</span>
+                        <span class="stats_cell stats_value js-games-played" rel="Infernal">0</span>
+                        <span class="stats_cell stats_value js-games-played" rel="Extrême">0</span>
+                        <span class="stats_cell stats_value js-games-played" rel="Glitched">0</span>
+
+                    </div>
+                    <div class="stats_row">  
+                        <span class="stats_cell stats_cell--first stats_label">Réponses correctes</span>
+                        <div class="stats_row stats_row--mobile hide_desktop">
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Difficile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span>
+                        </div>
+                        <span class="stats_cell stats_value js-good-answers" rel="Normal">0</span>
+                        <span class="stats_cell stats_value js-good-answers" rel="Difficile">0</span>
+                        <span class="stats_cell stats_value js-good-answers" rel="Infernal">0</span>
+                        <span class="stats_cell stats_value js-good-answers" rel="Extrême">0</span>
+                        <span class="stats_cell stats_value js-good-answers" rel="Glitched">0</span>
+
+                    </div>
+                    <div class="stats_row">  
+                        <span class="stats_cell stats_cell--first stats_label">Réponses incorrectes</span>
+                        <div class="stats_row stats_row--mobile hide_desktop">
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Difficile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span>
+                        </div>
+                        <span class="stats_cell stats_value js-wrong-answers" rel="Normal">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers" rel="Difficile">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers" rel="Infernal">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers" rel="Extrême">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers" rel="Glitched">0</span>
+                    </div>
+                    <div class="stats_row">  
+                        <span class="stats_cell stats_cell--first stats_label">Meilleurs scores</span>
+                        <div class="stats_row stats_row--mobile hide_desktop">
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Difficile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span>
+                        </div>
+                        <span class="stats_cell stats_value js-best-score" rel="Normal">0</span>
+                        <span class="stats_cell stats_value js-best-score" rel="Difficile">0</span>
+                        <span class="stats_cell stats_value js-best-score" rel="Infernal">0</span>
+                        <span class="stats_cell stats_value js-best-score" rel="Extrême">0</span>
+                        <span class="stats_cell stats_value js-best-score" rel="Glitched">0</span>
+                    </div>
+                </div>
+            </div>         
+            <div class="statistics panel_tabs__section js-tab-section" rel="favorites">
+                <div class="panel_box__box panel_box__box--favorite js-favorites-content"></div>
+            </div> 
+            <div class="statistics panel_tabs__section js-tab-section" rel="trophies">
+                <div class="panel_box__box panel_box__box--trophies js-trophies-content">
+                    <span class="leaderboard__section_title">Hauts faits et basses œuvres<br/>[work in progress]</span>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img class="js-trophy-most-games" src="">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Accro</div>
+                    			<div class="liked_track__artist">A le plus de parties jouées et complétées</div>
+                    		</div>
+                    		<div class="trophy__value"><span class="js-trophy-most-games-value"></span> parties jouées</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img class="js-trophy-less-games" src="">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Fantôme</div>
+                    			<div class="liked_track__artist">A le moins de parties jouées et complétées</div>
+                    		</div>
+                    		<div class="trophy__value"><span class="js-trophy-less-games-value"></span> parties jouées</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img class="js-trophy-precision" src="">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Émérite</div>
+                    			<div class="liked_track__artist">A le meilleur ratio bonnes réponses / mauvaises réponses</div>
+                    		</div>
+                    		<div class="trophy__value"><span class="js-trophy-precision-value"></span><span>%</span> de bonnes réponses</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img class="js-trophy-less-precision" src="">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Godiche</div>
+                    			<div class="liked_track__artist">A le moins bon ratio bonnes réponses / mauvaises réponses</div>
+                    		</div>
+                    		<div class="trophy__value"><span class="js-trophy-less-precision-value"></span><span>%</span> de bonnes réponses</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img class="js-trophy-best-scores" src="">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Sagace</div>
+                    			<div class="liked_track__artist">A le plus grand cumul de meilleurs scores sur toutes les difficultés en mode classique</div>
+                    		</div>
+                    		<div class="trophy__value"><span class="js-trophy-best-scores-value"></span> points cumulés</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img class="js-trophy-worst-scores" src="">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Modique</div>
+                    			<div class="liked_track__artist">A le plus petit cumul de meilleurs scores sur toutes les difficultés en mode classique</div>
+                    		</div>
+                    		<div class="trophy__value"><span class="js-trophy-worst-scores-value"></span> points cumulés</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img class="js-trophy-most-favorites" src="">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Groupie</div>
+                    			<div class="liked_track__artist">A le plus de favoris dans sa liste</div>
+                    		</div>
+                    		<div class="trophy__value"><span class="js-trophy-most-favorites-value"></span> favoris</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img class="js-trophy-less-favorites" src="">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Fine bouche</div>
+                    			<div class="liked_track__artist">A le moins de favoris dans sa liste</div>
+                    		</div>
+                    		<div class="trophy__value"><span class="js-trophy-less-favorites-value"></span> favoris</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img src="assets/avatars/mba.png">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Princesse</div>
+                    			<div class="liked_track__artist">A proposé le plus de morceaux de Taylor Swift</div>
+                    		</div>
+                    		<div class="trophy__value"><span>1</span> morceau de Taylor Swift 👑</div>
+                    	</div>
+                    </div>
+                    <div class="liked_track">
+                    	<div class="trophy__image">
+                    		<img src="assets/avatars/jca.png">
+                    	</div>
+                    	<div class="liked_track__details trophy__details">
+                    		<div class="liked_track__content">
+                    			<div class="liked_track__name">🏆 Sismologue</div>
+                    			<div class="liked_track__artist">A proposé les morceaux les plus décoiffants</div>
+                    		</div>
+                    		<div class="trophy__value"><span>10</span> morceaux qui ont causé l'effondrement de l'immeuble près de chez vous</div>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+---
+description: CSS conventions for Advency Sound System
+globs: **/*.css
+alwaysApply: false
+---
+
+# CSS Standards
+
+## Architecture
+
+- Single stylesheet: `style.css`. Use existing patterns before adding new abstractions.
+- Design tokens live in `:root` (e.g. `--radius`, `--glitchedOpacity`). Extend tokens rather than scattering raw values.
+
+## Naming (BEM + Underscores)
+
+```
+.block_name {}
+.block_name__element {}
+.block_name__element--modifier {}
+```
+
+Examples: `bar_top`, `settings_panel__line`, `list_answers__item--avatar`.
+
+## Responsive
+
+- Mobile breakpoint: `640px`.
+- Utility classes: `hide_desktop`, `hide_mobile` — reuse them instead of duplicating media queries.
+
+## JavaScript Hooks
+
+- **Never style `.js-*` classes.** Style the structural BEM class; keep `js-` for behavior only.
+
+## Transitions & Effects
+
+- Reuse `default_transition` for interactive elements.
+- Glitch mode: `body.glitched`, `body.glitched_halfgame`, `.text_symbol`, `.text_no_glitch` / `.text_glitch`.
+- State visibility: prefer `.visible` / `.hidden` / `.visually_hidden` over `display: none` hacks unless the pattern already exists.
+
+## Quality Bar
+
+```css
+/* ❌ BAD — overrides specificity war */
+.foo { color: red !important; }
+
+/* ✅ GOOD — use existing modifier or add a purposeful one */
+.track_display__name--highlight { color: var(--accent); }
+```
+
+- Prefer flexbox patterns already used in `#wrapper`, `.panel_box`, `.track_display`.
+- Keep `box-sizing: border-box` inherited; do not reset globally without reason.

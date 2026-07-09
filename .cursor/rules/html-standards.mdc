@@ -1,0 +1,37 @@
+---
+description: HTML conventions for Advency Sound System
+globs: **/*.html
+alwaysApply: false
+---
+
+# HTML Standards
+
+## Structure
+
+- Single-page app: `index.html` is the entry point. Keep semantic structure (`button`, `label`, `ul`, `form`).
+- `lang="en"` on `<html>` is set; UI text is French — do not change language attributes without approval.
+
+## Class Naming
+
+- **BEM with underscores**: `block__element`, `block__element--modifier` (e.g. `panel_box__title`, `track_display__half--cover`).
+- **`js-` prefix** for JavaScript hooks only (`js-login-button`, `js-answers`). Never use `js-` classes for styling.
+- **State classes** toggled by JS: `visible`, `active`, `hidden`, `game_started`, `game_ended`, `playing`, `correct`, `incorrect`.
+
+## Accessibility
+
+- Interactive icons must have `aria-label` and `title` (see `bar_top__logout`).
+- Associate labels with inputs via `for` / `id`.
+- Decorative images: `role="decoration"` where appropriate.
+
+## Glitch Text Pattern
+
+Dual spans for glitch effect — keep both versions in sync:
+
+```html
+<span class="text_no_glitch">Paramètres</span>
+<span class="text_glitch">…glitched unicode…</span>
+```
+
+## Scripts
+
+Load order: jQuery → `js/app.js` (`type="module"`). Do not reorder without verifying dependencies.

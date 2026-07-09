@@ -1,0 +1,29 @@
+---
+description: Pre-submit checklist for agent changes on Musica3
+alwaysApply: true
+---
+
+# Code Review Checklist
+
+Before considering a task done, verify:
+
+## Correctness
+- [ ] Change works across difficulty levels 1–5 when game logic is touched
+- [ ] Mobile (≤640px) and desktop layouts still behave correctly
+- [ ] Login, game flow, leaderboard, and favorites paths are unaffected (or intentionally updated)
+
+## Quality
+- [ ] No quick fixes: root cause addressed, not symptoms patched
+- [ ] No unrelated files or drive-by refactors
+- [ ] Existing comments preserved
+- [ ] New code follows BEM + `js-` hook separation
+- [ ] French UI strings unchanged unless the task requires copy changes
+
+## Safety
+- [ ] localStorage read/write errors are handled, not ignored
+- [ ] No secrets or credentials added to committed files
+- [ ] No `!important` or inline-style workarounds without justification
+
+## If Blocked
+
+When a proper fix needs architectural change (e.g. splitting `script.js`, removing jQuery, env-based config), **stop and propose the plan to Pierre** rather than shipping a workaround.
