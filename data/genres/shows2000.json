@@ -4,7 +4,6 @@
     "title": "Fringe",
     "subTitle": "",
     "year": "2008 - 2013",
-    "cover": "assets/covers/A001.jpg",
     "acceptedAnswers": [
       "Fringe"
     ]
@@ -14,7 +13,6 @@
     "title": "Desperate Housewives",
     "subTitle": "",
     "year": "2004 - 2012",
-    "cover": "assets/covers/A002.jpg",
     "acceptedAnswers": [
       "Desperate Housewives"
     ]
@@ -24,7 +22,6 @@
     "title": "House",
     "subTitle": "",
     "year": "2004 - 2012",
-    "cover": "assets/covers/A003.jpg",
     "acceptedAnswers": [
       "House",
       "House MD",
@@ -38,7 +35,6 @@
     "title": "Lost",
     "subTitle": "",
     "year": "2004 - 2010",
-    "cover": "assets/covers/A004.jpg",
     "acceptedAnswers": [
       "Lost",
       "Lost les disparus"
@@ -49,7 +45,6 @@
     "title": "Heroes",
     "subTitle": "",
     "year": "2006 - 2010",
-    "cover": "assets/covers/A005.jpg",
     "acceptedAnswers": [
       "Heroes"
     ]
@@ -59,7 +54,6 @@
     "title": "Six Feet Under",
     "subTitle": "",
     "year": "2001 - 2005",
-    "cover": "assets/covers/A006.jpg",
     "acceptedAnswers": [
       "Six Feet Under",
       "Six pieds sous terre"
@@ -70,7 +64,6 @@
     "title": "The Office (US)",
     "subTitle": "",
     "year": "2005 - 2013",
-    "cover": "assets/covers/A007.jpg",
     "acceptedAnswers": [
       "The Office",
       "The Office US",
@@ -82,7 +75,6 @@
     "title": "Dead Like Me",
     "subTitle": "",
     "year": "2003 - 2004",
-    "cover": "assets/covers/A008.jpg",
     "acceptedAnswers": [
       "Dead Like Me"
     ]
@@ -92,7 +84,6 @@
     "title": "Alias",
     "subTitle": "",
     "year": "2001 - 2006",
-    "cover": "assets/covers/A009.jpg",
     "acceptedAnswers": [
       "Alias"
     ]
@@ -102,7 +93,6 @@
     "title": "How I Met Your Mother",
     "subTitle": "",
     "year": "2005 - 2014",
-    "cover": "assets/covers/A010.jpg",
     "acceptedAnswers": [
       "How I Met Your Mother",
       "HIMYM"
@@ -113,7 +103,6 @@
     "title": "ReGenesis",
     "subTitle": "",
     "year": "2004 - 2008",
-    "cover": "assets/covers/A011.jpg",
     "acceptedAnswers": [
       "ReGenesis"
     ]
@@ -123,7 +112,6 @@
     "title": "Pushing Daisies",
     "subTitle": "",
     "year": "2007 - 2009",
-    "cover": "assets/covers/A012.jpg",
     "acceptedAnswers": [
       "Pushing Daisies"
     ]
@@ -133,7 +121,6 @@
     "title": "Skins (UK)",
     "subTitle": "Générique saison 1",
     "year": "2007 - 2013",
-    "cover": "assets/covers/A013.jpg",
     "acceptedAnswers": [
       "Skins",
       "Skins UK"
@@ -144,7 +131,6 @@
     "title": "Malcolm in the Middle",
     "subTitle": "",
     "year": "2000 - 2006",
-    "cover": "assets/covers/A014.jpg",
     "acceptedAnswers": [
       "Malcolm in the Middle",
       "Malcolm"
@@ -155,7 +141,6 @@
     "title": "Monk",
     "subTitle": "Générique saison 1",
     "year": "2002 - 2009",
-    "cover": "assets/covers/A015.jpg",
     "acceptedAnswers": [
       "Monk"
     ]
@@ -165,7 +150,6 @@
     "title": "Supernatural",
     "subTitle": "",
     "year": "2005 - 2020",
-    "cover": "assets/covers/A016.jpg",
     "acceptedAnswers": [
       "Supernatural"
     ]
@@ -175,7 +159,6 @@
     "title": "Veronica Mars",
     "subTitle": "",
     "year": "2004 - 2007",
-    "cover": "assets/covers/A017.jpg",
     "acceptedAnswers": [
       "Veronica Mars"
     ]
@@ -185,7 +168,6 @@
     "title": "Medium",
     "subTitle": "",
     "year": "2005 - 2011",
-    "cover": "assets/covers/A018.jpg",
     "acceptedAnswers": [
       "Medium"
     ]
@@ -195,7 +177,6 @@
     "title": "Charmed",
     "subTitle": "",
     "year": "1998 - 2006",
-    "cover": "assets/covers/A019.jpg",
     "acceptedAnswers": [
       "Charmed"
     ]
@@ -205,7 +186,6 @@
     "title": "Dollhouse",
     "subTitle": "",
     "year": "2009 - 2010",
-    "cover": "assets/covers/A020.jpg",
     "acceptedAnswers": [
       "Dollhouse"
     ]
@@ -215,7 +195,6 @@
     "title": "Doctor Who",
     "subTitle": "",
     "year": "2005 - 2022",
-    "cover": "assets/covers/A021.jpg",
     "acceptedAnswers": [
       "Doctor Who"
     ]
@@ -225,7 +204,6 @@
     "title": "Dexter",
     "subTitle": "",
     "year": "2006 - 2013",
-    "cover": "assets/covers/A022.jpg",
     "acceptedAnswers": [
       "Dexter"
     ]
@@ -235,7 +213,6 @@
     "title": "The 4400",
     "subTitle": "",
     "year": "2004 - 2007",
-    "cover": "assets/covers/A023.jpg",
     "acceptedAnswers": [
       "The 4400",
       "Les 4400",
@@ -247,7 +224,6 @@
     "title": "Prison Break",
     "subTitle": "",
     "year": "2005 - 2009",
-    "cover": "assets/covers/A024.jpg",
     "acceptedAnswers": [
       "Prison Break"
     ]
@@ -257,7 +233,6 @@
     "title": "The Wire",
     "subTitle": "",
     "year": "2002 - 2008",
-    "cover": "assets/covers/A025.jpg",
     "acceptedAnswers": [
       "The Wire",
       "Wire",
@@ -269,7 +244,6 @@
     "title": "Arrested Development",
     "subTitle": "",
     "year": "2003 - 2006 / 2013 / 2019",
-    "cover": "assets/covers/A026.jpg",
     "acceptedAnswers": [
       "Arrested Development"
     ]
@@ -279,7 +253,6 @@
     "title": "The Sopranos",
     "subTitle": "",
     "year": "1999 - 2007",
-    "cover": "assets/covers/A027.jpg",
     "acceptedAnswers": [
       "The Sopranos",
       "The Soprano",
@@ -293,7 +266,6 @@
     "title": "Scrubs",
     "subTitle": "",
     "year": "2001 - 2010",
-    "cover": "assets/covers/A028.jpg",
     "acceptedAnswers": [
       "Scrubs"
     ]
@@ -303,7 +275,6 @@
     "title": "24",
     "subTitle": "",
     "year": "2001 - 2010 / 2014 / 2017",
-    "cover": "assets/covers/A029.jpg",
     "acceptedAnswers": [
       "24",
       "24 heures chrono",
@@ -315,7 +286,6 @@
     "title": "Mad Men",
     "subTitle": "",
     "year": "2007 - 2015",
-    "cover": "assets/covers/A030.jpg",
     "acceptedAnswers": [
       "Mad Men"
     ]
@@ -325,7 +295,6 @@
     "title": "The Shield",
     "subTitle": "",
     "year": "2002 - 2008",
-    "cover": "assets/covers/A031.jpg",
     "acceptedAnswers": [
       "The Shield",
       "Shield"
@@ -336,7 +305,6 @@
     "title": "Nip/Tuck",
     "subTitle": "",
     "year": "2003 - 2010",
-    "cover": "assets/covers/A032.jpg",
     "acceptedAnswers": [
       "Nip Tuck"
     ]
@@ -346,7 +314,6 @@
     "title": "Rome",
     "subTitle": "",
     "year": "2005 - 2007",
-    "cover": "assets/covers/A033.jpg",
     "acceptedAnswers": [
       "Rome"
     ]
@@ -356,7 +323,6 @@
     "title": "Weeds",
     "subTitle": "",
     "year": "2005 - 2012",
-    "cover": "assets/covers/A034.jpg",
     "acceptedAnswers": [
       "Weeds"
     ]
@@ -366,7 +332,6 @@
     "title": "The Tudors",
     "subTitle": "",
     "year": "2007 - 2010",
-    "cover": "assets/covers/A035.jpg",
     "acceptedAnswers": [
       "The Tudors",
       "Les Tudors",
@@ -378,7 +343,6 @@
     "title": "Breaking Bad",
     "subTitle": "",
     "year": "2008 - 2013",
-    "cover": "assets/covers/A036.jpg",
     "acceptedAnswers": [
       "Breaking Bad"
     ]
@@ -388,7 +352,6 @@
     "title": "Californication",
     "subTitle": "",
     "year": "2007 - 2014",
-    "cover": "assets/covers/A037.jpg",
     "acceptedAnswers": [
       "Californication"
     ]
@@ -398,7 +361,6 @@
     "title": "True Blood",
     "subTitle": "",
     "year": "2008 - 2014",
-    "cover": "assets/covers/A038.jpg",
     "acceptedAnswers": [
       "True Blood"
     ]
@@ -408,7 +370,6 @@
     "title": "Grey's Anatomy",
     "subTitle": "",
     "year": "2005 - En cours",
-    "cover": "assets/covers/A039.jpg",
     "acceptedAnswers": [
       "Greys Anatomy"
     ]
@@ -418,7 +379,6 @@
     "title": "Bones",
     "subTitle": "",
     "year": "2005 - 2017",
-    "cover": "assets/covers/A040.jpg",
     "acceptedAnswers": [
       "Bones"
     ]
@@ -428,7 +388,6 @@
     "title": "Angel",
     "subTitle": "",
     "year": "1999 - 2004",
-    "cover": "assets/covers/A041.jpg",
     "acceptedAnswers": [
       "Angel"
     ]
@@ -438,7 +397,6 @@
     "title": "Smallville",
     "subTitle": "",
     "year": "2001 - 2011",
-    "cover": "assets/covers/A042.jpg",
     "acceptedAnswers": [
       "Smallville"
     ]
@@ -448,7 +406,6 @@
     "title": "CSI: Crime Scene Investigation",
     "subTitle": "",
     "year": "2000 - 2015",
-    "cover": "assets/covers/A043.jpg",
     "acceptedAnswers": [
       "CSI: Crime Scene Investigation",
       "CSI",
@@ -461,7 +418,6 @@
     "title": "NCIS",
     "subTitle": "",
     "year": "2003 - En cours",
-    "cover": "assets/covers/A044.jpg",
     "acceptedAnswers": [
       "NCIS"
     ]
@@ -471,7 +427,6 @@
     "title": "The IT Crowd",
     "subTitle": "",
     "year": "2006 - 2013",
-    "cover": "assets/covers/A045.jpg",
     "acceptedAnswers": [
       "The IT Crowd",
       "IT Crowd"
@@ -482,7 +437,6 @@
     "title": "Gilmore Girls",
     "subTitle": "",
     "year": "2000 - 2007",
-    "cover": "assets/covers/A046.jpg",
     "acceptedAnswers": [
       "Gilmore Girls"
     ]
@@ -492,7 +446,6 @@
     "title": "Everybody Hates Chris",
     "subTitle": "",
     "year": "2005 - 2009",
-    "cover": "assets/covers/A047.jpg",
     "acceptedAnswers": [
       "Everybody Hates Chris",
       "Tout le monde déteste Chris"
@@ -503,7 +456,6 @@
     "title": "Battlestar Galactica",
     "subTitle": "",
     "year": "2003 - 2009",
-    "cover": "assets/covers/A048.jpg",
     "acceptedAnswers": [
       "Battlestar Galactica"
     ]
@@ -513,7 +465,6 @@
     "title": "One Tree Hill",
     "subTitle": "",
     "year": "2003 - 2012",
-    "cover": "assets/covers/A049.jpg",
     "acceptedAnswers": [
       "One Tree Hill"
     ]
@@ -523,7 +474,6 @@
     "title": "Dark Angel",
     "subTitle": "",
     "year": "2000 - 2002",
-    "cover": "assets/covers/A050.jpg",
     "acceptedAnswers": [
       "Dark Angel"
     ]

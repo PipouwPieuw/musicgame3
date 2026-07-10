@@ -42,7 +42,7 @@ export async function filterPlayableTracks(tracks) {
 }
 
 export function getCoverPath(trackId) {
-    return `assets/covers/${trackId}.jpg`;
+    return `assets/covers/${trackId}.png`;
 }
 
 export function getTrackMetadata(tracks, trackId) {
@@ -59,7 +59,7 @@ export function getTrackMetadata(tracks, trackId) {
     return {
         name: track.title,
         subTitle: track.subTitle,
-        image: track.cover || getCoverPath(trackId),
+        image: getCoverPath(trackId),
     };
 }
 
