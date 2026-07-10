@@ -92,7 +92,7 @@ export function buildFavorites($) {
         );
         const favoriteElemContent = $('<div class="track_display__content"></div>');
         favoriteElemContent.append('<div class="track_display__name">' + meta.name + '</div>');
-        favoriteElemContent.append('<div class="track_display__artist">' + meta.subTitle + '</div>');
+        favoriteElemContent.append('<div class="track_display__description">' + meta.subTitle + '</div>');
         favoriteElemDetails.append(favoriteElemContent);
         const favoriteElemLike = $(
             '<button class="track_display__like default_tooltip__wrapper js-like-track" data-liked="true" data-track-id="' +

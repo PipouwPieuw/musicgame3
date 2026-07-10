@@ -73,7 +73,8 @@
     "cover": "assets/covers/A007.jpg",
     "acceptedAnswers": [
       "The Office",
-      "The Office US"
+      "The Office US",
+      "Office"
     ]
   },
   {
@@ -259,6 +260,7 @@
     "cover": "assets/covers/A025.jpg",
     "acceptedAnswers": [
       "The Wire",
+      "Wire",
       "Sur ecoute"
     ]
   },
@@ -325,7 +327,8 @@
     "year": "2002 - 2008",
     "cover": "assets/covers/A031.jpg",
     "acceptedAnswers": [
-      "The Shield"
+      "The Shield",
+      "Shield"
     ]
   },
   {
@@ -366,7 +369,8 @@
     "cover": "assets/covers/A035.jpg",
     "acceptedAnswers": [
       "The Tudors",
-      "Les Tudors"
+      "Les Tudors",
+      "Tudors"
     ]
   },
   {
@@ -448,7 +452,8 @@
     "acceptedAnswers": [
       "CSI: Crime Scene Investigation",
       "CSI",
-      "Les Experts"
+      "Les Experts",
+      "Experts"
     ]
   },
   {
@@ -468,7 +473,8 @@
     "year": "2006 - 2013",
     "cover": "assets/covers/A045.jpg",
     "acceptedAnswers": [
-      "The IT Crowd"
+      "The IT Crowd",
+      "IT Crowd"
     ]
   },
   {
@@ -489,7 +495,7 @@
     "cover": "assets/covers/A047.jpg",
     "acceptedAnswers": [
       "Everybody Hates Chris",
-      "tout le monde déteste Chris"
+      "Tout le monde déteste Chris"
     ]
   },
   {

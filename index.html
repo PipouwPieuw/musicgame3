@@ -105,7 +105,7 @@
                                 <ul class="settings_panel__description settings_difficulty__description">
                                     <li><span>Les extraits durent <b><u>30 secondes</u></b></span></li>
                                     <li><span>Les extraits <b><u>sont joués en entier</u></b></span></li>
-                                    <li><span>Les informations des morceaux sont <b><u>affichées</u></b></span></li>
+                                    <li><span>Les informations des morceaux sont <b><u>révélées après chaque réponse</u></b></span></li>
                                     <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
                                     <li><span>Multiplicateur de points : <b><u style="color: green">x1</u></b></span></li>
                                 </ul>
@@ -205,12 +205,12 @@
                 </span>
                 <div class="track_display">
                     <div class="track_display__half track_display__half--cover js-track-cover">
-                        <img class="track_display__cover js-cover" src=""/>
+                        <img class="track_display__cover js-cover" src="assets/images/default.png" alt=""/>
                     </div>
                     <div class="track_display__details track_display__half track_display__half--details">
                         <div class="track_display__content">
                             <div class="track_display__name js-name"></div>
-                            <div class="track_display__artist js-artist"></div>
+                            <div class="track_display__description js-description"></div>
                         </div>
                     </div>
                 </div>
@@ -223,10 +223,6 @@
                        autocomplete="off"
                        spellcheck="false"
                        disabled />
-                <button type="submit" class="answer_form__submit button_big js-answer-submit" disabled>
-                    <span class="text_no_glitch">Valider</span>
-                    <span class="text_glitch">V̸͔̏͛̉à̴̐̏l̸̏͛̉ì̴̐d̸̏͛è̴̐ȑ̸͛</span>
-                </button>
                 <p class="answer_form__feedback js-answer-feedback" aria-live="polite"></p>
             </form>
             <div class="bar_countdown__wrapper text_symbol">
@@ -333,7 +329,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Accro</div>
-                    			<div class="liked_track__artist">A le plus de parties jouées et complétées</div>
+                    			<div class="liked_track__description">A le plus de parties jouées et complétées</div>
                     		</div>
                     		<div class="trophy__value"><span class="js-trophy-most-games-value"></span> parties jouées</div>
                     	</div>
@@ -345,7 +341,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Fantôme</div>
-                    			<div class="liked_track__artist">A le moins de parties jouées et complétées</div>
+                    			<div class="liked_track__description">A le moins de parties jouées et complétées</div>
                     		</div>
                     		<div class="trophy__value"><span class="js-trophy-less-games-value"></span> parties jouées</div>
                     	</div>
@@ -357,7 +353,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Émérite</div>
-                    			<div class="liked_track__artist">A le meilleur ratio bonnes réponses / mauvaises réponses</div>
+                    			<div class="liked_track__description">A le meilleur ratio bonnes réponses / mauvaises réponses</div>
                     		</div>
                     		<div class="trophy__value"><span class="js-trophy-precision-value"></span><span>%</span> de bonnes réponses</div>
                     	</div>
@@ -369,7 +365,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Godiche</div>
-                    			<div class="liked_track__artist">A le moins bon ratio bonnes réponses / mauvaises réponses</div>
+                    			<div class="liked_track__description">A le moins bon ratio bonnes réponses / mauvaises réponses</div>
                     		</div>
                     		<div class="trophy__value"><span class="js-trophy-less-precision-value"></span><span>%</span> de bonnes réponses</div>
                     	</div>
@@ -381,7 +377,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Sagace</div>
-                    			<div class="liked_track__artist">A le plus grand cumul de meilleurs scores sur toutes les difficultés en mode classique</div>
+                    			<div class="liked_track__description">A le plus grand cumul de meilleurs scores sur toutes les difficultés en mode classique</div>
                     		</div>
                     		<div class="trophy__value"><span class="js-trophy-best-scores-value"></span> points cumulés</div>
                     	</div>
@@ -393,7 +389,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Modique</div>
-                    			<div class="liked_track__artist">A le plus petit cumul de meilleurs scores sur toutes les difficultés en mode classique</div>
+                    			<div class="liked_track__description">A le plus petit cumul de meilleurs scores sur toutes les difficultés en mode classique</div>
                     		</div>
                     		<div class="trophy__value"><span class="js-trophy-worst-scores-value"></span> points cumulés</div>
                     	</div>
@@ -405,7 +401,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Groupie</div>
-                    			<div class="liked_track__artist">A le plus de favoris dans sa liste</div>
+                    			<div class="liked_track__description">A le plus de favoris dans sa liste</div>
                     		</div>
                     		<div class="trophy__value"><span class="js-trophy-most-favorites-value"></span> favoris</div>
                     	</div>
@@ -417,7 +413,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Fine bouche</div>
-                    			<div class="liked_track__artist">A le moins de favoris dans sa liste</div>
+                    			<div class="liked_track__description">A le moins de favoris dans sa liste</div>
                     		</div>
                     		<div class="trophy__value"><span class="js-trophy-less-favorites-value"></span> favoris</div>
                     	</div>
@@ -429,7 +425,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Princesse</div>
-                    			<div class="liked_track__artist">A proposé le plus de morceaux de Taylor Swift</div>
+                    			<div class="liked_track__description">A proposé le plus de morceaux de Taylor Swift</div>
                     		</div>
                     		<div class="trophy__value"><span>1</span> morceau de Taylor Swift 👑</div>
                     	</div>
@@ -441,7 +437,7 @@
                     	<div class="liked_track__details trophy__details">
                     		<div class="liked_track__content">
                     			<div class="liked_track__name">🏆 Sismologue</div>
-                    			<div class="liked_track__artist">A proposé les morceaux les plus décoiffants</div>
+                    			<div class="liked_track__description">A proposé les morceaux les plus décoiffants</div>
                     		</div>
                     		<div class="trophy__value"><span>10</span> morceaux qui ont causé l'effondrement de l'immeuble près de chez vous</div>
                     	</div>

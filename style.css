@@ -570,12 +570,12 @@ body.no_glitch .text_glitch {
 	    text-overflow: ellipsis;
 	}
 }
-.track_display__artist {
+.track_display__description {
 	font-size: 16px;
 	color: darkgray;
 }
 @media only screen and (max-width: 640px) {	
-	.track_display__artist {
+	.track_display__description {
 /*		font-size: 12px;*/
 		white-space: nowrap;
 		overflow: hidden;
@@ -603,8 +603,7 @@ body.no_glitch .text_glitch {
 	gap: 10px;
 	pointer-events: none;
 }
-.answer_form:not(.answer_form--playing) .answer_form__input,
-.answer_form:not(.answer_form--playing) .answer_form__submit {
+.answer_form:not(.answer_form--playing) .answer_form__input {
 	pointer-events: none;
 }
 .answer_form__input {
@@ -623,9 +622,6 @@ body.no_glitch .text_glitch {
 }
 .answer_form__input:disabled {
 	opacity: 0.7;
-}
-.answer_form__submit {
-	pointer-events: all;
 }
 .answer_form__feedback {
 	margin: 0;
@@ -653,18 +649,6 @@ body.no_glitch .text_glitch {
 	.answer_form__input {
 		font-size: 20px;
 		height: 60px;
-	}
-	.answer_form__submit {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		width: 100%;
-		z-index: 1;
-		border-radius: 0;
-	}
-	#wrapper.game_started {
-		padding-bottom: 75px;
 	}
 }
 
@@ -1564,7 +1548,7 @@ body.no_glitch .text_glitch {
 	font-weight: 700;
 	margin-bottom: 5px;
 }
-.liked_track__artist {
+.liked_track__description {
 	font-size: 12px;
 	color: darkgray;
 }

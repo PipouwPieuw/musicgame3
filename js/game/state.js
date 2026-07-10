@@ -15,8 +15,8 @@ export const gameState = {
     setListLength: 0,
     tracksByGame: DEFAULTTRACKSBYGAME,
     difficultyLevel: 1,
-    displayTrackInfos: true,
     trackStart: 0,
+    roundStartTime: 0,
     pointsMultiplier: 1,
     streak: 0,
     streakBonus: 0,
@@ -57,6 +57,7 @@ export function resetGameState() {
     gameState.setListLength = 0;
     gameState.playedTracks = 0;
     gameState.isPlaying = false;
+    gameState.roundStartTime = 0;
 }
 
 export function computeScoreIncrement() {

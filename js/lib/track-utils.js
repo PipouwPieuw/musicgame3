@@ -8,6 +8,39 @@ export function getPreviewPath(trackId) {
     return `assets/previews/${trackId}.m4a`;
 }
 
+async function previewExists(trackId) {
+    const path = getPreviewPath(trackId);
+
+    try {
+        let response = await fetch(path, { method: 'HEAD' });
+
+        if (response.ok) {
+            return true;
+        }
+
+        if (response.status === 405 || response.status === 501) {
+            response = await fetch(path, { method: 'GET', headers: { Range: 'bytes=0-0' } });
+        }
+
+        return response.ok;
+    } catch (error) {
+        return false;
+    }
+}
+
+export async function filterPlayableTracks(tracks) {
+    const playableChecks = await Promise.all(
+        tracks.map(async function (track) {
+            const hasPreview = await previewExists(track.id);
+            return hasPreview ? track : null;
+        })
+    );
+
+    return playableChecks.filter(function (track) {
+        return track !== null;
+    });
+}
+
 export function getCoverPath(trackId) {
     return `assets/covers/${trackId}.jpg`;
 }

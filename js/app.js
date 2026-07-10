@@ -1,12 +1,19 @@
 import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES, DEVMODE } from './config.js';
 import { setupAudioListeners } from './game/audio-player.js';
 import { applyDifficulty, updateDifficultyUI } from './game/difficulty.js';
-import { handleTimeout, initAnswerForm, playRound, setNextRoundCallback, setRoundJquery } from './game/round.js';
+import {
+    cancelNextRoundSchedule,
+    handleTimeout,
+    initAnswerForm,
+    playRound,
+    setNextRoundCallback,
+    setRoundJquery,
+} from './game/round.js';
 import { buildSetlist } from './game/setlist.js';
 import { getAudioElements, resetStreak, updateScoreUI } from './game/scoring.js';
 import { gameState, resetGameState, getDifficultyName } from './game/state.js';
 import { loadTracks } from './services/tracks-loader.js';
-import { getPreviewPath, migrateLikedTracksToIds } from './lib/track-utils.js';
+import { filterPlayableTracks, getPreviewPath, migrateLikedTracksToIds } from './lib/track-utils.js';
 import {
     clearStoredUsername,
     getAllScores,
@@ -125,14 +132,36 @@ function startGame() {
     playRound($);
 }
 
+function syncTracksByGameToCatalog() {
+    const availableTracks = gameState.tracks.length;
+
+    if (availableTracks === 0) {
+        return;
+    }
+
+    if (gameState.tracksByGame > availableTracks) {
+        gameState.tracksByGame = availableTracks;
+    }
+
+    $('.js-nb-tracks').attr('max', availableTracks).val(gameState.tracksByGame);
+}
+
 async function loadPlaylist() {
     try {
         gameState.tracks = await loadTracks();
+        gameState.tracks = await filterPlayableTracks(gameState.tracks);
     } catch (error) {
         console.error(error);
         alert(error.message || 'Impossible de charger le catalogue de morceaux.');
         return;
     }
+
+    if (gameState.tracks.length === 0) {
+        alert('Aucun morceau jouable trouvé. Vérifiez que les fichiers audio sont présents dans assets/previews/.');
+        return;
+    }
+
+    syncTracksByGameToCatalog();
 
     if (DEVMODE) {
         gameState.tracks.forEach(function (track) {
@@ -189,12 +218,14 @@ function bindEvents() {
     });
 
     $('.js-back-menu').on('click', function () {
+        cancelNextRoundSchedule();
         quitGame();
         $('.js-wrapper').removeClass('game_started');
         $('.js-settings').addClass('visible');
     });
 
     $('.js-quit-game').on('click', function () {
+        cancelNextRoundSchedule();
         gameState.isPlaying = false;
         const { audioPlayer, audioPlayerHardcore } = getAudioElements($);
         audioPlayer.pause();
@@ -205,9 +236,15 @@ function bindEvents() {
     });
 
     $('.js-nb-tracks').on('keyup mouseup', function () {
-        if (+$(this).val() < +$(this).attr('min')) {
-            $(this).val($(this).attr('min'));
+        const min = +$(this).attr('min');
+        const max = Math.min(+$(this).attr('max'), gameState.tracks.length || +$(this).attr('max'));
+
+        if (+$(this).val() < min) {
+            $(this).val(min);
+        } else if (+$(this).val() > max) {
+            $(this).val(max);
         }
+
         gameState.tracksByGame = +$(this).val();
     });
 

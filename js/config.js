@@ -1,3 +1,5 @@
+export const DEFAULT_COVER_PATH = 'assets/images/default.png';
+
 export const DEVMODE = false;
 export const SHUFFLE = true;
 

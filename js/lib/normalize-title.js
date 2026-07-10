@@ -8,20 +8,44 @@ const TITLE_SUFFIX_PATTERNS = [
     /\s*-\s*acoustic(\s+version)?$/i,
 ];
 
+const MODIFIED_LETTER_MAP = {
+    æ: 'ae',
+    œ: 'oe',
+    ø: 'o',
+    ł: 'l',
+    đ: 'd',
+    þ: 'th',
+    ð: 'd',
+};
+
+export function sanitizeAnswer(str) {
+    if (!str || typeof str !== 'string') {
+        return '';
+    }
+
+    let sanitized = str
+        .toLowerCase()
+        .normalize('NFKD')
+        .replace(/\p{M}/gu, '')
+        .replace(/ß/g, 'ss');
+
+    for (const [letter, replacement] of Object.entries(MODIFIED_LETTER_MAP)) {
+        sanitized = sanitized.replaceAll(letter, replacement);
+    }
+
+    return sanitized.replace(/[^a-z0-9]/g, '');
+}
+
 export function normalizeTitle(str) {
     if (!str || typeof str !== 'string') {
         return '';
     }
 
-    return str
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/\p{M}/gu, '')
+    const stripped = str
         .replace(/\(.*?\)|\[.*?\]/g, '')
-        .replace(/\b(feat\.?|ft\.?|featuring)\b.*/gi, '')
-        .replace(/[^a-z0-9\s]/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
+        .replace(/\b(feat\.?|ft\.?|featuring)\b.*/gi, '');
+
+    return sanitizeAnswer(stripped);
 }
 
 function buildTitleCandidates(trackTitle) {

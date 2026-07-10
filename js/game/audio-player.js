@@ -3,26 +3,78 @@ import { shuffleArray } from '../lib/shuffle.js';
 import { gameState } from './state.js';
 import { setPlaybackRate } from './scoring.js';
 
-export function startAudioCountdown($, audioPlayer) {
+let onRoundTimeout = null;
+
+function getPlayableDuration(audioPlayer) {
+    return Number.isFinite(audioPlayer.duration) ? audioPlayer.duration : Infinity;
+}
+
+function pickTrackStart(audioPlayer) {
+    const duration = getPlayableDuration(audioPlayer);
+    const maxStart = Math.min(24, Math.max(0, Math.floor(duration) - 1));
+
+    if (maxStart <= 0) {
+        return 0;
+    }
+
+    return Math.floor(Math.random() * maxStart + 1);
+}
+
+function pickHardcoreStart(audioPlayer) {
+    const duration = getPlayableDuration(audioPlayer);
+    const maxStart = Number.isFinite(duration) ? Math.max(0, Math.floor(duration) - 1) : 29;
+
+    return Math.floor(Math.random() * Math.min(29, maxStart + 1));
+}
+
+export function getRoundDuration() {
+    return gameState.difficultyLevel <= 2
+        ? DEFAULTTRACKDURATION
+        : HARDCOREMODETRACKDURATION;
+}
+
+function getElapsedSeconds() {
+    if (!gameState.roundStartTime) {
+        return 0;
+    }
+
+    return (performance.now() - gameState.roundStartTime) / 1000;
+}
+
+function getRemainingTime() {
+    return Math.max(0, getRoundDuration() - getElapsedSeconds());
+}
+
+function isRoundTimeUp() {
+    return gameState.isPlaying && getElapsedSeconds() >= getRoundDuration() - 0.05;
+}
+
+function whenMetadataReady(audioPlayer, callback) {
+    if (audioPlayer.readyState >= HTMLMediaElement.HAVE_METADATA) {
+        callback();
+        return;
+    }
+
+    audioPlayer.addEventListener('loadedmetadata', callback, { once: true });
+}
+
+export function startAudioCountdown($) {
     function audioCountdown() {
-        const timer =
-            gameState.difficultyLevel <= 2
-                ? DEFAULTTRACKDURATION - Math.floor(audioPlayer.currentTime)
-                : gameState.trackStart + HARDCOREMODETRACKDURATION - Math.floor(audioPlayer.currentTime);
+        const remaining = getRemainingTime();
+        const timer = Math.ceil(remaining);
 
         if (timer <= 0) {
+            if (gameState.isPlaying && onRoundTimeout) {
+                onRoundTimeout();
+            }
             return;
         }
 
         $('.js-countdown').text(timer);
 
         if (gameState.isPlaying) {
-            const currentDuration = gameState.difficultyLevel <= 2 ? DEFAULTTRACKDURATION : HARDCOREMODETRACKDURATION;
-            const currentCountdown =
-                gameState.difficultyLevel <= 2
-                    ? DEFAULTTRACKDURATION - audioPlayer.currentTime
-                    : gameState.trackStart + HARDCOREMODETRACKDURATION - audioPlayer.currentTime;
-            const countdownPercentage = (currentCountdown / currentDuration) * 100;
+            const totalDuration = getRoundDuration();
+            const countdownPercentage = totalDuration > 0 ? (remaining / totalDuration) * 100 : 0;
             $('.js-countdown-bar').css('width', countdownPercentage + '%');
             window.requestAnimationFrame(audioCountdown);
         }
@@ -32,12 +84,10 @@ export function startAudioCountdown($, audioPlayer) {
 }
 
 export function setupAudioListeners($, { audioPlayer, audioPlayerHardcore, jsAudioPlayer, jsAudioPlayerHardcore }, onTimeout) {
-    jsAudioPlayer.off('timeupdate').on('timeupdate', function () {
-        const clipEnded =
-            (gameState.difficultyLevel >= 3 && audioPlayer.currentTime >= gameState.trackStart + HARDCOREMODETRACKDURATION) ||
-            (gameState.difficultyLevel <= 2 && audioPlayer.currentTime >= audioPlayer.duration);
+    onRoundTimeout = onTimeout;
 
-        if (clipEnded) {
+    jsAudioPlayer.off('timeupdate').on('timeupdate', function () {
+        if (isRoundTimeUp()) {
             onTimeout();
             return;
         }
@@ -57,7 +107,7 @@ export function setupAudioListeners($, { audioPlayer, audioPlayerHardcore, jsAud
                         gameState.playedTracks - 1 >= gameState.tracksByGame / 2
                             ? shuffleArray(gameState.segmentDurations2)
                             : shuffleArray(gameState.segmentDurations1);
-                    gameState.currentAudioTime = Math.floor(Math.random() * 29);
+                    gameState.currentAudioTime = pickHardcoreStart(audioPlayerHardcore);
                     audioPlayerHardcore.playbackRate = setPlaybackRate();
                     audioPlayerHardcore.currentTime = gameState.currentAudioTime;
                 } else {
@@ -67,11 +117,24 @@ export function setupAudioListeners($, { audioPlayer, audioPlayerHardcore, jsAud
         }
     });
 
+    jsAudioPlayer.off('ended').on('ended', function () {
+        if (!gameState.isPlaying || isRoundTimeUp()) {
+            return;
+        }
+
+        audioPlayer.currentTime = gameState.difficultyLevel >= 3 ? gameState.trackStart : 0;
+        audioPlayer.play();
+    });
+
     jsAudioPlayerHardcore.off('timeupdate').on('timeupdate', function () {
         if (gameState.isPlaying && audioPlayerHardcore.currentTime < 1) {
             gameState.currentAudioTime = 0;
         }
     });
+}
+
+export function resetRoundTimer() {
+    gameState.roundStartTime = 0;
 }
 
 export function pauseAudio($) {
@@ -88,12 +151,9 @@ export function stopAudioForRoundEnd($) {
 }
 
 export function getCountdownPercentage($, audioPlayer) {
-    const currentDuration = gameState.difficultyLevel <= 2 ? DEFAULTTRACKDURATION : HARDCOREMODETRACKDURATION;
-    const currentCountdown =
-        gameState.difficultyLevel <= 2
-            ? DEFAULTTRACKDURATION - audioPlayer.currentTime
-            : gameState.trackStart + HARDCOREMODETRACKDURATION - audioPlayer.currentTime;
-    return (currentCountdown / currentDuration) * 100;
+    const totalDuration = getRoundDuration();
+    const remaining = getRemainingTime();
+    return totalDuration > 0 ? (remaining / totalDuration) * 100 : 0;
 }
 
 function getAudioFromDom($) {
@@ -103,36 +163,51 @@ function getAudioFromDom($) {
     };
 }
 
-export function prepareRoundAudio($, previewPath) {
-    const { audioPlayer, audioPlayerHardcore, jsAudioPlayer, jsAudioPlayerHardcore } = {
-        audioPlayer: document.getElementById('audio_player'),
-        audioPlayerHardcore: document.getElementById('audio_player_hardcore'),
-        jsAudioPlayer: $('.js-audio-player'),
-        jsAudioPlayerHardcore: $('.js-audio-player-hardcore'),
-    };
-
-    jsAudioPlayer.attr('src', previewPath);
-    jsAudioPlayerHardcore.attr('src', previewPath);
+function beginRoundPlayback($, audioPlayer, audioPlayerHardcore) {
+    if (!gameState.isPlaying) {
+        return;
+    }
 
     if (gameState.difficultyLevel >= 5) {
-        gameState.currentAudioTime = Math.floor(Math.random() * 29);
+        gameState.currentAudioTime = pickHardcoreStart(audioPlayer);
         audioPlayerHardcore.currentTime = gameState.currentAudioTime;
         audioPlayerHardcore.playbackRate = setPlaybackRate();
     }
 
     if (gameState.difficultyLevel >= 3) {
-        gameState.trackStart = Math.floor(Math.random() * 24 + 1);
+        gameState.trackStart = pickTrackStart(audioPlayer);
         audioPlayer.currentTime = gameState.trackStart;
+    } else {
+        gameState.trackStart = 0;
+        audioPlayer.currentTime = 0;
     }
 
-    $('.js-countdown').text(gameState.difficultyLevel <= 2 ? DEFAULTTRACKDURATION : HARDCOREMODETRACKDURATION);
+    gameState.roundStartTime = performance.now();
+    $('.js-countdown').text(Math.ceil(getRoundDuration()));
 
     audioPlayer.play();
     if (gameState.difficultyLevel >= 5) {
         audioPlayerHardcore.play();
     }
 
-    startAudioCountdown($, audioPlayer);
+    startAudioCountdown($);
+}
+
+export function prepareRoundAudio($, previewPath) {
+    const audioPlayer = document.getElementById('audio_player');
+    const audioPlayerHardcore = document.getElementById('audio_player_hardcore');
+    const jsAudioPlayer = $('.js-audio-player');
+    const jsAudioPlayerHardcore = $('.js-audio-player-hardcore');
+
+    audioPlayer.loop = false;
+
+    jsAudioPlayer.attr('src', previewPath);
+    jsAudioPlayerHardcore.attr('src', previewPath);
+    audioPlayer.load();
+
+    whenMetadataReady(audioPlayer, function () {
+        beginRoundPlayback($, audioPlayer, audioPlayerHardcore);
+    });
 
     return { audioPlayer, audioPlayerHardcore };
 }
