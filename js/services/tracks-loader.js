@@ -1,5 +1,10 @@
-const TRACKS_URL = 'data/tracks.json';
 export const DEFAULT_GENRE = 'shows2000';
+const GENRE_FILES = {
+    shows2000: 'data/genres/shows2000.json',
+    shows2010: 'data/genres/shows2010.json',
+    shows1990: 'data/genres/shows1990.json',
+    cartoons: 'data/genres/cartoons.json',
+};
 
 let cachedCatalog = null;
 
@@ -29,42 +34,52 @@ function validateTrack(track, index, genreId) {
     if (typeof track.id !== 'string' || !track.id.trim()) {
         throw new Error(`Invalid track at ${context}: "id" must be a non-empty string`);
     }
+
+    if (!Array.isArray(track.acceptedAnswers) || track.acceptedAnswers.length === 0) {
+        throw new Error(`Invalid track at ${context}: "acceptedAnswers" must be a non-empty array`);
+    }
+
+    track.acceptedAnswers.forEach(function (answer, answerIndex) {
+        if (typeof answer !== 'string' || !answer.trim()) {
+            throw new Error(
+                `Invalid track at ${context}: "acceptedAnswers[${answerIndex}]" must be a non-empty string`
+            );
+        }
+    });
 }
 
-function parseGenreCatalog(data) {
-    if (!Array.isArray(data.tracks) || data.tracks.length === 0) {
-        throw new Error('Le catalogue de morceaux doit contenir un tableau "tracks" non vide.');
+async function fetchGenreTracks(genreId, genreUrl) {
+    let response;
+
+    try {
+        response = await fetch(genreUrl);
+    } catch (error) {
+        throw new Error(`Impossible de charger le genre "${genreId}". Vérifiez que le serveur local est démarré.`, {
+            cause: error,
+        });
     }
 
-    const catalog = {};
+    if (!response.ok) {
+        throw new Error(`Impossible de charger le genre "${genreId}" (${response.status}).`);
+    }
 
-    data.tracks.forEach(function (entry, entryIndex) {
-        if (!entry || typeof entry !== 'object') {
-            throw new Error(`Invalid genre group at index ${entryIndex}: expected an object`);
-        }
+    let tracks;
 
-        Object.entries(entry).forEach(function ([genreId, tracks]) {
-            if (catalog[genreId]) {
-                throw new Error(`Genre dupliqué dans le catalogue : "${genreId}".`);
-            }
+    try {
+        tracks = await response.json();
+    } catch (error) {
+        throw new Error(`Le fichier du genre "${genreId}" est invalide (JSON mal formé).`, { cause: error });
+    }
 
-            if (!Array.isArray(tracks) || tracks.length === 0) {
-                throw new Error(`Le genre "${genreId}" doit contenir un tableau de morceaux non vide.`);
-            }
+    if (!Array.isArray(tracks) || tracks.length === 0) {
+        throw new Error(`Le genre "${genreId}" doit contenir un tableau de morceaux non vide.`);
+    }
 
-            tracks.forEach(function (track, trackIndex) {
-                validateTrack(track, trackIndex, genreId);
-            });
-
-            catalog[genreId] = tracks;
-        });
+    tracks.forEach(function (track, trackIndex) {
+        validateTrack(track, trackIndex, genreId);
     });
 
-    if (Object.keys(catalog).length === 0) {
-        throw new Error('Le catalogue de morceaux ne contient aucun genre.');
-    }
-
-    return catalog;
+    return tracks;
 }
 
 async function fetchCatalog() {
@@ -72,29 +87,25 @@ async function fetchCatalog() {
         return cachedCatalog;
     }
 
-    let response;
+    const catalog = {};
+    const genreEntries = Object.entries(GENRE_FILES);
 
-    try {
-        response = await fetch(TRACKS_URL);
-    } catch (error) {
-        throw new Error('Impossible de charger le catalogue de morceaux. Vérifiez que le serveur local est démarré.', {
-            cause: error,
-        });
+    if (genreEntries.length === 0) {
+        throw new Error('Le catalogue de morceaux ne contient aucun genre.');
     }
 
-    if (!response.ok) {
-        throw new Error(`Impossible de charger le catalogue de morceaux (${response.status}).`);
-    }
+    const tracksByGenre = await Promise.all(
+        genreEntries.map(async function ([genreId, genreUrl]) {
+            const tracks = await fetchGenreTracks(genreId, genreUrl);
+            return [genreId, tracks];
+        })
+    );
 
-    let data;
+    tracksByGenre.forEach(function ([genreId, tracks]) {
+        catalog[genreId] = tracks;
+    });
 
-    try {
-        data = await response.json();
-    } catch (error) {
-        throw new Error('Le fichier de morceaux est invalide (JSON mal formé).', { cause: error });
-    }
-
-    cachedCatalog = parseGenreCatalog(data);
+    cachedCatalog = catalog;
 
     return cachedCatalog;
 }

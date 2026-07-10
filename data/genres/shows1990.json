@@ -1,0 +1,47 @@
+[
+  {
+    "id": "C001",
+    "title": "Friends",
+    "subTitle": "",
+    "year": "1994 - 2004",
+    "cover": "assets/covers/C001.jpg",
+    "acceptedAnswers": [
+      "Friends"
+    ]
+  },
+  {
+    "id": "C002",
+    "title": "The X-Files",
+    "subTitle": "",
+    "year": "1993 - 2002 / 2016 - 2018",
+    "cover": "assets/covers/C002.jpg",
+    "acceptedAnswers": [
+      "The XFiles",
+      "XFiles",
+      "Au frontière du réel",
+      "Xfiles aux frontières du réel"
+    ]
+  },
+  {
+    "id": "C003",
+    "title": "Are You Afraid of the Dark?",
+    "subTitle": "",
+    "year": "1992 - 2000",
+    "cover": "assets/covers/C003.jpg",
+    "acceptedAnswers": [
+      "Are You Afraid of the Dark",
+      "Fais moi peur"
+    ]
+  },
+  {
+    "id": "C004",
+    "title": "Goosebumps",
+    "subTitle": "",
+    "year": "19995 - 1998",
+    "cover": "assets/covers/C004.jpg",
+    "acceptedAnswers": [
+      "Goosebumps",
+      "Chair de poule"
+    ]
+  }
+]

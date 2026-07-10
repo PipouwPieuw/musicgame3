@@ -1,0 +1,14 @@
+[
+  {
+    "id": "D001",
+    "title": "Rick and Morty",
+    "subTitle": "",
+    "year": "2013 - En cours",
+    "cover": "assets/covers/D001.jpg",
+    "acceptedAnswers": [
+      "Rick and Morty",
+      "Rick et Morty",
+      "Rick Morty"
+    ]
+  }
+]

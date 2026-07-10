@@ -39,10 +39,17 @@ function buildTitleCandidates(trackTitle) {
 
 export function isTitleCorrect(input, track) {
     const normalizedInput = normalizeTitle(input);
-    if (!normalizedInput) {
+    if (!normalizedInput || !Array.isArray(track.acceptedAnswers)) {
         return false;
     }
 
-    const candidates = buildTitleCandidates(track.title);
-    return candidates.some((title) => normalizeTitle(title) === normalizedInput);
+    const candidates = new Set();
+
+    track.acceptedAnswers.forEach(function (answer) {
+        buildTitleCandidates(answer).forEach(function (candidate) {
+            candidates.add(candidate);
+        });
+    });
+
+    return [...candidates].some((answer) => normalizeTitle(answer) === normalizedInput);
 }
