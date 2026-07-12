@@ -58,6 +58,7 @@ export function applyCorrectAnswer($) {
     $('.js-streak').text(gameState.streakBonus > 0 ? gameState.streakBonus : '');
     updateScoreUI($, POINTSBYANSWER * gameState.pointsMultiplier);
     recordGoodAnswer();
+    animateCorrectAnswer($);
 }
 
 export function applyWrongAnswer($) {
@@ -121,4 +122,29 @@ export function getAudioElements($) {
         jsAudioPlayer: $('.js-audio-player'),
         jsAudioPlayerHardcore: $('.js-audio-player-hardcore'),
     };
+}
+
+function animateCorrectAnswer($) {
+    $('.js-answer-reveal').addClass('toggled');
+    setTimeout(function () {
+        $('.js-answer-reveal-image').addClass('visible');
+    }, 10);
+    setTimeout(function () {
+        // $('.js-answer-reveal-star').addClass('active');
+        $('.js-answer-reveal-text-wrapper').addClass('appear');
+    }, 150);
+    setTimeout(function () {
+        $('.js-answer-reveal-image').addClass('shine');
+    }, 500);
+    setTimeout(function () {
+        $('.js-answer-reveal-image').removeClass('shine');
+    }, 1000);
+    setTimeout(function () {
+         $('.js-answer-reveal-text-wrapper').removeClass('appear');
+         $('.js-answer-reveal-image').removeClass('visible');
+     }, 1500);
+    setTimeout(function () {
+        // $('.js-answer-reveal-star').removeClass('active');
+         $('.js-answer-reveal').removeClass('toggled');
+    }, 1600);
 }

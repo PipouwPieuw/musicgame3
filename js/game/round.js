@@ -62,33 +62,37 @@ export function cancelNextRoundSchedule() {
 }
 
 function showGuessingPhaseUI($) {
-    $('.js-cover').attr('src', DEFAULT_COVER_PATH);
-    $('.js-name').text(MYSTERY_TITLE);
-    $('.js-description').text('');
+    // $('.js-cover').attr('src', DEFAULT_COVER_PATH);
+    // $('.js-name').text(MYSTERY_TITLE);
+    // $('.js-description').text('');
 }
 
 function setCoverImage($, imagePath) {
-    const $cover = $('.js-cover');
+    // const $cover = $('.js-cover');
+    const $coverReveal = $('.js-answer-reveal-image img');
     const probe = new Image();
 
     probe.onload = function () {
-        $cover.attr('src', imagePath);
+        // $cover.attr('src', imagePath);
+        $coverReveal.attr('src', imagePath);
     };
     probe.onerror = function () {
-        $cover.attr('src', DEFAULT_COVER_PATH);
+        // $cover.attr('src', DEFAULT_COVER_PATH);
+        $coverReveal.attr('src', DEFAULT_COVER_PATH);
     };
     probe.src = imagePath;
 }
 
 function revealTrackMetadata($, trackId) {
     const meta = getTrackMetadata(gameState.tracks, trackId);
-    $('.js-name').text(meta.name);
-    $('.js-description').text(meta.subTitle?.trim() ? meta.subTitle : '');
+    // $('.js-name').text(meta.name);
+    $('.js-answer-reveal-text').text(meta.name);
+    // $('.js-description').text(meta.subTitle?.trim() ? meta.subTitle : '');
 
     if (meta.image) {
         setCoverImage($, meta.image);
     } else {
-        $('.js-cover').attr('src', DEFAULT_COVER_PATH);
+        // $('.js-cover').attr('src', DEFAULT_COVER_PATH);
     }
 }
 
