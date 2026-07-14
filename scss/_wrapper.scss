@@ -37,7 +37,7 @@
 #wrapper.game_started .start_game,
 #wrapper.game_ended .start_game,
 #wrapper:not(.game_ended) .end_game,
-.visually_hidden,
+.visually_hidden.visually_hidden,
 body.glitched:not(.no_glitch) .text_no_glitch,
 body:not(.glitched) .text_glitch,
 body.no_glitch .text_glitch {

@@ -21,10 +21,6 @@
 	background: white;
 	box-sizing: border-box;
 	pointer-events: all;
-
-	&.hidden {
-		display: none;
-	}
 }
 .answer_form__input:disabled {
 	opacity: 0.7;

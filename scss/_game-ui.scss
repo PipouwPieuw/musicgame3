@@ -1,21 +1,22 @@
-.bar_countdown__wrapper {
-/*	padding: 5px 0;*/
-	display: flex;
-	align-items: center;
-	gap: 20px;
-}
 .bar_countdown {
 	height: 16px;
 	background: #EAE8E8;
 	border-radius: 5px;
 	overflow: hidden;
 	flex: 1;
-}
-.bar_countdown__inner {
-	height: 16px;
-	background: black;
-	border-radius: 5px;
-	width: 100%;
+	
+	&__wrapper {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+	}
+	
+	&__inner {
+		height: 16px;
+		background: black;
+		border-radius: 5px;
+		width: 100%;
+	}
 }
 
 .game_top_bar {
@@ -25,10 +26,11 @@
 	height: 45px;
 	color: white;
 	background: black;
-	border-radius: var(--radius) var(--radius) 0 0;
-}
-.game_top_bar__tracks {
-	font-size: 16px;
-	font-weight: 700;
-	padding: 0 15px;
+	border-radius: var(--radius);
+	
+	&__tracks {
+		font-size: 16px;
+		font-weight: 700;
+		padding: 0 15px;
+	}
 }

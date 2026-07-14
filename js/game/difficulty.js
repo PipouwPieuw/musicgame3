@@ -8,12 +8,12 @@ export function applyDifficulty(level) {
 
     const audioPlayer = document.getElementById('audio_player');
     const audioPlayerHardcore = document.getElementById('audio_player_hardcore');
-    const answerInput = document.getElementById('answer_input');
+    const answerForm = document.getElementById('answer_form');
 
     audioPlayer.volume = difficultyLevel < 5 ? 1 : 0;
     audioPlayerHardcore.volume = difficultyLevel < 5 ? 0 : 1;
 
-    answerInput.classList.toggle('hidden', difficultyLevel > 1);
+    answerForm.classList.toggle('visually_hidden', difficultyLevel > 1);
 
     document.body.classList.toggle('glitched', difficultyLevel === 5);
 

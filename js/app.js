@@ -158,7 +158,7 @@ async function loadPlaylist() {
     }
 
     if (gameState.tracks.length === 0) {
-        alert('Aucun morceau jouable trouvé. Vérifiez que les fichiers audio sont présents dans assets/previews/.');
+        alert('Aucun morceau jouable trouvé. Vérifiez que les fichiers audio sont présents dans assets/audio/.');
         return;
     }
 

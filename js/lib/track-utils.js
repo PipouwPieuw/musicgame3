@@ -5,7 +5,7 @@ export function findTrackById(tracks, trackId) {
 }
 
 export function getPreviewPath(trackId) {
-    return `assets/previews/${trackId}.m4a`;
+    return `assets/audio/${trackId}.ogg`;
 }
 
 async function previewExists(trackId) {
