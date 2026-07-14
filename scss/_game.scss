@@ -33,6 +33,8 @@
 @media only screen and (max-width: 640px) {
 	.game_display {
 		padding-top: 20px;
+		padding-bottom: 0;
+		gap: 20px;
 	}
 	.track_display {
 		flex-wrap: wrap;

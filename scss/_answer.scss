@@ -62,7 +62,7 @@
 	gap: 10px;
 
 	@media only screen and (max-width: 640px) {
-		height: calc(100vh - 245px);
+		height: calc(100vh - 215px);
 	}
 }
 .list_answers:not(.playing) {
@@ -143,6 +143,7 @@
 
 	.list_answers:has(.list_answers__item--avatar) {
 		gap: 5px;
+		justify-content: center;
 	}
 
 	.list_answers__item--avatar {
@@ -150,6 +151,7 @@
 		// flex: 0 0 calc((100% - 15px) / 4);
 		flex: 0 0 calc((100% - 5px) / 2);
 		max-height: calc((100% - 15px) / 4);
+		max-width: 200px;
 	}
 }
 .list_answers__img {
