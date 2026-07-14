@@ -5,7 +5,7 @@ export const SHUFFLE = true;
 
 export const DIFFICULTYNAMES = ['Normal', 'Difficile', 'Infernal', 'Extrême', 'Glitched'];
 export const MINSTREAK = 3;
-export const DEFAULTTRACKSBYGAME = 40;
+export const DEFAULTTRACKSBYGAME = 20;
 export const DEFAULTTRACKDURATION = 30;
 export const HARDCOREMODETRACKDURATION = 5;
 export const POINTSBYANSWER = 1;

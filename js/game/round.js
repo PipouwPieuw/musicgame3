@@ -12,7 +12,7 @@ import { applyCorrectAnswer, applyWrongAnswer, playCorrectSound, resetCountdownB
 import { gameState } from './state.js';
 
 const WRONG_ANSWER_FLASH_MS = 400;
-const ROUND_END_DISPLAY_MS = 3000;
+const ROUND_END_DISPLAY_MS = 2050;
 const MYSTERY_TITLE = 'Morceau mystère';
 
 let nextRoundCallback = null;
@@ -36,7 +36,7 @@ function resetAnswerForm($) {
     const $form = $('.js-answer-form');
     $form.removeClass('answer_form--correct answer_form--incorrect answer_form--playing');
     $('.js-answer-input').val('').prop('readonly', false).prop('disabled', true);
-    $('.js-answer-feedback').text('');
+    // $('.js-answer-feedback').text('');
 }
 
 function enableAnswerForm($) {
@@ -97,11 +97,11 @@ function revealTrackMetadata($, trackId) {
 }
 
 function revealAnswer($, trackId) {
-    const meta = getTrackMetadata(gameState.tracks, trackId);
-    const feedbackText = meta.subTitle?.trim()
-        ? 'Réponse : ' + meta.name + ' — ' + meta.subTitle
-        : 'Réponse : ' + meta.name;
-    $('.js-answer-feedback').text(feedbackText);
+    // const meta = getTrackMetadata(gameState.tracks, trackId);
+    // const feedbackText = meta.subTitle?.trim()
+    //     ? 'Réponse : ' + meta.name + ' — ' + meta.subTitle
+    //     : 'Réponse : ' + meta.name;
+    // $('.js-answer-feedback').text(feedbackText);
     revealTrackMetadata($, trackId);
 }
 
@@ -245,10 +245,10 @@ export function initAnswerForm($) {
     $('.js-answer-form').on('submit', function (event) {
         event.preventDefault();
 
-        if (isAwaitingNextRound) {
-            advanceToNextRound();
-            return;
-        }
+        // if (isAwaitingNextRound) {
+        //     advanceToNextRound();
+        //     return;
+        // }
 
         submitAnswer($);
     });

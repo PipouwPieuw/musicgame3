@@ -141,10 +141,12 @@ function animateCorrectAnswer($) {
     }, 1000);
     setTimeout(function () {
          $('.js-answer-reveal-text-wrapper').removeClass('appear');
-         $('.js-answer-reveal-image').removeClass('visible');
      }, 1500);
+    setTimeout(function () {
+         $('.js-answer-reveal-image').removeClass('visible');
+     }, 1700);
     setTimeout(function () {
         // $('.js-answer-reveal-star').removeClass('active');
          $('.js-answer-reveal').removeClass('toggled');
-    }, 1600);
+    }, 1800);
 }
