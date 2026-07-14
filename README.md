@@ -2,7 +2,7 @@
 
 A French-language, browser-based **blind test** for a closed group of players. Tracks come from shared Spotify playlists; the core question is **“Quel est le titre de ce morceau ?”** — players type the song title while an excerpt plays.
 
-Built as a single-page application with no build step: `index.html`, `style.css`, ES modules under `js/`, plus static assets.
+Built as a single-page application: `index.html`, compiled `style.css`, ES modules under `js/`, plus static assets. Styles are authored in `scss/` and compiled to minified `style.css`.
 
 ---
 
@@ -40,6 +40,7 @@ Built as a single-page application with no build step: `index.html`, `style.css`
 
 ```
 Browser SPA (index.html + style.css + js/)
+    ├── scss/                 → source styles (compiled to style.css)
     ├── Spotify Web API     → playlist metadata
     ├── localStorage          → profiles, scores, stats (per browser)
     └── Local assets        → previews, avatars, sound effects
@@ -70,7 +71,7 @@ Script load order:
 
 | Layer | Technology |
 |-------|------------|
-| UI | HTML5, CSS (BEM + `_` separators), responsive at **640px** |
+| UI | HTML5, SCSS → minified CSS (BEM + `_` separators), responsive at **640px** |
 | Behavior | ES modules + jQuery (`js/`) |
 | Persistence | Browser localStorage |
 | Music metadata | Spotify Web API (two fixed playlists, `market=FR`) |
@@ -320,7 +321,17 @@ Without previews, avatars, and sound files, the game cannot run fully in a fresh
 1. Serve the project root with any static file server (e.g. Live Server, `npx serve`, or similar).
 2. Spotify client credentials must be valid for playlist metadata fetch on load.
 
-No install step, database, or build command is required.
+### CSS changes
+
+Styles live in `scss/`. After editing SCSS files, compile to the app stylesheet:
+
+```bash
+npm install          # first time only
+npm run build:css    # compile scss/main.scss → minified style.css
+npm run watch:css    # recompile on save (optional)
+```
+
+The committed `style.css` is the compiled output — rebuild before committing style changes.
 
 ---
 
@@ -332,7 +343,7 @@ No install step, database, or build command is required.
 - **Unused logic** — `minScore` is calculated but the end-game message (`.js-message`) is never populated.
 - **`updateStatsBestScore`** — `bestScores` object omits **Glitched**; Glitched best score may show as 0 in stats.
 - **Spotify vs local audio** — API fetches metadata; playback uses local files indexed by track position (playlist order matters).
-- **No build tooling** — no TypeScript, bundler, or tests in repo.
+- **No JS build tooling** — no TypeScript, bundler, or tests in repo (CSS uses Sass compile only).
 - **Trophies tab** — partially static, partially computed; explicitly WIP.
 
 ---

@@ -1,0 +1,11 @@
+{
+  "name": "advency-sound-system",
+  "private": true,
+  "scripts": {
+    "build": "sass scss/main.scss style.css --style=compressed --no-source-map",
+    "watch": "sass scss/main.scss style.css --style=compressed --no-source-map --watch"
+  },
+  "devDependencies": {
+    "sass": "1.69.7"
+  }
+}

@@ -8,14 +8,27 @@ export function applyDifficulty(level) {
 
     const audioPlayer = document.getElementById('audio_player');
     const audioPlayerHardcore = document.getElementById('audio_player_hardcore');
+    const answerInput = document.getElementById('answer_input');
 
     audioPlayer.volume = difficultyLevel < 5 ? 1 : 0;
     audioPlayerHardcore.volume = difficultyLevel < 5 ? 0 : 1;
+
+    answerInput.classList.toggle('hidden', difficultyLevel > 1);
 
     document.body.classList.toggle('glitched', difficultyLevel === 5);
 
     if (difficultyLevel >= 5) {
         gameState.currentSegmentDurations = [...SEGMENT_DURATIONS_1];
+    }
+}
+
+export function updateAnswerModeUI($) {
+    if (gameState.difficultyLevel === 2) {
+        $('.js-answer-form').addClass('visually_hidden');
+        $('.js-answers').removeClass('visually_hidden');
+    } else {
+        $('.js-answer-form').removeClass('visually_hidden');
+        $('.js-answers').addClass('visually_hidden');
     }
 }
 
@@ -29,4 +42,5 @@ export function updateDifficultyUI($, difficultyName) {
     $('.js-track-cover').removeClass('hidden');
 
     $('.js-like-button').toggleClass('visually_hidden', gameState.difficultyLevel > 2);
+    updateAnswerModeUI($);
 }

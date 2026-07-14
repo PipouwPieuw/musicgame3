@@ -1,6 +1,6 @@
 ---
 description: CSS conventions for Advency Sound System
-globs: **/*.css
+globs: **/*.{css,scss}
 alwaysApply: false
 ---
 
@@ -8,8 +8,9 @@ alwaysApply: false
 
 ## Architecture
 
-- Single stylesheet: `style.css`. Use existing patterns before adding new abstractions.
-- Design tokens live in `:root` (e.g. `--radius`, `--glitchedOpacity`). Extend tokens rather than scattering raw values.
+- **Source:** SCSS partials in `scss/` (one file per component area). Entry point: `scss/main.scss`.
+- **Output:** Compiled, minified `style.css` at the project root (used by `index.html`). Do not edit `style.css` by hand — change SCSS and run `npm run build:css`.
+- Design tokens live in `scss/_variables.scss` (`:root`, e.g. `--radius`, `--glitchedOpacity`). Extend tokens rather than scattering raw values.
 
 ## Naming (BEM + Underscores)
 

@@ -1,10 +1,11 @@
 import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES, DEVMODE } from './config.js';
 import { setupAudioListeners } from './game/audio-player.js';
-import { applyDifficulty, updateDifficultyUI } from './game/difficulty.js';
+import { applyDifficulty, updateAnswerModeUI, updateDifficultyUI } from './game/difficulty.js';
 import {
     cancelNextRoundSchedule,
     handleTimeout,
     initAnswerForm,
+    initImageAnswers,
     playRound,
     setNextRoundCallback,
     setRoundJquery,
@@ -331,6 +332,7 @@ function init() {
     setRoundJquery($);
     setNextRoundCallback(endGame);
     initAnswerForm($);
+    initImageAnswers($);
 
     const audioElements = getAudioElements($);
     setupAudioListeners($, audioElements, function () {
@@ -340,6 +342,7 @@ function init() {
     updateScoreUI($);
     gameState.tracksByGame = DEFAULTTRACKSBYGAME;
     applyDifficulty(1);
+    updateAnswerModeUI($);
     loadPlaylist();
     bindEvents();
 }

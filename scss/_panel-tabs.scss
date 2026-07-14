@@ -1,0 +1,30 @@
+.panel_tabs__tabs {
+	display: flex;
+	width: fit-content;
+	border-radius: var(--radius) var(--radius) 0 0;
+	overflow: hidden;
+}
+.panel_tabs__tab {
+	border-radius: 0;
+	border: 0;
+}
+.panel_tabs__tab:not(:first-child) {
+	border-left: 1px solid black;
+}
+.panel_tabs__tab:not(:last-child) {
+	border-right: 1px solid black;
+}
+.panel_tabs__tab:not(.active):not(:hover) {
+	background: darkgray;
+}
+
+@media only screen and (max-width: 640px) {	
+	.panel_tabs__tab {
+		flex: 1;
+		font-size: 14px;
+		padding: 0 10px;
+	}
+}
+.panel_tabs__section:not(.active) {
+	display: none;
+}

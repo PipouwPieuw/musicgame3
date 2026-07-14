@@ -1,5 +1,7 @@
 import {
+    DEFAULTTRACKDURATION,
     DEFAULTTRACKSBYGAME,
+    DIFFICILETRACKDURATION,
     DIFFICULTYNAMES,
     HARDCOREMODETRACKDURATION,
     MODIFIER_RATES,
@@ -24,6 +26,7 @@ export const gameState = {
     score: 0,
     playedTracks: 0,
     currentTrackId: null,
+    roundChoices: [],
     currentAudioTime: 0,
     currentSegmentDurations: [],
     playerData: {},
@@ -41,8 +44,18 @@ export function isHardcoreAudio() {
     return gameState.difficultyLevel >= 3;
 }
 
+export function isImageAnswerMode() {
+    return gameState.difficultyLevel === 2;
+}
+
 export function getClipDuration() {
-    return isHardcoreAudio() ? HARDCOREMODETRACKDURATION : 30;
+    if (gameState.difficultyLevel === 1) {
+        return DEFAULTTRACKDURATION;
+    }
+    if (gameState.difficultyLevel === 2) {
+        return DIFFICILETRACKDURATION;
+    }
+    return HARDCOREMODETRACKDURATION;
 }
 
 export function resetRoundState() {

@@ -8,11 +8,20 @@ import {
     resetRoundTimer,
     stopAudioForRoundEnd,
 } from './audio-player.js';
+import {
+    buildImageChoices,
+    disableImageAnswers,
+    enableImageAnswers,
+    getImageAnswerButton,
+    renderImageChoices,
+    resetImageAnswers,
+} from './image-answers.js';
 import { applyCorrectAnswer, applyWrongAnswer, playCorrectSound, resetCountdownBar, updateTrackNumberUI } from './scoring.js';
-import { gameState } from './state.js';
+import { gameState, isImageAnswerMode } from './state.js';
 
 const WRONG_ANSWER_FLASH_MS = 400;
 const ROUND_END_DISPLAY_MS = 2050;
+const TIMEOUT_NEXT_ROUND_DELAY = 800;
 const MYSTERY_TITLE = 'Morceau mystère';
 
 let nextRoundCallback = null;
@@ -37,6 +46,7 @@ function resetAnswerForm($) {
     $form.removeClass('answer_form--correct answer_form--incorrect answer_form--playing');
     $('.js-answer-input').val('').prop('readonly', false).prop('disabled', true);
     // $('.js-answer-feedback').text('');
+    resetImageAnswers($);
 }
 
 function enableAnswerForm($) {
@@ -46,6 +56,11 @@ function enableAnswerForm($) {
 }
 
 function enableNextRoundInput($) {
+    if (isImageAnswerMode()) {
+        disableImageAnswers($);
+        return;
+    }
+
     $('.js-answer-input').val('').prop('readonly', true).prop('disabled', false).focus();
 }
 
@@ -124,13 +139,17 @@ function finishRound($, audioPlayer) {
     resetRoundTimer();
     pauseAudio($);
 
-    const $form = $('.js-answer-form');
-    $form.removeClass('answer_form--playing');
+    if (isImageAnswerMode()) {
+        disableImageAnswers($);
+    } else {
+        const $form = $('.js-answer-form');
+        $form.removeClass('answer_form--playing');
+        $form.addClass('answer_form--correct');
+    }
 
     const countdownPercentage = getCountdownPercentage($, audioPlayer);
     resetCountdownBar($, countdownPercentage + '%');
 
-    $form.addClass('answer_form--correct');
     playCorrectSound();
     applyCorrectAnswer($);
 
@@ -138,6 +157,27 @@ function finishRound($, audioPlayer) {
 
     revealTrackMetadata($, gameState.currentTrackId);
     scheduleNextRound();
+}
+
+function finishImageRoundWrong($, answerIndex) {
+    gameState.isPlaying = false;
+    resetRoundTimer();
+    stopAudioForRoundEnd($);
+    disableImageAnswers($);
+
+    const $button = getImageAnswerButton($, answerIndex);
+    $button.addClass('incorrect');
+
+    $('.js-countdown').text(0);
+    const audioPlayer = document.getElementById('audio_player');
+    const countdownPercentage = getCountdownPercentage($, audioPlayer);
+    resetCountdownBar($, countdownPercentage + '%');
+
+    applyWrongAnswer($);
+    revealAnswer($, gameState.currentTrackId);
+    enableNextRoundInput($);
+
+    scheduleNextRound(TIMEOUT_NEXT_ROUND_DELAY);
 }
 
 function advanceToNextRound() {
@@ -162,14 +202,14 @@ function advanceToNextRound() {
     }
 }
 
-function scheduleNextRound() {
+function scheduleNextRound(delay = ROUND_END_DISPLAY_MS) {
     clearNextRoundSchedule();
     isAwaitingNextRound = true;
 
     nextRoundTimeoutId = setTimeout(function () {
         nextRoundTimeoutId = null;
         advanceToNextRound();
-    }, ROUND_END_DISPLAY_MS);
+    }, delay);
 }
 
 export function handleTimeout($) {
@@ -186,17 +226,23 @@ export function handleTimeout($) {
 
     $('.js-countdown').text(0);
     stopAudioForRoundEnd($);
-    $('.js-answer-form').removeClass('answer_form--playing');
+
+    if (isImageAnswerMode()) {
+        disableImageAnswers($);
+    } else {
+        $('.js-answer-form').removeClass('answer_form--playing');
+        $('.js-answer-form').addClass('answer_form--incorrect');
+    }
+
     applyWrongAnswer($);
     revealAnswer($, trackId);
-    $('.js-answer-form').addClass('answer_form--incorrect');
     enableNextRoundInput($);
 
-    scheduleNextRound();
+    scheduleNextRound(TIMEOUT_NEXT_ROUND_DELAY);
 }
 
 export function submitAnswer($) {
-    if (!gameState.isPlaying) {
+    if (!gameState.isPlaying || isImageAnswerMode()) {
         return;
     }
 
@@ -214,6 +260,26 @@ export function submitAnswer($) {
         finishRound($, audioPlayer);
     } else {
         handleWrongAttempt($);
+    }
+}
+
+export function submitImageAnswer($, answerIndex) {
+    if (!gameState.isPlaying || !isImageAnswerMode()) {
+        return;
+    }
+
+    const choice = gameState.roundChoices[answerIndex];
+    if (!choice) {
+        return;
+    }
+
+    if (choice.isCorrect) {
+        const $button = getImageAnswerButton($, answerIndex);
+        $button.addClass('correct');
+        const { audioPlayer } = { audioPlayer: document.getElementById('audio_player') };
+        finishRound($, audioPlayer);
+    } else {
+        finishImageRoundWrong($, answerIndex);
     }
 }
 
@@ -235,7 +301,14 @@ export function playRound($) {
     }
 
     gameState.isPlaying = true;
-    enableAnswerForm($);
+
+    if (isImageAnswerMode()) {
+        gameState.roundChoices = buildImageChoices(trackId, gameState.tracks);
+        renderImageChoices($, gameState.roundChoices);
+        enableImageAnswers($);
+    } else {
+        enableAnswerForm($);
+    }
 
     const previewPath = getPreviewPath(trackId);
     prepareRoundAudio($, previewPath);
@@ -251,5 +324,20 @@ export function initAnswerForm($) {
         // }
 
         submitAnswer($);
+    });
+}
+
+export function initImageAnswers($) {
+    $('body').on('click', '.js-answer', function () {
+        if (!gameState.isPlaying || !isImageAnswerMode()) {
+            return;
+        }
+
+        const answerIndex = parseInt($(this).attr('data-index'), 10);
+        if (Number.isNaN(answerIndex)) {
+            return;
+        }
+
+        submitImageAnswer($, answerIndex);
     });
 }

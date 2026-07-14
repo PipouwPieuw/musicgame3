@@ -1,0 +1,131 @@
+.score_wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+/*	padding: 0 5px;*/
+}
+.score_wrapper__col {
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+}
+@media only screen and (max-width: 640px) {	
+	.score_wrapper {
+		
+	}
+}
+.score_wrapper:not(.visible) {
+	display: none;
+}
+
+.score_wrapper__box {
+	display: flex;
+}
+
+.score_multiplicator {
+	font-size: 16px;
+	font-weight: 700;
+	color: white;
+	border: 2px solid black;
+	color: black;
+    height: 40px;
+    width: 40px;
+    line-height: 36px;
+    text-align: center;
+	border-radius: var(--radius) 0 0 var(--radius);
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+}
+/*.score_multiplicator[data-value="1"] {
+	color: green;
+}
+.score_multiplicator[data-value="2"] {
+	color: #0000FF;
+}
+.score_multiplicator[data-value="3"] {
+	color: #FF0000;
+}
+.score_multiplicator[data-value="4"] {
+	color: purple;
+}*/
+.score_multiplicator__prefix {
+	font-weight: 400;
+	font-size: 10px;
+	line-height: 30px;
+}
+.score_main {
+	font-size: 24px;
+	font-weight: 700;
+	color: white;
+	background: black;
+	text-align: right;
+	min-width: 90px;
+	line-height: 40px;
+	border-radius: 0 var(--radius) var(--radius) 0;
+	padding: 0 12px;
+	position: relative;
+	z-index: 1;
+}
+.score_streak {
+	color: white;
+	font-size: 16px;
+/*    height: 50px;*/
+    height: 40px;
+/*    line-height: 40px;*/
+    line-height: 30px;
+	font-weight: 700;
+	position: relative;
+	min-width: 45px;
+	text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+}
+.score_streak:before {
+	content: '';
+/*	width: 45px;*/
+	width: 45px;
+/*	height: 50px;*/
+	height: 40px;
+	background: url(assets/flame-grey.svg) center no-repeat;
+	background-size: 100% 100%;
+	position: absolute;
+	z-index: -1;
+	inset: -99px;
+	margin: auto;
+}
+
+.score_streak.active:before {
+	background-image: url(assets/flame-black.svg);
+}
+.score_increment {
+	position: absolute;
+	z-index: -1;
+	right: 0;
+	bottom: 0;
+	font-size: 24px;
+	font-weight: 700;
+	color: black;
+	line-height: 40px;
+	padding: 0 12px;
+	-webkit-transition: all ease-in-out .1s;
+    -moz-transition: all ease-in-out .1s;
+    -ms-transition: all ease-in-out .1s;
+    transition: all ease-in-out .1s;
+}
+.score_increment--base {
+	padding: 0 4px;
+}
+.score_increment.animate {
+	bottom: 40px;
+}
+/*.score_increment--base.animate {
+	bottom: 30px;
+}*/
+.score_increment.fade {
+	opacity: 0;
+}

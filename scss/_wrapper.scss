@@ -1,0 +1,49 @@
+#wrapper {	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	min-height: 100vh;
+	max-width: 610px;
+	margin: auto;
+	padding: 120px 10px 10px 10px;
+	-webkit-transition: opacity ease .4s;
+    -moz-transition: opacity ease .4s;
+    -ms-transition: opacity ease .4s;
+    transition: opacity ease .4s;
+}
+@media only screen and (max-width: 640px) {
+	#wrapper {	
+		padding: 65px 10px 10px 10px;
+		justify-content: flex-start;
+	}
+	#wrapper.game_started {	
+		padding-top: 50px;
+	}
+}
+#wrapper:not(.initialized) {
+	opacity: 0;
+	pointer-events: none;
+}
+@media only screen and (min-width: 641px) {
+	#wrapper:not(.game_started) {
+		padding-bottom: 10px;
+	}
+}
+#wrapper:not(.game_started) .track_display__wrapper,
+#wrapper:not(.game_started) .answer_form,
+#wrapper:not(.game_started) .list_answers,
+#wrapper:not(.game_started) .game_display,
+#wrapper.game_started .start_game,
+#wrapper.game_ended .start_game,
+#wrapper:not(.game_ended) .end_game,
+.visually_hidden,
+body.glitched:not(.no_glitch) .text_no_glitch,
+body:not(.glitched) .text_glitch,
+body.no_glitch .text_glitch {
+	display: none;
+}
+
+.audio_player {
+	display: none;
+}

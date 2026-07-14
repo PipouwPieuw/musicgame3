@@ -1,4 +1,4 @@
-import { DEFAULTTRACKDURATION, HARDCOREMODETRACKDURATION } from '../config.js';
+import { DEFAULTTRACKDURATION, DIFFICILETRACKDURATION, HARDCOREMODETRACKDURATION } from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { gameState } from './state.js';
 import { setPlaybackRate } from './scoring.js';
@@ -28,9 +28,13 @@ function pickHardcoreStart(audioPlayer) {
 }
 
 export function getRoundDuration() {
-    return gameState.difficultyLevel <= 2
-        ? DEFAULTTRACKDURATION
-        : HARDCOREMODETRACKDURATION;
+    if (gameState.difficultyLevel === 1) {
+        return DEFAULTTRACKDURATION;
+    }
+    if (gameState.difficultyLevel === 2) {
+        return DIFFICILETRACKDURATION;
+    }
+    return HARDCOREMODETRACKDURATION;
 }
 
 function getElapsedSeconds() {

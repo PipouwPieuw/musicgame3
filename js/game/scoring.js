@@ -1,5 +1,6 @@
-import { DEFAULTTRACKDURATION, DIFFICULTYNAMES, HARDCOREMODETRACKDURATION, MINSTREAK, POINTSBYANSWER } from '../config.js';
+import { DIFFICULTYNAMES, MINSTREAK, POINTSBYANSWER } from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
+import { getRoundDuration } from './audio-player.js';
 import { gameState } from './state.js';
 
 const soundRight = new Audio('assets/right.m4a');
@@ -95,10 +96,7 @@ export function updateTrackNumberUI($) {
 
 export function resetCountdownBar($, value = '100%') {
     $('.js-countdown-bar').css('width', value);
-    $('.js-countdown-bar').attr(
-        'data-timer',
-        gameState.difficultyLevel <= 2 ? DEFAULTTRACKDURATION : HARDCOREMODETRACKDURATION
-    );
+    $('.js-countdown-bar').attr('data-timer', getRoundDuration());
     $('.js-countdown').text(0);
 }
 

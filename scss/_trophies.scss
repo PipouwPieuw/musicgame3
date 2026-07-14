@@ -1,0 +1,23 @@
+/* Trophies  */
+.trophy__details {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+.trophy__image {
+	flex: 0 0 100px;
+	height: 100px;	
+}
+.trophy__image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.trophy__value {
+	margin-top: 10px;
+	font-size: 14px;
+}
+.trophy__value span:not(.fw_normal) {
+	font-size: 18px;
+	font-weight: 700;
+}
