@@ -111,7 +111,7 @@
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-2">
                                 <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--2">Vignettes</span>
                                 <ul class="settings_panel__description settings_difficulty__description">
-                                    <li><span>Les extraits durent <b><u style="color: #0000FF">10 secondes</u></b></span></li>
+                                    <li><span>Les extraits durent <b><u style="color: #0000FF">30 secondes</u></b></span></li>
                                     <li><span>Choix parmi <b><u>8 vignettes</u></b></span></li>
                                     <li><span>Multiplicateur de points : <b><u style="color: #0000FF">x2</u></b></span></li>
                                 </ul>
@@ -169,47 +169,49 @@
         </div>
         <audio id="audio_player" class="audio_player js-audio-player" src=""></audio>
         <audio id="audio_player_hardcore" class="audio_player js-audio-player-hardcore" loop="true" src=""></audio>
-        <div class="game_display">            
-            <span class="score_wrapper text_symbol_halfgame js-score-wrapper">
-                <div class="score_wrapper__col">
-                    <div class="score_wrapper__box">
-                        <span class="score_multiplicator default_tooltip__wrapper js-multiplicator-wrapper" data-value="1">
-                            <span class="score_multiplicator__prefix">x</span>
-                            <span class="js-multiplicator">1</span>                        
-                            <span class="default_tooltip default_transition">Le multiplicateur de points</span>
-                        </span>
-                        <span class="score_main default_tooltip__wrapper">
-                            <span class="js-score">0</span>
-                            <span class="default_tooltip default_transition">Le score</span>
-                        </span>
-                    </div>
-                    <span class="score_streak default_tooltip__wrapper js-streak-wrapper">
-                        <span class="js-streak"></span>
-                        <span class="default_tooltip default_transition">Le bonus de chaîne</span>
-                    </span>
-                </div>
-                <!-- <button class="track_display__like default_tooltip__wrapper js-like-track js-like-button" data-liked="false">
-                    <span class="track_display__like_legend default_tooltip default_transition" data-liked="true">Retirer des favoris</span>
-                    <span class="track_display__like_legend default_tooltip default_transition" data-liked="false">Ajouter aux favoris</span>
-                </button> -->
-            </span>
-            <div class="track_display__wrapper text_symbol">
-                <span class="game_top_bar">
-                    <div class="game_top_bar__tracks">
-                        <span class="js-track-number">0</span>/<span class="js-track-total">40</span>
-                    </div>
-                </span>
-                <!-- <div class="track_display">
-                    <div class="track_display__half track_display__half--cover js-track-cover">
-                        <img class="track_display__cover js-cover" src="assets/images/default.png" alt=""/>
-                    </div>
-                    <div class="track_display__details track_display__half track_display__half--details">
-                        <div class="track_display__content">
-                            <div class="track_display__name js-name"></div>
-                            <div class="track_display__description js-description"></div>
+        <div class="game_display">    
+            <div class="game_display__top">       
+                <div class="track_display__wrapper text_symbol">
+                    <span class="game_top_bar">
+                        <div class="game_top_bar__tracks">
+                            <span class="js-track-number">0</span>/<span class="js-track-total">40</span>
                         </div>
+                    </span>
+                    <!-- <div class="track_display">
+                        <div class="track_display__half track_display__half--cover js-track-cover">
+                            <img class="track_display__cover js-cover" src="assets/images/default.png" alt=""/>
+                        </div>
+                        <div class="track_display__details track_display__half track_display__half--details">
+                            <div class="track_display__content">
+                                <div class="track_display__name js-name"></div>
+                                <div class="track_display__description js-description"></div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div> 
+                <span class="score_wrapper text_symbol_halfgame js-score-wrapper">
+                    <div class="score_wrapper__col">
+                        <div class="score_wrapper__box">
+                            <span class="score_multiplicator default_tooltip__wrapper js-multiplicator-wrapper" data-value="1">
+                                <span class="score_multiplicator__prefix">x</span>
+                                <span class="js-multiplicator">1</span>                        
+                                <span class="default_tooltip default_transition">Le multiplicateur de points</span>
+                            </span>
+                            <span class="score_main default_tooltip__wrapper">
+                                <span class="js-score">0</span>
+                                <span class="default_tooltip default_transition">Le score</span>
+                            </span>
+                        </div>
+                        <span class="score_streak default_tooltip__wrapper js-streak-wrapper">
+                            <span class="js-streak"></span>
+                            <span class="default_tooltip default_transition">Le bonus de chaîne</span>
+                        </span>
                     </div>
-                </div> -->
+                    <!-- <button class="track_display__like default_tooltip__wrapper js-like-track js-like-button" data-liked="false">
+                        <span class="track_display__like_legend default_tooltip default_transition" data-liked="true">Retirer des favoris</span>
+                        <span class="track_display__like_legend default_tooltip default_transition" data-liked="false">Ajouter aux favoris</span>
+                    </button> -->
+                </span>
             </div>
             <form id="answer_form" class="answer_form js-answer-form" autocomplete="off">
                 <input type="text"

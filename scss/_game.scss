@@ -1,5 +1,4 @@
 .game_display {
-/*	overflow: auto;*/
 	padding-top: 10px;
 	padding-bottom: 10px;
 	width: 620px;
@@ -7,16 +6,17 @@
 	display: flex;
     flex-direction: column;
     gap: 30px;
+
+	&__top {
+		display: flex;
+		gap: 20px;
+		justify-content: space-between;
+	}
 }
 .track_display__wrapper {
 	width: 100%;
-/*	padding: 5px 0;*/
+	flex: 1;
 }
-/*@media only screen and (max-width: 640px) {
-	.track_display__wrapper {
-		padding: 5px 0;
-	}
-}*/
 .track_display {
 	width: 100%;
 	display: flex;
@@ -32,7 +32,7 @@
 }
 @media only screen and (max-width: 640px) {
 	.game_display {
-		padding-top: 30px;
+		padding-top: 20px;
 	}
 	.track_display {
 		flex-wrap: wrap;
