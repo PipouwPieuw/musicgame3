@@ -480,7 +480,9 @@
     "subTitle": "",
     "year": "2003 - 2012",
     "acceptedAnswers": [
-      "One Tree Hill"
+      "One Tree Hill",
+      "Les frères Scott",
+      "Frères Scott"
     ]
   },
   {
@@ -490,6 +492,35 @@
     "year": "2000 - 2002",
     "acceptedAnswers": [
       "Dark Angel"
+    ]
+  },
+  {
+    "id": "A051",
+    "title": "Ghost Whisperer",
+    "subTitle": "",
+    "year": "2005 - 2010",
+    "acceptedAnswers": [
+      "Ghost Whisperer"
+    ]
+  },
+  {
+    "id": "A052",
+    "title": "Tru Calling",
+    "subTitle": "",
+    "year": "2003 - 2005",
+    "acceptedAnswers": [
+      "Tru Calling"
+    ]
+  },
+  {
+    "id": "A053",
+    "title": "Mysterious Ways",
+    "subTitle": "",
+    "year": "2000 - 2002",
+    "acceptedAnswers": [
+      "Mysterious Ways",
+      "Mysterious Ways : Les chemins de l'étrange",
+      "Les chemins de l'étrange"
     ]
   }
 ]
