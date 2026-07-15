@@ -1,5 +1,5 @@
 import { SEGMENT_DURATIONS_1 } from '../config.js';
-import { gameState } from './state.js';
+import { gameState, isClassicMode } from './state.js';
 
 export function applyDifficulty(level) {
     const difficultyLevel = parseInt(level, 10);
@@ -30,6 +30,8 @@ export function updateAnswerModeUI($) {
         $('.js-answer-form').removeClass('visually_hidden');
         $('.js-answers').addClass('visually_hidden');
     }
+
+    $('.js-skip-round').toggleClass('visually_hidden', !isClassicMode());
 }
 
 export function updateDifficultyUI($, difficultyName) {

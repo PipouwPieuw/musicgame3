@@ -214,13 +214,20 @@
                 </span>
             </div>
             <form id="answer_form" class="answer_form js-answer-form" autocomplete="off">
-                <input type="text"
-                       class="answer_form__input js-answer-input"
-                       placeholder="Tapez un titre..."
-                       aria-label="Titre du morceau"
-                       autocomplete="off"
-                       spellcheck="false"
-                       disabled />
+                <div class="answer_form__row">
+                    <input type="text"
+                           class="answer_form__input js-answer-input"
+                           placeholder="Tapez un titre..."
+                           aria-label="Titre du morceau"
+                           autocomplete="off"
+                           spellcheck="false"
+                           disabled />
+                    <button type="button"
+                            class="answer_form__skip js-skip-round visually_hidden"
+                            aria-label="Passer au morceau suivant"
+                            title="Passer au morceau suivant"
+                            disabled>Passer</button>
+                </div>
                 <!-- <p class="answer_form__feedback js-answer-feedback" aria-live="polite"></p> -->
             </form>
             <ul class="list_answers js-answers visually_hidden" aria-label="Choix de pochettes"></ul>

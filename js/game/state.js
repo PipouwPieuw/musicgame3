@@ -48,6 +48,10 @@ export function isImageAnswerMode() {
     return gameState.difficultyLevel === 2;
 }
 
+export function isClassicMode() {
+    return gameState.difficultyLevel === 1;
+}
+
 export function getClipDuration() {
     if (gameState.difficultyLevel === 1) {
         return DEFAULTTRACKDURATION;

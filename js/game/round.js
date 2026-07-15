@@ -17,7 +17,7 @@ import {
     resetImageAnswers,
 } from './image-answers.js';
 import { applyCorrectAnswer, applyWrongAnswer, playCorrectSound, resetCountdownBar, updateTrackNumberUI } from './scoring.js';
-import { gameState, isImageAnswerMode } from './state.js';
+import { gameState, isClassicMode, isImageAnswerMode } from './state.js';
 
 const WRONG_ANSWER_FLASH_MS = 400;
 const ROUND_END_DISPLAY_MS = 2050;
@@ -45,6 +45,7 @@ function resetAnswerForm($) {
     const $form = $('.js-answer-form');
     $form.removeClass('answer_form--correct answer_form--incorrect answer_form--playing');
     $('.js-answer-input').val('').prop('readonly', false).prop('disabled', true);
+    $('.js-skip-round').prop('disabled', true);
     // $('.js-answer-feedback').text('');
     resetImageAnswers($);
 }
@@ -53,6 +54,9 @@ function enableAnswerForm($) {
     const $form = $('.js-answer-form');
     $form.addClass('answer_form--playing');
     $('.js-answer-input').prop('readonly', false).prop('disabled', false).focus();
+    if (isClassicMode()) {
+        $('.js-skip-round').prop('disabled', false);
+    }
 }
 
 function enableNextRoundInput($) {
@@ -62,6 +66,7 @@ function enableNextRoundInput($) {
     }
 
     $('.js-answer-input').val('').prop('readonly', true).prop('disabled', false).focus();
+    $('.js-skip-round').prop('disabled', true);
 }
 
 function clearNextRoundSchedule() {
@@ -212,7 +217,7 @@ function scheduleNextRound(delay = ROUND_END_DISPLAY_MS) {
     }, delay);
 }
 
-export function handleTimeout($) {
+function finishRoundAsWrong($, nextroundDelay = TIMEOUT_NEXT_ROUND_DELAY) {
     if (!gameState.isPlaying) {
         return;
     }
@@ -220,9 +225,6 @@ export function handleTimeout($) {
     gameState.isPlaying = false;
     resetRoundTimer();
     const trackId = gameState.currentTrackId;
-    const { audioPlayer } = {
-        audioPlayer: document.getElementById('audio_player'),
-    };
 
     $('.js-countdown').text(0);
     stopAudioForRoundEnd($);
@@ -238,7 +240,19 @@ export function handleTimeout($) {
     revealAnswer($, trackId);
     enableNextRoundInput($);
 
-    scheduleNextRound(TIMEOUT_NEXT_ROUND_DELAY);
+    scheduleNextRound(nextroundDelay);
+}
+
+export function handleTimeout($) {
+    finishRoundAsWrong($);
+}
+
+export function skipRound($) {
+    if (!gameState.isPlaying || !isClassicMode() || isImageAnswerMode()) {
+        return;
+    }
+
+    finishRoundAsWrong($, 100);
 }
 
 export function submitAnswer($) {
@@ -324,6 +338,10 @@ export function initAnswerForm($) {
         // }
 
         submitAnswer($);
+    });
+
+    $('.js-skip-round').on('click', function () {
+        skipRound($);
     });
 }
 
