@@ -34,6 +34,7 @@ export const gameState = {
     modifierRates: [...MODIFIER_RATES],
     segmentDurations1: [...SEGMENT_DURATIONS_1],
     segmentDurations2: [...SEGMENT_DURATIONS_2],
+    foundTracksIds: [],
 };
 
 export function getDifficultyName() {

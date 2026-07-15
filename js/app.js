@@ -90,6 +90,19 @@ async function loadPlayerSession(username) {
 async function endGame() {
     gameState.playerData.scores.push([getDifficultyName(), gameState.tracksByGame, gameState.score]);
 
+    if(gameState.difficultyLevel == 1) {
+        // if(gameState.playerData.foundTracksIds == null) {
+        //     gameState.playerData.foundTracksIds = [];
+        // }
+        for(let id of gameState.foundTracksIds) {
+            if(!gameState.playerData.foundTracksIds.includes(id)) {
+                gameState.playerData.foundTracksIds.push(id);
+                console.log(gameState.foundTracksIds);
+            }
+        }
+        gameState.foundTracksIds = [];
+    }
+
     const difficultyName = getDifficultyName();
     if (!(difficultyName in gameState.playerData.games_played) || gameState.playerData.games_played[difficultyName] == null) {
         gameState.playerData.games_played[difficultyName] = 0;
@@ -132,6 +145,9 @@ function resetGame() {
 }
 
 function startGame() {
+    if(gameState.difficultyLevel == 1) {
+        gameState.foundTracksIds = [];
+    }
     buildSetlist(gameState.tracks, gameState.tracksByGame);
     $('.js-track-total').text(gameState.tracksByGame);
     $('.js-wrapper').removeClass('game_ended');

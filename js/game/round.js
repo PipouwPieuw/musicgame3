@@ -271,6 +271,10 @@ export function submitAnswer($) {
 
     if (isCorrect) {
         const { audioPlayer } = { audioPlayer: document.getElementById('audio_player') };
+        if(gameState.difficultyLevel == 1) {
+            gameState.foundTracksIds.push(trackId);
+            console.log(gameState.foundTracksIds);
+        }
         finishRound($, audioPlayer);
     } else {
         handleWrongAttempt($);

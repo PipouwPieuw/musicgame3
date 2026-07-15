@@ -175,7 +175,8 @@
 	padding-left: 0;
 }
 .settings_difficulty__radio:not(:checked) + label span {
-	opacity: 0;
+	// opacity: 0;
+	opacity: .5;
 	color: black;
 }
 .settings_difficulty__radio:not(:checked) + label:hover span {
