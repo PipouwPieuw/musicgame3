@@ -1,0 +1,30 @@
+{
+  "pipow": {
+    "id": "pipow",
+    "username": "pipow",
+    "initials": "pip",
+    "likedTracks": [],
+    "games_played": {
+      "Normal": 0,
+      "Difficile": 0,
+      "Infernal": 0,
+      "Extrême": 0,
+      "Glitched": 0
+    },
+    "good_answers": {
+      "Normal": 0,
+      "Difficile": 0,
+      "Infernal": 0,
+      "Extrême": 0,
+      "Glitched": 0
+    },
+    "wrong_answers": {
+      "Normal": 0,
+      "Difficile": 0,
+      "Infernal": 0,
+      "Extrême": 0,
+      "Glitched": 0
+    },
+    "scores": []
+  }
+}

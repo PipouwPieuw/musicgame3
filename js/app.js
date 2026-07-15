@@ -17,16 +17,16 @@ import { loadTracks } from './services/tracks-loader.js';
 import { filterPlayableTracks, getPreviewPath, migrateLikedTracksToIds } from './lib/track-utils.js';
 import {
     clearStoredUsername,
+    getStoredUsername,
+    setStoredUsername,
+} from './services/local-storage.js';
+import {
     getAllScores,
     getPlayerData,
     getScores,
-    getStoredUsername,
-    setStoredUsername,
-    updateAnswers,
-    updateGamesPlayed,
+    savePlayerProfile,
     updateLikedTracks,
-    updateScores,
-} from './services/local-storage.js';
+} from './services/player-api.js';
 import {
     buildFavorites,
     buildLeaderboard,
@@ -68,23 +68,27 @@ function migrateStoredLikedTracks() {
 }
 
 async function loadPlayerSession(username) {
-    const result = await getPlayerData(username);
-    if (result.id == null) {
+    try {
+        const result = await getPlayerData(username);
+        if (result.id == null) {
+            return false;
+        }
+
+        gameState.username = username;
+        gameState.playerData = result;
+        const scoresResult = await getScores(username);
+        gameState.playerData.scores = scoresResult[0]?.scores || [];
+        migrateStoredLikedTracks();
+        showLoggedInUI();
+        return true;
+    } catch (error) {
+        console.error('Failed to load player session', error);
         return false;
     }
-
-    gameState.username = username;
-    gameState.playerData = result;
-    const scoresResult = await getScores(username);
-    gameState.playerData.scores = scoresResult[0]?.scores || [];
-    migrateStoredLikedTracks();
-    showLoggedInUI();
-    return true;
 }
 
-function endGame() {
+async function endGame() {
     gameState.playerData.scores.push([getDifficultyName(), gameState.tracksByGame, gameState.score]);
-    updateScores(gameState.username, gameState.playerData.scores);
 
     const difficultyName = getDifficultyName();
     if (!(difficultyName in gameState.playerData.games_played) || gameState.playerData.games_played[difficultyName] == null) {
@@ -92,10 +96,14 @@ function endGame() {
     }
     gameState.playerData.games_played[difficultyName] += 1;
     updateStatsGamesPlayed($);
-    updateGamesPlayed(gameState.username, gameState.playerData.games_played);
-
     updateStatsAnswers($);
-    updateAnswers(gameState.username, gameState.playerData.good_answers, gameState.playerData.wrong_answers);
+
+    try {
+        await savePlayerProfile(gameState.username, gameState.playerData);
+    } catch (error) {
+        console.error('Failed to save player profile after game', error);
+        alert('Impossible de sauvegarder la partie. Vérifiez que le serveur est démarré.');
+    }
 
     $('.js-wrapper').removeClass('game_started');
     $('.js-wrapper').addClass('game_ended');
@@ -189,7 +197,7 @@ async function login() {
 
     const loggedIn = await loadPlayerSession(username);
     if (!loggedIn) {
-        alert('Impossible de charger le profil');
+        alert('Impossible de charger le profil. Vérifiez que le serveur est démarré.');
         return;
     }
 

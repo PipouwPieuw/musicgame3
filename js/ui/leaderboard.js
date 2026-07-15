@@ -1,6 +1,6 @@
 import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES } from '../config.js';
 import { getTrackMetadata } from '../lib/track-utils.js';
-import { getAllProfiles, getAllScores } from '../services/local-storage.js';
+import { getAllProfiles, getAllScores } from '../services/player-api.js';
 import { gameState } from '../game/state.js';
 
 export function returnBestScores(allScores, leaderboard, leaderboardCustom) {

@@ -1,9 +1,15 @@
 {
   "name": "advency-sound-system",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "sass scss/main.scss style.css --style=compressed --no-source-map",
-    "watch": "sass scss/main.scss style.css --style=compressed --no-source-map --watch"
+    "watch": "sass scss/main.scss style.css --style=compressed --no-source-map --watch",
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "sass": "1.69.7"
