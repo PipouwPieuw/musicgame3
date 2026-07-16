@@ -1,0 +1,18 @@
+/**
+ * Expected schema for the `players` table (Supabase SQL editor).
+ * RLS can stay enabled: the Express server uses the service_role key, which bypasses RLS.
+ *
+ * create table if not exists public.players (
+ *   username text primary key,
+ *   initials text not null,
+ *   liked_tracks jsonb not null default '[]'::jsonb,
+ *   games_played jsonb not null default '{}'::jsonb,
+ *   good_answers jsonb not null default '{}'::jsonb,
+ *   wrong_answers jsonb not null default '{}'::jsonb,
+ *   scores jsonb not null default '[]'::jsonb,
+ *   found_tracks_ids jsonb not null default '[]'::jsonb,
+ *   updated_at timestamptz not null default now()
+ * );
+ *
+ * alter table public.players enable row level security;
+ */

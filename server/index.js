@@ -14,6 +14,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.join(__dirname, '..');
 const PORT = Number(process.env.PORT) || 3000;
 
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error(
+        'Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY. Set them in Render Environment Variables (or a local .env).'
+    );
+    process.exit(1);
+}
+
 const app = express();
 
 app.use(express.json({ limit: '1mb' }));

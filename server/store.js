@@ -1,13 +1,5 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { DIFFICULTYNAMES } from '../js/config.js';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PLAYERS_FILE = path.join(__dirname, 'data', 'players.json');
-const PLAYERS_TMP_FILE = path.join(__dirname, 'data', 'players.json.tmp');
-
-let writeChain = Promise.resolve();
+import { supabase } from './supabase.js';
 
 function emptyDifficultyMap() {
     const map = {};
@@ -27,6 +19,7 @@ export function createDefaultProfile(username) {
         good_answers: emptyDifficultyMap(),
         wrong_answers: emptyDifficultyMap(),
         scores: [],
+        foundTracksIds: [],
     };
 }
 
@@ -45,6 +38,9 @@ export function normalizeProfile(profile) {
     }
     if (!profile.scores) {
         profile.scores = [];
+    }
+    if (!profile.foundTracksIds) {
+        profile.foundTracksIds = [];
     }
 
     for (const name of DIFFICULTYNAMES) {
@@ -66,30 +62,50 @@ export function normalizeUsername(username) {
     return String(username || '').trim().toLowerCase();
 }
 
-async function readProfilesFile() {
-    try {
-        const raw = await fs.readFile(PLAYERS_FILE, 'utf8');
-        return raw ? JSON.parse(raw) : {};
-    } catch (error) {
-        if (error.code === 'ENOENT') {
-            return {};
-        }
-        throw error;
+function rowToProfile(row) {
+    if (!row) {
+        return null;
     }
-}
 
-async function writeProfilesFile(profiles) {
-    await fs.mkdir(path.dirname(PLAYERS_FILE), { recursive: true });
-    await fs.writeFile(PLAYERS_TMP_FILE, JSON.stringify(profiles, null, 2), 'utf8');
-    await fs.rename(PLAYERS_TMP_FILE, PLAYERS_FILE);
-}
-
-function withWriteLock(task) {
-    const next = writeChain.then(task, task);
-    writeChain = next.catch(function () {
-        // Keep the queue alive after a failed write.
+    return normalizeProfile({
+        id: row.username,
+        username: row.username,
+        initials: row.initials,
+        likedTracks: row.liked_tracks,
+        games_played: row.games_played,
+        good_answers: row.good_answers,
+        wrong_answers: row.wrong_answers,
+        scores: row.scores,
+        foundTracksIds: row.found_tracks_ids,
     });
-    return next;
+}
+
+function profileToRow(username, profile) {
+    const normalized = normalizeProfile({
+        ...profile,
+        id: username,
+        username,
+        initials: profile.initials || username.slice(0, 3).toLowerCase(),
+    });
+
+    return {
+        username,
+        initials: normalized.initials,
+        liked_tracks: normalized.likedTracks,
+        games_played: normalized.games_played,
+        good_answers: normalized.good_answers,
+        wrong_answers: normalized.wrong_answers,
+        scores: normalized.scores,
+        found_tracks_ids: normalized.foundTracksIds,
+        updated_at: new Date().toISOString(),
+    };
+}
+
+function throwIfError(error, context) {
+    if (error) {
+        console.error(context, error);
+        throw new Error(error.message || context);
+    }
 }
 
 export async function getPlayer(username) {
@@ -98,12 +114,9 @@ export async function getPlayer(username) {
         return null;
     }
 
-    const profiles = await readProfilesFile();
-    if (!(key in profiles)) {
-        return null;
-    }
-
-    return normalizeProfile({ ...profiles[key] });
+    const { data, error } = await supabase.from('players').select('*').eq('username', key).maybeSingle();
+    throwIfError(error, 'getPlayer failed');
+    return rowToProfile(data);
 }
 
 export async function getOrCreatePlayer(username) {
@@ -112,22 +125,17 @@ export async function getOrCreatePlayer(username) {
         return { profile: null, created: false };
     }
 
-    return withWriteLock(async function () {
-        const profiles = await readProfilesFile();
+    const existing = await getPlayer(key);
+    if (existing) {
+        return { profile: existing, created: false };
+    }
 
-        if (key in profiles) {
-            return {
-                profile: normalizeProfile({ ...profiles[key] }),
-                created: false,
-            };
-        }
+    const profile = createDefaultProfile(key);
+    const row = profileToRow(key, profile);
+    const { data, error } = await supabase.from('players').insert(row).select('*').single();
+    throwIfError(error, 'getOrCreatePlayer insert failed');
 
-        const profile = createDefaultProfile(key);
-        profiles[key] = profile;
-        await writeProfilesFile(profiles);
-
-        return { profile: normalizeProfile({ ...profile }), created: true };
-    });
+    return { profile: rowToProfile(data), created: true };
 }
 
 export async function savePlayer(username, profile) {
@@ -136,12 +144,14 @@ export async function savePlayer(username, profile) {
         throw new Error('Invalid username');
     }
 
-    return withWriteLock(async function () {
-        const profiles = await readProfilesFile();
-        profiles[key] = normalizeProfile({ ...profile, id: key, username: key });
-        await writeProfilesFile(profiles);
-        return profiles[key];
-    });
+    const row = profileToRow(key, profile);
+    const { data, error } = await supabase
+        .from('players')
+        .upsert(row, { onConflict: 'username' })
+        .select('*')
+        .single();
+    throwIfError(error, 'savePlayer failed');
+    return rowToProfile(data);
 }
 
 export async function updateLikedTracks(username, likedTracks) {
@@ -150,29 +160,24 @@ export async function updateLikedTracks(username, likedTracks) {
         throw new Error('Invalid username');
     }
 
-    return withWriteLock(async function () {
-        const profiles = await readProfilesFile();
-        if (!(key in profiles)) {
-            throw new Error('Player not found');
-        }
+    const existing = await getPlayer(key);
+    if (!existing) {
+        throw new Error('Player not found');
+    }
 
-        profiles[key].likedTracks = likedTracks;
-        profiles[key] = normalizeProfile(profiles[key]);
-        await writeProfilesFile(profiles);
-        return profiles[key];
-    });
+    existing.likedTracks = likedTracks;
+    return savePlayer(key, existing);
 }
 
 export async function getAllProfiles() {
-    const profiles = await readProfilesFile();
-    return Object.values(profiles).map(function (profile) {
-        return normalizeProfile({ ...profile });
-    });
+    const { data, error } = await supabase.from('players').select('*');
+    throwIfError(error, 'getAllProfiles failed');
+    return (data || []).map(rowToProfile);
 }
 
 export async function getAllScores() {
-    const profiles = await readProfilesFile();
-    return Object.values(profiles).map(function (profile) {
+    const profiles = await getAllProfiles();
+    return profiles.map(function (profile) {
         return {
             name: profile.username,
             initials: profile.initials,

@@ -6,9 +6,11 @@
     "build": "sass scss/main.scss style.css --style=compressed --no-source-map",
     "watch": "sass scss/main.scss style.css --style=compressed --no-source-map --watch",
     "start": "node server/index.js",
-    "dev": "node --watch server/index.js"
+    "dev": "node --watch --env-file=.env server/index.js",
+    "import-players": "node --env-file=.env server/scripts/import-players-json.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.7",
     "express": "^4.21.2"
   },
   "devDependencies": {
