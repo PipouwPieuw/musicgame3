@@ -1,4 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
+import { loadEnvFile } from './load-env.js';
+
+loadEnvFile();
 
 const url = process.env.SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;

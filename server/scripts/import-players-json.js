@@ -1,10 +1,10 @@
 /**
  * One-time import: upserts server/data/players.json into Supabase.
  *
- * Usage (from repo root, with env vars set):
- *   node --env-file=.env server/scripts/import-players-json.js
+ * Usage (from repo root, with a local .env file):
+ *   npm run import-players
  *
- * Or with Render/local exports:
+ * Or with exported env vars:
  *   SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node server/scripts/import-players-json.js
  */
 import fs from 'node:fs/promises';
