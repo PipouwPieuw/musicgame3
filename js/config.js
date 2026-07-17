@@ -4,6 +4,7 @@ export const DEVMODE = false;
 export const SHUFFLE = true;
 
 export const DIFFICULTYNAMES = ['Normal', 'Difficile', 'Infernal', 'Extrême', 'Glitched'];
+export const LEADERBOARDDIFFICULTYNAMES = ['Classique', 'Vignettes', 'Infernal', 'Extrême', 'Glitched'];
 export const MINSTREAK = 3;
 export const DEFAULTTRACKSBYGAME = 20;
 export const DEFAULTTRACKDURATION = 30;

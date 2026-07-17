@@ -1,4 +1,4 @@
-import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES } from '../config.js';
+import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES, LEADERBOARDDIFFICULTYNAMES } from '../config.js';
 import { getTrackMetadata } from '../lib/track-utils.js';
 import { getAllProfiles, getAllScores } from '../services/player-api.js';
 import { gameState } from '../game/state.js';
@@ -54,11 +54,12 @@ export function buildLeaderboard($, object, title) {
     for (const difficulty in DIFFICULTYNAMES) {
         counter += 1;
         const label = DIFFICULTYNAMES[difficulty];
+        const displayedLabel = LEADERBOARDDIFFICULTYNAMES[difficulty];
         if (object[label].length == 0) {
             continue;
         }
         $('.js-leaderboard-content').append(
-            '<span class="leaderboard__title leaderboard__title--' + counter + ' panel_label">' + label + '</span>'
+            '<span class="leaderboard__title leaderboard__title--' + counter + ' panel_label">' + displayedLabel + '</span>'
         );
         const scoresList = $('<ul class="leaderboard__list"></ul>');
         scoresList.append(
