@@ -4,7 +4,8 @@ import { gameState, isClassicMode } from './state.js';
 export function applyDifficulty(level) {
     const difficultyLevel = parseInt(level, 10);
     gameState.difficultyLevel = difficultyLevel;
-    gameState.pointsMultiplier = difficultyLevel;
+    // gameState.pointsMultiplier = difficultyLevel;
+    gameState.pointsMultiplier = 1;
 
     const audioPlayer = document.getElementById('audio_player');
     const audioPlayerHardcore = document.getElementById('audio_player_hardcore');

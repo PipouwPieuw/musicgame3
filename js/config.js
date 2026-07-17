@@ -12,6 +12,7 @@ export const DIFFICILETRACKDURATION = 30;
 export const HARDCOREMODETRACKDURATION = 5;
 export const IMAGE_ANSWER_COUNT = 8;
 export const POINTSBYANSWER = 1;
+export const VIGNETTES_UNLOCK_THRESHOLD = 20;
 
 export const MODIFIER_RATES = [0.25, 0.33, 0.5, 0.66, 0.75, 0.87, 1, 1.25, 1.5, 2, 2.25, 2.5, 2.75, 3, 1];
 export const SEGMENT_DURATIONS_1 = [0.5, 1, 1.5, 2];

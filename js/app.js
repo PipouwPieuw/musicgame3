@@ -31,6 +31,7 @@ import {
     buildFavorites,
     buildLeaderboard,
     buildTrophies,
+    buildFoundTracks,
     closeLeaderboard,
     openLeaderboard,
     returnBestScores,
@@ -38,6 +39,12 @@ import {
     updateStatsBestScore,
     updateStatsGamesPlayed,
 } from './ui/leaderboard.js';
+import {
+    clearVignettesNewHighlight,
+    lockVignettesMode,
+    markVignettesUnlockIfNeeded,
+    syncVignettesModeUnlock,
+} from './ui/vignettes-unlock.js';
 
 const $ = window.jQuery;
 
@@ -74,7 +81,7 @@ async function loadPlayerSession(username) {
             return false;
         }
 
-        console.log(result);
+        // console.log(result);
 
         // Use the stored casing from the server (canonical username).
         gameState.username = result.username;
@@ -83,6 +90,7 @@ async function loadPlayerSession(username) {
         gameState.playerData.scores = scoresResult[0]?.scores || [];
         setStoredUsername(gameState.username);
         migrateStoredLikedTracks();
+        syncVignettesModeUnlock($);
         showLoggedInUI();
         return true;
     } catch (error) {
@@ -94,18 +102,16 @@ async function loadPlayerSession(username) {
 async function endGame() {
     gameState.playerData.scores.push([getDifficultyName(), gameState.tracksByGame, gameState.score]);
 
-    if(gameState.difficultyLevel == 1) {
-        // if(gameState.playerData.foundTracksIds == null) {
-        //     gameState.playerData.foundTracksIds = [];
-        // }
-        for(let id of gameState.foundTracksIds) {
-            if(!gameState.playerData.foundTracksIds.includes(id)) {
+    if (gameState.difficultyLevel == 1) {
+        for (let id of gameState.foundTracksIds) {
+            if (!gameState.playerData.foundTracksIds.includes(id)) {
                 gameState.playerData.foundTracksIds.push(id);
-                console.log(gameState.foundTracksIds);
             }
         }
         gameState.foundTracksIds = [];
     }
+
+    markVignettesUnlockIfNeeded();
 
     const difficultyName = getDifficultyName();
     if (!(difficultyName in gameState.playerData.games_played) || gameState.playerData.games_played[difficultyName] == null) {
@@ -228,6 +234,7 @@ function logout() {
     gameState.username = '';
     gameState.playerData = {};
     clearStoredUsername();
+    lockVignettesMode($);
     closeLeaderboard($);
     $('.js-settings').removeClass('visible');
     $('.js-bar-top').removeClass('visible');
@@ -250,6 +257,7 @@ function bindEvents() {
         quitGame();
         $('.js-wrapper').removeClass('game_started');
         $('.js-settings').addClass('visible');
+        syncVignettesModeUnlock($, { animate: true });
     });
 
     $('.js-quit-game').on('click', function () {
@@ -261,6 +269,7 @@ function bindEvents() {
         quitGame();
         $('.js-wrapper').removeClass('game_started');
         $('.js-settings').addClass('visible');
+        syncVignettesModeUnlock($, { animate: true });
     });
 
     $('.js-nb-tracks').on('keyup mouseup', function () {
@@ -277,9 +286,21 @@ function bindEvents() {
     });
 
     $('.js-input-difficulty').on('change', function () {
-        const difficultyName = $(this).find('+ label .text_no_glitch').text();
-        applyDifficulty($(this).val());
+        const difficultyName = $('label[for="' + this.id + '"] .text_no_glitch').text();
+        const selectedLevel = String($(this).val());
+        applyDifficulty(selectedLevel);
         updateDifficultyUI($, difficultyName);
+
+        if (selectedLevel === '2' && gameState.playerData && !gameState.playerData.hasSeenVignettesMode) {
+            gameState.playerData.hasSeenVignettesMode = true;
+            clearVignettesNewHighlight($);
+            savePlayerProfile(gameState.username, gameState.playerData).catch(function (error) {
+                console.error('Failed to save vignettes seen flag', error);
+                gameState.playerData.hasSeenVignettesMode = false;
+                $('.js-vignettes-option').addClass('settings_difficulty__option--new');
+                alert('Impossible de sauvegarder le statut du mode Vignettes. Vérifiez que le serveur est démarré.');
+            });
+        }
     });
 
     $(document).on('click', '.js-like-track', function () {
@@ -337,10 +358,12 @@ function bindEvents() {
 
         buildFavorites($);
         buildTrophies($);
+        buildFoundTracks($);
     });
 
     $('.js-close-leaderboard').on('click', function () {
         closeLeaderboard($);
+        syncVignettesModeUnlock($, { animate: true });
     });
 
     $('.js-tab').on('click', function () {

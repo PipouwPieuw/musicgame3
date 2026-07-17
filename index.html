@@ -67,16 +67,18 @@
                             <label class="default_transition" for="difficultyLevel1">
                                 <span class="default_transition">
                                     <span class="text_no_glitch">Classique</span>
-                                    <span class="text_glitch">N̴͍͖͇̝͎͇̅͜o̵̞̿̂̊͐r̷͈͔̭̝̫̆̔̾̌̔̄͗̍͝m̵͚̬̬̯͍̒̆͐͋̇a̴̛̺̜̙̩̋̀͋̇̕̚̕͝l̴̛͉͖̖͓͙̝͈̿̽͋͐́</span>
+                                    <span class="text_glitch"></span>
                                 </span>
                             </label>
-                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2"/>
-                            <label class="default_transition" for="difficultyLevel2">
-                                <span class="default_transition">
-                                    <span class="text_no_glitch">Vignettes</span>
-                                    <span class="text_glitch">Ḑ̴̻̍̈́̃̅̔i̷̧̢̡̙̯̯̮̯̥̐̽͗͋̿͌f̵̢̛̻̝̺̳̹̱̹̗͗̑̽͑͑̂̕f̵̦͚̺͖̯́̈́̊̈́̽́̀̀͠i̴̧͖͓̘͖̮͎̜̓́̄́ç̷͕̰̜̓͂i̸̥͉͛̒͗͒̉̔͘l̶̻̺̼̝̘͈̒̃͊͐̂̒͠e̶̟̮̎</span>                                    
-                                </span>
-                            </label>
+                            <div class="settings_difficulty__option js-vignettes-option is-locked">
+                                <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2" disabled/>
+                                <label class="default_transition" for="difficultyLevel2">
+                                    <span class="default_transition">
+                                        <span class="text_no_glitch">Vignettes</span>
+                                        <span class="text_glitch"></span>                                    
+                                    </span>
+                                </label>
+                            </div>
                             <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--3 js-input-difficulty" name="difficultyLevel" id="difficultyLevel3" value="3"/>
                             <label class="default_transition" for="difficultyLevel3">
                                 <span class="default_transition">
@@ -113,7 +115,7 @@
                                 <ul class="settings_panel__description settings_difficulty__description">
                                     <li><span>Les extraits durent <b><u>30 secondes</u></b></span></li>
                                     <li><span>Choix parmi <b><u>8 vignettes</u></b></span></li>
-                                    <li><span>Multiplicateur de points : <b><u style="color: #0000FF">x2</u></b></span></li>
+                                    <li><span>Multiplicateur de points : <b><u style="color: #0000FF">x1</u></b></span></li>
                                 </ul>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-3">
@@ -242,6 +244,7 @@
             <div class="panel_tabs__tabs js-tabs-wrapper">
                 <button class="panel_box__title panel_tabs__tab active js-tab" rel="leaderboard">Classement</button>
                 <button class="panel_box__title panel_tabs__tab js-tab" rel="stats">Statistiques</button>
+                <button class="panel_box__title panel_tabs__tab js-tab" rel="found-tracks">Morceaux trouvés</button>
                 <!-- <button class="panel_box__title panel_tabs__tab js-tab" rel="favorites">Favoris</button> -->
                 <!-- <button class="panel_box__title panel_tabs__tab js-tab" rel="trophies">Trophées</button> -->
             </div>
@@ -321,7 +324,13 @@
                         <span class="stats_cell stats_value js-best-score" rel="Glitched">0</span> -->
                     </div>
                 </div>
-            </div>         
+            </div>    
+            <div class="found_tracks panel_tabs__section js-tab-section" rel="found-tracks">
+                <div class="panel_box__box">     
+                    <span class="leaderboard__section_title"><span class="js-found-tracks-count"></span> morceaux trouvés</span>
+                    <ul class="found_tracks__list js-found-tracks-list"></ul>
+                </div>
+            </div>
             <!-- <div class="statistics panel_tabs__section js-tab-section" rel="favorites">
                 <div class="panel_box__box panel_box__box--favorite js-favorites-content"></div>
             </div>  -->

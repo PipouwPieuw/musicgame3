@@ -11,8 +11,13 @@
  *   wrong_answers jsonb not null default '{}'::jsonb,
  *   scores jsonb not null default '[]'::jsonb,
  *   found_tracks_ids jsonb not null default '[]'::jsonb,
+ *   has_seen_vignettes_mode boolean not null default false,
  *   updated_at timestamptz not null default now()
  * );
+ *
+ * -- Existing databases: add the column once.
+ * -- alter table public.players
+ * --   add column if not exists has_seen_vignettes_mode boolean not null default false;
  *
  * -- Case-insensitive uniqueness: Pipow and pipow cannot both exist.
  * create unique index if not exists players_username_lower_idx

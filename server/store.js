@@ -20,6 +20,7 @@ export function createDefaultProfile(username) {
         wrong_answers: emptyDifficultyMap(),
         scores: [],
         foundTracksIds: [],
+        hasSeenVignettesMode: false,
     };
 }
 
@@ -41,6 +42,9 @@ export function normalizeProfile(profile) {
     }
     if (!profile.foundTracksIds) {
         profile.foundTracksIds = [];
+    }
+    if (profile.hasSeenVignettesMode == null) {
+        profile.hasSeenVignettesMode = false;
     }
 
     for (const name of DIFFICULTYNAMES) {
@@ -91,6 +95,7 @@ function rowToProfile(row) {
         wrong_answers: row.wrong_answers,
         scores: row.scores,
         foundTracksIds: row.found_tracks_ids,
+        hasSeenVignettesMode: row.has_seen_vignettes_mode,
     });
 }
 
@@ -111,6 +116,7 @@ function profileToRow(username, profile) {
         wrong_answers: normalized.wrong_answers,
         scores: normalized.scores,
         found_tracks_ids: normalized.foundTracksIds,
+        has_seen_vignettes_mode: Boolean(normalized.hasSeenVignettesMode),
         updated_at: new Date().toISOString(),
     };
 }

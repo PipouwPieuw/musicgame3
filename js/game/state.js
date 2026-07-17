@@ -76,6 +76,7 @@ export function resetGameState() {
     gameState.playedTracks = 0;
     gameState.isPlaying = false;
     gameState.roundStartTime = 0;
+    gameState.foundTracksIds = [];
 }
 
 export function computeScoreIncrement() {

@@ -214,6 +214,14 @@ export async function buildTrophies($) {
     }
 }
 
+export async function buildFoundTracks($) {
+    const foundTracks = gameState.playerData.foundTracksIds;
+    $('.js-found-tracks-count').text(foundTracks.length);
+    for (const track in foundTracks) {
+        $('.js-found-tracks-list').append('<li class="found_tracks__item"><img src="assets/covers/' + foundTracks[track] + '.png"/></li>');
+    }
+}
+
 export function updateStatsGamesPlayed($) {
     $('.js-games-played').each(function () {
         const level = $(this).attr('rel');
