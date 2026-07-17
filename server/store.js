@@ -58,8 +58,22 @@ export function normalizeProfile(profile) {
     return profile;
 }
 
+/** Trim only — preserves letter casing for display/storage. */
+export function trimUsername(username) {
+    return String(username || '').trim();
+}
+
+/** Lowercase key used for case-insensitive matching. */
 export function normalizeUsername(username) {
-    return String(username || '').trim().toLowerCase();
+    return trimUsername(username).toLowerCase();
+}
+
+function escapeIlikeExact(value) {
+    return String(value).replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
+}
+
+function isUniqueViolation(error) {
+    return Boolean(error && (error.code === '23505' || /duplicate key|unique constraint/i.test(error.message || '')));
 }
 
 function rowToProfile(row) {
@@ -114,25 +128,46 @@ export async function getPlayer(username) {
         return null;
     }
 
-    const { data, error } = await supabase.from('players').select('*').eq('username', key).maybeSingle();
-    throwIfError(error, 'getPlayer failed');
-    return rowToProfile(data);
+    // Fast path: exact match on lowercase key (covers existing rows).
+    const exact = await supabase.from('players').select('*').eq('username', key).maybeSingle();
+    throwIfError(exact.error, 'getPlayer failed');
+    if (exact.data) {
+        return rowToProfile(exact.data);
+    }
+
+    // Case-insensitive match for mixed-case stored usernames.
+    const ilike = await supabase
+        .from('players')
+        .select('*')
+        .ilike('username', escapeIlikeExact(key))
+        .maybeSingle();
+    throwIfError(ilike.error, 'getPlayer failed');
+    return rowToProfile(ilike.data);
 }
 
 export async function getOrCreatePlayer(username) {
-    const key = normalizeUsername(username);
+    const display = trimUsername(username);
+    const key = normalizeUsername(display);
     if (!key) {
         return { profile: null, created: false };
     }
 
-    const existing = await getPlayer(key);
+    const existing = await getPlayer(display);
     if (existing) {
         return { profile: existing, created: false };
     }
 
-    const profile = createDefaultProfile(key);
-    const row = profileToRow(key, profile);
+    const profile = createDefaultProfile(display);
+    const row = profileToRow(display, profile);
     const { data, error } = await supabase.from('players').insert(row).select('*').single();
+
+    if (isUniqueViolation(error)) {
+        const raced = await getPlayer(display);
+        if (raced) {
+            return { profile: raced, created: false };
+        }
+    }
+
     throwIfError(error, 'getOrCreatePlayer insert failed');
 
     return { profile: rowToProfile(data), created: true };
@@ -144,7 +179,13 @@ export async function savePlayer(username, profile) {
         throw new Error('Invalid username');
     }
 
-    const row = profileToRow(key, profile);
+    const existing = await getPlayer(username);
+    const canonical = existing?.username || trimUsername(username);
+    if (!canonical) {
+        throw new Error('Invalid username');
+    }
+
+    const row = profileToRow(canonical, profile);
     const { data, error } = await supabase
         .from('players')
         .upsert(row, { onConflict: 'username' })
@@ -160,13 +201,13 @@ export async function updateLikedTracks(username, likedTracks) {
         throw new Error('Invalid username');
     }
 
-    const existing = await getPlayer(key);
+    const existing = await getPlayer(username);
     if (!existing) {
         throw new Error('Player not found');
     }
 
     existing.likedTracks = likedTracks;
-    return savePlayer(key, existing);
+    return savePlayer(existing.username, existing);
 }
 
 export async function getAllProfiles() {

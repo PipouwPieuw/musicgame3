@@ -5,8 +5,8 @@ import {
     getAllProfiles,
     getAllScores,
     getOrCreatePlayer,
-    normalizeUsername,
     savePlayer,
+    trimUsername,
     updateLikedTracks,
 } from './store.js';
 
@@ -28,7 +28,7 @@ app.use(express.static(ROOT_DIR));
 
 app.get('/api/players/:username', async function (req, res) {
     try {
-        const username = normalizeUsername(req.params.username);
+        const username = trimUsername(req.params.username);
         if (!username) {
             res.status(400).json({ error: 'Nom d\'utilisateur invalide' });
             return;
@@ -44,7 +44,7 @@ app.get('/api/players/:username', async function (req, res) {
 
 app.put('/api/players/:username', async function (req, res) {
     try {
-        const username = normalizeUsername(req.params.username);
+        const username = trimUsername(req.params.username);
         if (!username) {
             res.status(400).json({ error: 'Nom d\'utilisateur invalide' });
             return;
@@ -65,7 +65,7 @@ app.put('/api/players/:username', async function (req, res) {
 
 app.patch('/api/players/:username/likes', async function (req, res) {
     try {
-        const username = normalizeUsername(req.params.username);
+        const username = trimUsername(req.params.username);
         if (!username) {
             res.status(400).json({ error: 'Nom d\'utilisateur invalide' });
             return;

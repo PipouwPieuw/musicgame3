@@ -17,7 +17,8 @@
 	border: 0;
 }
 .stats_cell {
-	flex: 0 0 calc((100% - 100px) / 5);
+	flex: 0 0 calc((100% - 200px) / 2);
+	// flex: 0 0 calc((100% - 100px) / 5);
 }
 @media only screen and (max-width: 640px) {	
 	.stats_cell {
@@ -30,7 +31,8 @@
 	}
 }
 .stats_cell--first {
-	flex: 0 0 100px;
+	// flex: 0 0 100px;
+	flex: 0 0 200px;
 }
 @media only screen and (max-width: 640px) {	
 	.stats_cell--first {
@@ -142,7 +144,7 @@
 	color: darkgray;
 }
 .leaderboard__value--name {
-	text-transform: capitalize;
+	// text-transform: capitalize;
 }
 .leaderboard__value--tracks {
 	text-align: center;

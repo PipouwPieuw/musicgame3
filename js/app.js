@@ -74,10 +74,14 @@ async function loadPlayerSession(username) {
             return false;
         }
 
-        gameState.username = username;
+        console.log(result);
+
+        // Use the stored casing from the server (canonical username).
+        gameState.username = result.username;
         gameState.playerData = result;
-        const scoresResult = await getScores(username);
+        const scoresResult = await getScores(gameState.username);
         gameState.playerData.scores = scoresResult[0]?.scores || [];
+        setStoredUsername(gameState.username);
         migrateStoredLikedTracks();
         showLoggedInUI();
         return true;
@@ -205,7 +209,7 @@ async function loadPlaylist() {
 }
 
 async function login() {
-    const username = $('.js-username').val().trim().toLowerCase();
+    const username = $('.js-username').val().trim();
     if (!username) {
         alert('Veuillez entrer un nom d\'utilisateur');
         return;
@@ -217,7 +221,6 @@ async function login() {
         return;
     }
 
-    setStoredUsername(username);
     $('.js-username').val('');
 }
 

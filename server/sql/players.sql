@@ -14,5 +14,9 @@
  *   updated_at timestamptz not null default now()
  * );
  *
+ * -- Case-insensitive uniqueness: Pipow and pipow cannot both exist.
+ * create unique index if not exists players_username_lower_idx
+ *   on public.players (lower(username));
+ *
  * alter table public.players enable row level security;
  */

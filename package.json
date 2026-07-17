@@ -13,6 +13,7 @@
     "import-players": "node server/scripts/import-players-json.js"
   },
   "dependencies": {
+    "24": "^0.0.0",
     "@supabase/supabase-js": "^2.110.7",
     "express": "^4.21.2"
   },
