@@ -215,6 +215,7 @@ export async function buildTrophies($) {
 }
 
 export async function buildFoundTracks($) {
+    $('.js-found-tracks-list').empty();
     const foundTracks = gameState.playerData.foundTracksIds;
     $('.js-found-tracks-count').text(foundTracks.length);
     for (const track in foundTracks) {
