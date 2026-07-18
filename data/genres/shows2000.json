@@ -512,6 +512,17 @@
         "Mysterious Ways : Les chemins de l'étrange",
         "Les chemins de l'étrange"
       ]
+    },
+    {
+      "id": "A054",
+      "title": "CSI: Miami",
+      "subTitle": "",
+      "year": "2002 - 2012",
+      "acceptedAnswers": [
+        "CSI: Miami",
+        "Les experts Miami",
+        "Experts Miami"
+      ]
     }
   ]
 }

@@ -3,7 +3,11 @@ import { shuffleArray } from '../lib/shuffle.js';
 import { gameState } from './state.js';
 import { setPlaybackRate } from './scoring.js';
 
+/** One retry with cache-bust after a failed load (e.g. ERR_CACHE_READ_FAILURE). */
+const AUDIO_LOAD_MAX_ATTEMPTS = 2;
+
 let onRoundTimeout = null;
+let prepareAudioGeneration = 0;
 
 function getPlayableDuration(audioPlayer) {
     return Number.isFinite(audioPlayer.duration) ? audioPlayer.duration : Infinity;
@@ -51,15 +55,6 @@ function getRemainingTime() {
 
 function isRoundTimeUp() {
     return gameState.isPlaying && getElapsedSeconds() >= getRoundDuration() - 0.05;
-}
-
-function whenMetadataReady(audioPlayer, callback) {
-    if (audioPlayer.readyState >= HTMLMediaElement.HAVE_METADATA) {
-        callback();
-        return;
-    }
-
-    audioPlayer.addEventListener('loadedmetadata', callback, { once: true });
 }
 
 export function startAudioCountdown($) {
@@ -197,21 +192,91 @@ function beginRoundPlayback($, audioPlayer, audioPlayerHardcore) {
     startAudioCountdown($);
 }
 
-export function prepareRoundAudio($, previewPath) {
+function withCacheBust(path) {
+    const separator = path.includes('?') ? '&' : '?';
+    return `${path}${separator}cb=${Date.now()}`;
+}
+
+/**
+ * Loads preview audio and starts the round timer once metadata is ready.
+ * On load failure: retries once with a cache-busting URL, then calls onLoadFailure
+ * so the round can recover without punishing the player.
+ */
+export function prepareRoundAudio($, previewPath, options = {}) {
+    const onLoadFailure = typeof options.onLoadFailure === 'function' ? options.onLoadFailure : null;
+    const generation = ++prepareAudioGeneration;
     const audioPlayer = document.getElementById('audio_player');
     const audioPlayerHardcore = document.getElementById('audio_player_hardcore');
     const jsAudioPlayer = $('.js-audio-player');
     const jsAudioPlayerHardcore = $('.js-audio-player-hardcore');
 
+    let attempt = 0;
+    let settled = false;
+
     audioPlayer.loop = false;
 
-    jsAudioPlayer.attr('src', previewPath);
-    jsAudioPlayerHardcore.attr('src', previewPath);
-    audioPlayer.load();
+    function isStale() {
+        return generation !== prepareAudioGeneration || !gameState.isPlaying;
+    }
 
-    whenMetadataReady(audioPlayer, function () {
+    function cleanup() {
+        audioPlayer.removeEventListener('error', onError);
+        audioPlayer.removeEventListener('loadedmetadata', onMetadata);
+    }
+
+    function settleSuccess() {
+        if (settled || isStale()) {
+            return;
+        }
+
+        settled = true;
+        cleanup();
         beginRoundPlayback($, audioPlayer, audioPlayerHardcore);
-    });
+    }
+
+    function settleFailure() {
+        if (settled || isStale()) {
+            return;
+        }
+
+        settled = true;
+        cleanup();
+
+        if (onLoadFailure) {
+            onLoadFailure();
+        }
+    }
+
+    function onMetadata() {
+        settleSuccess();
+    }
+
+    function onError() {
+        if (settled || isStale()) {
+            return;
+        }
+
+        attempt += 1;
+
+        if (attempt < AUDIO_LOAD_MAX_ATTEMPTS) {
+            console.warn('Audio load failed, retrying with cache-bust:', previewPath);
+            loadSrc(withCacheBust(previewPath));
+            return;
+        }
+
+        console.warn('Audio load failed after retry:', previewPath);
+        settleFailure();
+    }
+
+    function loadSrc(path) {
+        jsAudioPlayer.attr('src', path);
+        jsAudioPlayerHardcore.attr('src', path);
+        audioPlayer.load();
+    }
+
+    audioPlayer.addEventListener('error', onError);
+    audioPlayer.addEventListener('loadedmetadata', onMetadata, { once: true });
+    loadSrc(previewPath);
 
     return { audioPlayer, audioPlayerHardcore };
 }

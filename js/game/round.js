@@ -1,5 +1,6 @@
 import { DEFAULT_COVER_PATH } from '../config.js';
 import { isTitleCorrect } from '../lib/normalize-title.js';
+import { shuffleArray } from '../lib/shuffle.js';
 import { findTrackById, getPreviewPath, getTrackMetadata } from '../lib/track-utils.js';
 import {
     getCountdownPercentage,
@@ -17,13 +18,15 @@ import {
     resetImageAnswers,
 } from './image-answers.js';
 import { applyCorrectAnswer, applyWrongAnswer, playCorrectSound, resetCountdownBar, updateTrackNumberUI } from './scoring.js';
-import { getFoundPlayableTracks } from './setlist.js';
+import { getFoundPlayableTracks, getTracksForCurrentMode } from './setlist.js';
 import { gameState, isClassicMode, isImageAnswerMode } from './state.js';
 
 const WRONG_ANSWER_FLASH_MS = 400;
 const ROUND_END_DISPLAY_MS = 2050;
 const TIMEOUT_NEXT_ROUND_DELAY = 800;
 const MYSTERY_TITLE = 'Morceau mystère';
+/** Soft advance when no playable replacement track remains. */
+const UNPLAYABLE_ROUND_DELAY_MS = 100;
 
 let nextRoundCallback = null;
 let appJquery = null;
@@ -301,6 +304,104 @@ export function submitImageAnswer($, answerIndex) {
     }
 }
 
+/**
+ * Pick a replacement track without consuming future setlist slots when possible,
+ * so the game length stays the same after an audio load failure.
+ */
+function pickReplacementTrackId(attemptedIds) {
+    const reserved = new Set([...gameState.setList, ...gameState.sessionTrackIds, ...attemptedIds]);
+    const candidates = getTracksForCurrentMode()
+        .map(function (track) {
+            return track.id;
+        })
+        .filter(function (id) {
+            return !reserved.has(id);
+        });
+
+    if (candidates.length > 0) {
+        return shuffleArray(candidates)[0];
+    }
+
+    // Last resort: borrow from the upcoming setlist so this round can still play.
+    while (gameState.setList.length > 0) {
+        const nextId = gameState.setList.shift();
+        if (!attemptedIds.has(nextId)) {
+            return nextId;
+        }
+    }
+
+    return null;
+}
+
+function bindCurrentTrackForRound($, trackId) {
+    gameState.currentTrackId = trackId;
+
+    const lastIndex = gameState.sessionTrackIds.length - 1;
+    if (lastIndex >= 0) {
+        gameState.sessionTrackIds[lastIndex] = trackId;
+    } else {
+        gameState.sessionTrackIds.push(trackId);
+    }
+
+    setLikeButton($, trackId);
+    $('.js-answer-input').val('');
+
+    if (isImageAnswerMode()) {
+        gameState.roundChoices = buildImageChoices(trackId, getFoundPlayableTracks());
+        renderImageChoices($, gameState.roundChoices);
+        enableImageAnswers($);
+    }
+}
+
+/** Advance without wrong-answer penalty when no playable track can be loaded. */
+function softSkipUnplayableRound($) {
+    if (!gameState.isPlaying) {
+        return;
+    }
+
+    console.warn('No playable replacement track; advancing without penalty.');
+    gameState.isPlaying = false;
+    resetRoundTimer();
+    stopAudioForRoundEnd($);
+
+    if (isImageAnswerMode()) {
+        disableImageAnswers($);
+    } else {
+        $('.js-answer-form').removeClass('answer_form--playing');
+    }
+
+    enableNextRoundInput($);
+    scheduleNextRound(UNPLAYABLE_ROUND_DELAY_MS);
+}
+
+function recoverRoundAudio($, attemptedIds) {
+    if (!gameState.isPlaying) {
+        return;
+    }
+
+    const replacementId = pickReplacementTrackId(attemptedIds);
+    if (!replacementId) {
+        softSkipUnplayableRound($);
+        return;
+    }
+
+    console.warn('Swapping unplayable track for same round:', gameState.currentTrackId, '→', replacementId);
+    attemptedIds.add(replacementId);
+    bindCurrentTrackForRound($, replacementId);
+    startRoundAudio($, attemptedIds);
+}
+
+function startRoundAudio($, attemptedIds = new Set()) {
+    const trackId = gameState.currentTrackId;
+    attemptedIds.add(trackId);
+
+    prepareRoundAudio($, getPreviewPath(trackId), {
+        onLoadFailure: function () {
+            recoverRoundAudio($, attemptedIds);
+        },
+    });
+}
+
 export function playRound($) {
     resetAnswerForm($);
 
@@ -309,6 +410,7 @@ export function playRound($) {
 
     const trackId = gameState.setList.shift();
     gameState.currentTrackId = trackId;
+    gameState.sessionTrackIds.push(trackId);
 
     setLikeButton($, trackId);
     showGuessingPhaseUI($);
@@ -328,8 +430,7 @@ export function playRound($) {
         enableAnswerForm($);
     }
 
-    const previewPath = getPreviewPath(trackId);
-    prepareRoundAudio($, previewPath);
+    startRoundAudio($);
 }
 
 export function initAnswerForm($) {

@@ -35,6 +35,8 @@ export const gameState = {
     segmentDurations1: [...SEGMENT_DURATIONS_1],
     segmentDurations2: [...SEGMENT_DURATIONS_2],
     foundTracksIds: [],
+    /** Track IDs already used this game (including the current round). */
+    sessionTrackIds: [],
     onlyUnfoundTracks: false,
 };
 
@@ -78,6 +80,7 @@ export function resetGameState() {
     gameState.isPlaying = false;
     gameState.roundStartTime = 0;
     gameState.foundTracksIds = [];
+    gameState.sessionTrackIds = [];
 }
 
 export function computeScoreIncrement() {
