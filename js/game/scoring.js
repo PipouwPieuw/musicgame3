@@ -1,11 +1,12 @@
 import { DIFFICULTYNAMES, MINSTREAK, POINTSBYANSWER } from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
+import { animateCorrectAnswer } from '../ui/answer-reveal.js';
 import { getRoundDuration } from './audio-player.js';
 import { gameState } from './state.js';
 
-const soundRight = new Audio('assets/right.m4a');
+const soundRight = new Audio('assets/sounds/right.m4a');
 soundRight.volume = 0.5;
-const soundWrong = new Audio('assets/wrong.m4a');
+const soundWrong = new Audio('assets/sounds/wrong.m4a');
 
 export function playSound(soundElem) {
     soundElem.currentTime = 0;
@@ -120,31 +121,4 @@ export function getAudioElements($) {
         jsAudioPlayer: $('.js-audio-player'),
         jsAudioPlayerHardcore: $('.js-audio-player-hardcore'),
     };
-}
-
-function animateCorrectAnswer($) {
-    $('.js-answer-reveal').addClass('toggled');
-    setTimeout(function () {
-        $('.js-answer-reveal-image').addClass('visible');
-    }, 10);
-    setTimeout(function () {
-        // $('.js-answer-reveal-star').addClass('active');
-        $('.js-answer-reveal-text-wrapper').addClass('appear');
-    }, 150);
-    setTimeout(function () {
-        $('.js-answer-reveal-image').addClass('shine');
-    }, 500);
-    setTimeout(function () {
-        $('.js-answer-reveal-image').removeClass('shine');
-    }, 1000);
-    setTimeout(function () {
-         $('.js-answer-reveal-text-wrapper').removeClass('appear');
-     }, 1500);
-    setTimeout(function () {
-         $('.js-answer-reveal-image').removeClass('visible');
-     }, 1700);
-    setTimeout(function () {
-        // $('.js-answer-reveal-star').removeClass('active');
-         $('.js-answer-reveal').removeClass('toggled');
-    }, 1800);
 }

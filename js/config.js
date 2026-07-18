@@ -1,4 +1,5 @@
 export const DEFAULT_COVER_PATH = 'assets/images/default.png';
+export const NOT_FOUND_COVER_PATH = 'assets/images/not-found.png';
 
 export const DEVMODE = false;
 export const SHUFFLE = true;

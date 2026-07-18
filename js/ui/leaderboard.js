@@ -1,7 +1,15 @@
-import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES, LEADERBOARDDIFFICULTYNAMES } from '../config.js';
-import { getTrackMetadata } from '../lib/track-utils.js';
+import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES, LEADERBOARDDIFFICULTYNAMES, NOT_FOUND_COVER_PATH } from '../config.js';
+import { getCoverPath, getTrackMetadata } from '../lib/track-utils.js';
 import { getAllProfiles, getAllScores } from '../services/player-api.js';
+import { groupTrackIdsByGenre } from '../services/tracks-loader.js';
 import { gameState } from '../game/state.js';
+import {
+    playAnswerRevealAppear,
+    playAnswerRevealDismiss,
+    setAnswerRevealContent,
+} from './answer-reveal.js';
+
+let foundTrackRevealDismissArmed = false;
 
 export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
     for (const element in allScores) {
@@ -215,12 +223,85 @@ export async function buildTrophies($) {
 }
 
 export async function buildFoundTracks($) {
-    $('.js-found-tracks-list').empty();
-    const foundTracks = gameState.playerData.foundTracksIds;
+    const $container = $('.js-found-tracks-list');
+    $container.empty();
+
+    const foundTracks = gameState.playerData.foundTracksIds || [];
     $('.js-found-tracks-count').text(foundTracks.length);
-    for (const track in foundTracks) {
-        $('.js-found-tracks-list').append('<li class="found_tracks__item"><img src="assets/covers/' + foundTracks[track] + '.png"/></li>');
+
+    const genreGroups = await groupTrackIdsByGenre(foundTracks);
+
+    genreGroups.forEach(function (group) {
+        const $genre = $('<details class="found_tracks__genre"></details>');
+        $genre.append(
+            $('<summary class="found_tracks__genre_label"></summary>').append(
+                group.label + ' (' + group.foundCount + '/' + group.totalTracks + ')'
+            )
+        );
+
+        const $list = $('<ul class="found_tracks__list"></ul>');
+        group.tracks.forEach(function (track) {
+            const $item = $('<li class="found_tracks__item"></li>');
+
+            if (track.found) {
+                $item
+                    .addClass('found_tracks__item--found js-found-track')
+                    .attr('data-track-id', track.id)
+                    .attr('data-track-title', track.title)
+                    .attr('role', 'button')
+                    .attr('tabindex', '0')
+                    .attr('aria-label', track.title)
+                    .append($('<img>').attr('src', getCoverPath(track.id)).attr('alt', track.title));
+            } else {
+                $item
+                    .addClass('found_tracks__item--locked')
+                    .append($('<img>').attr('src', NOT_FOUND_COVER_PATH).attr('alt', ''));
+            }
+
+            $list.append($item);
+        });
+
+        $genre.append($list);
+        $container.append($genre);
+    });
+}
+
+function dismissFoundTrackReveal($) {
+    if (!foundTrackRevealDismissArmed) {
+        return;
     }
+
+    foundTrackRevealDismissArmed = false;
+    $(document).off('click.foundTrackReveal');
+    playAnswerRevealDismiss($);
+}
+
+export function initFoundTracksReveal($) {
+    $('body').on('click', '.js-found-track', function (event) {
+        if (foundTrackRevealDismissArmed) {
+            dismissFoundTrackReveal($);
+            return;
+        }
+
+        event.stopPropagation();
+
+        const $item = $(this);
+        const trackId = $item.attr('data-track-id');
+        const title = $item.attr('data-track-title') || '';
+
+        setAnswerRevealContent($, {
+            title: title,
+            imagePath: getCoverPath(trackId),
+        });
+        playAnswerRevealAppear($);
+
+        setTimeout(function () {
+            foundTrackRevealDismissArmed = true;
+            $(document).on('click.foundTrackReveal', function () {
+                dismissFoundTrackReveal($);
+            });
+        }, 0);
+    });
 }
 
 export function updateStatsGamesPlayed($) {

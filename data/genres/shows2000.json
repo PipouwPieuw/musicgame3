@@ -1,513 +1,517 @@
-[
-  {
-    "id": "A001",
-    "title": "Fringe",
-    "subTitle": "",
-    "year": "2008 - 2013",
-    "acceptedAnswers": [
-      "Fringe"
-    ]
-  },
-  {
-    "id": "A002",
-    "title": "Desperate Housewives",
-    "subTitle": "",
-    "year": "2004 - 2012",
-    "acceptedAnswers": [
-      "Desperate Housewives"
-    ]
-  },
-  {
-    "id": "A003",
-    "title": "House",
-    "subTitle": "",
-    "year": "2004 - 2012",
-    "acceptedAnswers": [
-      "House",
-      "House MD",
-      "Dr. House",
-      "Docteur House",
-      "Doctor House"
-    ]
-  },
-  {
-    "id": "A004",
-    "title": "Lost",
-    "subTitle": "",
-    "year": "2004 - 2010",
-    "acceptedAnswers": [
-      "Lost",
-      "Lost les disparus"
-    ]
-  },
-  {
-    "id": "A005",
-    "title": "Heroes",
-    "subTitle": "",
-    "year": "2006 - 2010",
-    "acceptedAnswers": [
-      "Heroes"
-    ]
-  },
-  {
-    "id": "A006",
-    "title": "Six Feet Under",
-    "subTitle": "",
-    "year": "2001 - 2005",
-    "acceptedAnswers": [
-      "Six Feet Under",
-      "Six pieds sous terre"
-    ]
-  },
-  {
-    "id": "A007",
-    "title": "The Office (US)",
-    "subTitle": "",
-    "year": "2005 - 2013",
-    "acceptedAnswers": [
-      "The Office",
-      "The Office US",
-      "Office"
-    ]
-  },
-  {
-    "id": "A008",
-    "title": "Dead Like Me",
-    "subTitle": "",
-    "year": "2003 - 2004",
-    "acceptedAnswers": [
-      "Dead Like Me"
-    ]
-  },
-  {
-    "id": "A009",
-    "title": "Alias",
-    "subTitle": "",
-    "year": "2001 - 2006",
-    "acceptedAnswers": [
-      "Alias"
-    ]
-  },
-  {
-    "id": "A010",
-    "title": "How I Met Your Mother",
-    "subTitle": "",
-    "year": "2005 - 2014",
-    "acceptedAnswers": [
-      "How I Met Your Mother",
-      "HIMYM"
-    ]
-  },
-  {
-    "id": "A011",
-    "title": "ReGenesis",
-    "subTitle": "",
-    "year": "2004 - 2008",
-    "acceptedAnswers": [
-      "ReGenesis"
-    ]
-  },
-  {
-    "id": "A012",
-    "title": "Pushing Daisies",
-    "subTitle": "",
-    "year": "2007 - 2009",
-    "acceptedAnswers": [
-      "Pushing Daisies"
-    ]
-  },
-  {
-    "id": "A013",
-    "title": "Skins (UK)",
-    "subTitle": "Générique saison 1",
-    "year": "2007 - 2013",
-    "acceptedAnswers": [
-      "Skins",
-      "Skins UK"
-    ]
-  },
-  {
-    "id": "A014",
-    "title": "Malcolm in the Middle",
-    "subTitle": "",
-    "year": "2000 - 2006",
-    "acceptedAnswers": [
-      "Malcolm in the Middle",
-      "Malcolm"
-    ]
-  },
-  {
-    "id": "A015",
-    "title": "Monk",
-    "subTitle": "Générique saison 1",
-    "year": "2002 - 2009",
-    "acceptedAnswers": [
-      "Monk"
-    ]
-  },
-  {
-    "id": "A016",
-    "title": "Two and a Half Men",
-    "subTitle": "",
-    "year": "2003 - 2015",
-    "acceptedAnswers": [
-      "Two and a Half Men",
-      "Mon Oncle Charlie"
-    ]
-  },
-  {
-    "id": "A017",
-    "title": "Veronica Mars",
-    "subTitle": "",
-    "year": "2004 - 2007",
-    "acceptedAnswers": [
-      "Veronica Mars"
-    ]
-  },
-  {
-    "id": "A018",
-    "title": "Medium",
-    "subTitle": "",
-    "year": "2005 - 2011",
-    "acceptedAnswers": [
-      "Medium"
-    ]
-  },
-  {
-    "id": "A019",
-    "title": "Charmed",
-    "subTitle": "",
-    "year": "1998 - 2006",
-    "acceptedAnswers": [
-      "Charmed"
-    ]
-  },
-  {
-    "id": "A020",
-    "title": "Dollhouse",
-    "subTitle": "",
-    "year": "2009 - 2010",
-    "acceptedAnswers": [
-      "Dollhouse"
-    ]
-  },
-  {
-    "id": "A021",
-    "title": "Doctor Who",
-    "subTitle": "",
-    "year": "2005 - 2022",
-    "acceptedAnswers": [
-      "Doctor Who"
-    ]
-  },
-  {
-    "id": "A022",
-    "title": "Dexter",
-    "subTitle": "",
-    "year": "2006 - 2013",
-    "acceptedAnswers": [
-      "Dexter"
-    ]
-  },
-  {
-    "id": "A023",
-    "title": "The 4400",
-    "subTitle": "",
-    "year": "2004 - 2007",
-    "acceptedAnswers": [
-      "The 4400",
-      "Les 4400",
-      "4400"
-    ]
-  },
-  {
-    "id": "A024",
-    "title": "Prison Break",
-    "subTitle": "",
-    "year": "2005 - 2009",
-    "acceptedAnswers": [
-      "Prison Break"
-    ]
-  },
-  {
-    "id": "A025",
-    "title": "The Wire",
-    "subTitle": "",
-    "year": "2002 - 2008",
-    "acceptedAnswers": [
-      "The Wire",
-      "Wire",
-      "Sur ecoute"
-    ]
-  },
-  {
-    "id": "A026",
-    "title": "Arrested Development",
-    "subTitle": "",
-    "year": "2003 - 2006 / 2013 / 2019",
-    "acceptedAnswers": [
-      "Arrested Development"
-    ]
-  },
-  {
-    "id": "A027",
-    "title": "The Sopranos",
-    "subTitle": "",
-    "year": "1999 - 2007",
-    "acceptedAnswers": [
-      "The Sopranos",
-      "The Soprano",
-      "Les Sopranos",
-      "Les Soprano",
-      "Sopranos"
-    ]
-  },
-  {
-    "id": "A028",
-    "title": "Scrubs",
-    "subTitle": "",
-    "year": "2001 - 2010",
-    "acceptedAnswers": [
-      "Scrubs"
-    ]
-  },
-  {
-    "id": "A029",
-    "title": "24",
-    "subTitle": "",
-    "year": "2001 - 2010 / 2014 / 2017",
-    "acceptedAnswers": [
-      "24",
-      "24 heures chrono",
-      "24h"
-    ]
-  },
-  {
-    "id": "A030",
-    "title": "Mad Men",
-    "subTitle": "",
-    "year": "2007 - 2015",
-    "acceptedAnswers": [
-      "Mad Men"
-    ]
-  },
-  {
-    "id": "A031",
-    "title": "The Shield",
-    "subTitle": "",
-    "year": "2002 - 2008",
-    "acceptedAnswers": [
-      "The Shield",
-      "Shield"
-    ]
-  },
-  {
-    "id": "A032",
-    "title": "Nip/Tuck",
-    "subTitle": "",
-    "year": "2003 - 2010",
-    "acceptedAnswers": [
-      "Nip Tuck"
-    ]
-  },
-  {
-    "id": "A033",
-    "title": "Rome",
-    "subTitle": "",
-    "year": "2005 - 2007",
-    "acceptedAnswers": [
-      "Rome"
-    ]
-  },
-  {
-    "id": "A034",
-    "title": "Weeds",
-    "subTitle": "",
-    "year": "2005 - 2012",
-    "acceptedAnswers": [
-      "Weeds"
-    ]
-  },
-  {
-    "id": "A035",
-    "title": "The Tudors",
-    "subTitle": "",
-    "year": "2007 - 2010",
-    "acceptedAnswers": [
-      "The Tudors",
-      "Les Tudors",
-      "Tudors"
-    ]
-  },
-  {
-    "id": "A036",
-    "title": "Breaking Bad",
-    "subTitle": "",
-    "year": "2008 - 2013",
-    "acceptedAnswers": [
-      "Breaking Bad"
-    ]
-  },
-  {
-    "id": "A037",
-    "title": "Californication",
-    "subTitle": "",
-    "year": "2007 - 2014",
-    "acceptedAnswers": [
-      "Californication"
-    ]
-  },
-  {
-    "id": "A038",
-    "title": "True Blood",
-    "subTitle": "",
-    "year": "2008 - 2014",
-    "acceptedAnswers": [
-      "True Blood"
-    ]
-  },
-  {
-    "id": "A039",
-    "title": "Grey's Anatomy",
-    "subTitle": "",
-    "year": "2005 - En cours",
-    "acceptedAnswers": [
-      "Greys Anatomy"
-    ]
-  },
-  {
-    "id": "A040",
-    "title": "Bones",
-    "subTitle": "",
-    "year": "2005 - 2017",
-    "acceptedAnswers": [
-      "Bones"
-    ]
-  },
-  {
-    "id": "A041",
-    "title": "Angel",
-    "subTitle": "",
-    "year": "1999 - 2004",
-    "acceptedAnswers": [
-      "Angel"
-    ]
-  },
-  {
-    "id": "A042",
-    "title": "Smallville",
-    "subTitle": "",
-    "year": "2001 - 2011",
-    "acceptedAnswers": [
-      "Smallville"
-    ]
-  },
-  {
-    "id": "A043",
-    "title": "CSI: Crime Scene Investigation",
-    "subTitle": "",
-    "year": "2000 - 2015",
-    "acceptedAnswers": [
-      "CSI: Crime Scene Investigation",
-      "CSI",
-      "Les Experts",
-      "Experts"
-    ]
-  },
-  {
-    "id": "A044",
-    "title": "NCIS",
-    "subTitle": "",
-    "year": "2003 - En cours",
-    "acceptedAnswers": [
-      "NCIS"
-    ]
-  },
-  {
-    "id": "A045",
-    "title": "The IT Crowd",
-    "subTitle": "",
-    "year": "2006 - 2013",
-    "acceptedAnswers": [
-      "The IT Crowd",
-      "IT Crowd"
-    ]
-  },
-  {
-    "id": "A046",
-    "title": "Gilmore Girls",
-    "subTitle": "",
-    "year": "2000 - 2007",
-    "acceptedAnswers": [
-      "Gilmore Girls"
-    ]
-  },
-  {
-    "id": "A047",
-    "title": "Everybody Hates Chris",
-    "subTitle": "",
-    "year": "2005 - 2009",
-    "acceptedAnswers": [
-      "Everybody Hates Chris",
-      "Tout le monde déteste Chris"
-    ]
-  },
-  {
-    "id": "A048",
-    "title": "Battlestar Galactica",
-    "subTitle": "",
-    "year": "2003 - 2009",
-    "acceptedAnswers": [
-      "Battlestar Galactica"
-    ]
-  },
-  {
-    "id": "A049",
-    "title": "One Tree Hill",
-    "subTitle": "",
-    "year": "2003 - 2012",
-    "acceptedAnswers": [
-      "One Tree Hill",
-      "Les frères Scott",
-      "Frères Scott"
-    ]
-  },
-  {
-    "id": "A050",
-    "title": "Dark Angel",
-    "subTitle": "",
-    "year": "2000 - 2002",
-    "acceptedAnswers": [
-      "Dark Angel"
-    ]
-  },
-  {
-    "id": "A051",
-    "title": "Ghost Whisperer",
-    "subTitle": "",
-    "year": "2005 - 2010",
-    "acceptedAnswers": [
-      "Ghost Whisperer"
-    ]
-  },
-  {
-    "id": "A052",
-    "title": "Tru Calling",
-    "subTitle": "",
-    "year": "2003 - 2005",
-    "acceptedAnswers": [
-      "Tru Calling"
-    ]
-  },
-  {
-    "id": "A053",
-    "title": "Mysterious Ways",
-    "subTitle": "",
-    "year": "2000 - 2002",
-    "acceptedAnswers": [
-      "Mysterious Ways",
-      "Mysterious Ways : Les chemins de l'étrange",
-      "Les chemins de l'étrange"
-    ]
-  }
-]
+{
+  "label": "Années 2000",
+  "description": "Séries anglophones, génériques originaux",
+  "tracks": [
+    {
+      "id": "A001",
+      "title": "Fringe",
+      "subTitle": "",
+      "year": "2008 - 2013",
+      "acceptedAnswers": [
+        "Fringe"
+      ]
+    },
+    {
+      "id": "A002",
+      "title": "Desperate Housewives",
+      "subTitle": "",
+      "year": "2004 - 2012",
+      "acceptedAnswers": [
+        "Desperate Housewives"
+      ]
+    },
+    {
+      "id": "A003",
+      "title": "House",
+      "subTitle": "",
+      "year": "2004 - 2012",
+      "acceptedAnswers": [
+        "House",
+        "House MD",
+        "Dr. House",
+        "Docteur House",
+        "Doctor House"
+      ]
+    },
+    {
+      "id": "A004",
+      "title": "Lost",
+      "subTitle": "",
+      "year": "2004 - 2010",
+      "acceptedAnswers": [
+        "Lost",
+        "Lost les disparus"
+      ]
+    },
+    {
+      "id": "A005",
+      "title": "Heroes",
+      "subTitle": "",
+      "year": "2006 - 2010",
+      "acceptedAnswers": [
+        "Heroes"
+      ]
+    },
+    {
+      "id": "A006",
+      "title": "Six Feet Under",
+      "subTitle": "",
+      "year": "2001 - 2005",
+      "acceptedAnswers": [
+        "Six Feet Under",
+        "Six pieds sous terre"
+      ]
+    },
+    {
+      "id": "A007",
+      "title": "The Office (US)",
+      "subTitle": "",
+      "year": "2005 - 2013",
+      "acceptedAnswers": [
+        "The Office",
+        "The Office US",
+        "Office"
+      ]
+    },
+    {
+      "id": "A008",
+      "title": "Dead Like Me",
+      "subTitle": "",
+      "year": "2003 - 2004",
+      "acceptedAnswers": [
+        "Dead Like Me"
+      ]
+    },
+    {
+      "id": "A009",
+      "title": "Alias",
+      "subTitle": "",
+      "year": "2001 - 2006",
+      "acceptedAnswers": [
+        "Alias"
+      ]
+    },
+    {
+      "id": "A010",
+      "title": "How I Met Your Mother",
+      "subTitle": "",
+      "year": "2005 - 2014",
+      "acceptedAnswers": [
+        "How I Met Your Mother",
+        "HIMYM"
+      ]
+    },
+    {
+      "id": "A011",
+      "title": "ReGenesis",
+      "subTitle": "",
+      "year": "2004 - 2008",
+      "acceptedAnswers": [
+        "ReGenesis"
+      ]
+    },
+    {
+      "id": "A012",
+      "title": "Pushing Daisies",
+      "subTitle": "",
+      "year": "2007 - 2009",
+      "acceptedAnswers": [
+        "Pushing Daisies"
+      ]
+    },
+    {
+      "id": "A013",
+      "title": "Skins (UK)",
+      "subTitle": "Générique saison 1",
+      "year": "2007 - 2013",
+      "acceptedAnswers": [
+        "Skins",
+        "Skins UK"
+      ]
+    },
+    {
+      "id": "A014",
+      "title": "Malcolm in the Middle",
+      "subTitle": "",
+      "year": "2000 - 2006",
+      "acceptedAnswers": [
+        "Malcolm in the Middle",
+        "Malcolm"
+      ]
+    },
+    {
+      "id": "A015",
+      "title": "Monk",
+      "subTitle": "Générique saison 1",
+      "year": "2002 - 2009",
+      "acceptedAnswers": [
+        "Monk"
+      ]
+    },
+    {
+      "id": "A016",
+      "title": "Two and a Half Men",
+      "subTitle": "",
+      "year": "2003 - 2015",
+      "acceptedAnswers": [
+        "Two and a Half Men",
+        "Mon Oncle Charlie"
+      ]
+    },
+    {
+      "id": "A017",
+      "title": "Veronica Mars",
+      "subTitle": "",
+      "year": "2004 - 2007",
+      "acceptedAnswers": [
+        "Veronica Mars"
+      ]
+    },
+    {
+      "id": "A018",
+      "title": "Medium",
+      "subTitle": "",
+      "year": "2005 - 2011",
+      "acceptedAnswers": [
+        "Medium"
+      ]
+    },
+    {
+      "id": "A019",
+      "title": "Charmed",
+      "subTitle": "",
+      "year": "1998 - 2006",
+      "acceptedAnswers": [
+        "Charmed"
+      ]
+    },
+    {
+      "id": "A020",
+      "title": "Dollhouse",
+      "subTitle": "",
+      "year": "2009 - 2010",
+      "acceptedAnswers": [
+        "Dollhouse"
+      ]
+    },
+    {
+      "id": "A021",
+      "title": "Doctor Who",
+      "subTitle": "",
+      "year": "2005 - 2022",
+      "acceptedAnswers": [
+        "Doctor Who"
+      ]
+    },
+    {
+      "id": "A022",
+      "title": "Dexter",
+      "subTitle": "",
+      "year": "2006 - 2013",
+      "acceptedAnswers": [
+        "Dexter"
+      ]
+    },
+    {
+      "id": "A023",
+      "title": "The 4400",
+      "subTitle": "",
+      "year": "2004 - 2007",
+      "acceptedAnswers": [
+        "The 4400",
+        "Les 4400",
+        "4400"
+      ]
+    },
+    {
+      "id": "A024",
+      "title": "Prison Break",
+      "subTitle": "",
+      "year": "2005 - 2009",
+      "acceptedAnswers": [
+        "Prison Break"
+      ]
+    },
+    {
+      "id": "A025",
+      "title": "The Wire",
+      "subTitle": "",
+      "year": "2002 - 2008",
+      "acceptedAnswers": [
+        "The Wire",
+        "Wire",
+        "Sur ecoute"
+      ]
+    },
+    {
+      "id": "A026",
+      "title": "Arrested Development",
+      "subTitle": "",
+      "year": "2003 - 2006 / 2013 / 2019",
+      "acceptedAnswers": [
+        "Arrested Development"
+      ]
+    },
+    {
+      "id": "A027",
+      "title": "The Sopranos",
+      "subTitle": "",
+      "year": "1999 - 2007",
+      "acceptedAnswers": [
+        "The Sopranos",
+        "The Soprano",
+        "Les Sopranos",
+        "Les Soprano",
+        "Sopranos"
+      ]
+    },
+    {
+      "id": "A028",
+      "title": "Scrubs",
+      "subTitle": "",
+      "year": "2001 - 2010",
+      "acceptedAnswers": [
+        "Scrubs"
+      ]
+    },
+    {
+      "id": "A029",
+      "title": "24",
+      "subTitle": "",
+      "year": "2001 - 2010 / 2014 / 2017",
+      "acceptedAnswers": [
+        "24",
+        "24 heures chrono",
+        "24h"
+      ]
+    },
+    {
+      "id": "A030",
+      "title": "Mad Men",
+      "subTitle": "",
+      "year": "2007 - 2015",
+      "acceptedAnswers": [
+        "Mad Men"
+      ]
+    },
+    {
+      "id": "A031",
+      "title": "The Shield",
+      "subTitle": "",
+      "year": "2002 - 2008",
+      "acceptedAnswers": [
+        "The Shield",
+        "Shield"
+      ]
+    },
+    {
+      "id": "A032",
+      "title": "Nip/Tuck",
+      "subTitle": "",
+      "year": "2003 - 2010",
+      "acceptedAnswers": [
+        "Nip Tuck"
+      ]
+    },
+    {
+      "id": "A033",
+      "title": "Rome",
+      "subTitle": "",
+      "year": "2005 - 2007",
+      "acceptedAnswers": [
+        "Rome"
+      ]
+    },
+    {
+      "id": "A034",
+      "title": "Weeds",
+      "subTitle": "",
+      "year": "2005 - 2012",
+      "acceptedAnswers": [
+        "Weeds"
+      ]
+    },
+    {
+      "id": "A035",
+      "title": "The Tudors",
+      "subTitle": "",
+      "year": "2007 - 2010",
+      "acceptedAnswers": [
+        "The Tudors",
+        "Les Tudors",
+        "Tudors"
+      ]
+    },
+    {
+      "id": "A036",
+      "title": "Breaking Bad",
+      "subTitle": "",
+      "year": "2008 - 2013",
+      "acceptedAnswers": [
+        "Breaking Bad"
+      ]
+    },
+    {
+      "id": "A037",
+      "title": "Californication",
+      "subTitle": "",
+      "year": "2007 - 2014",
+      "acceptedAnswers": [
+        "Californication"
+      ]
+    },
+    {
+      "id": "A038",
+      "title": "True Blood",
+      "subTitle": "",
+      "year": "2008 - 2014",
+      "acceptedAnswers": [
+        "True Blood"
+      ]
+    },
+    {
+      "id": "A039",
+      "title": "Grey's Anatomy",
+      "subTitle": "",
+      "year": "2005 - En cours",
+      "acceptedAnswers": [
+        "Greys Anatomy"
+      ]
+    },
+    {
+      "id": "A040",
+      "title": "Bones",
+      "subTitle": "",
+      "year": "2005 - 2017",
+      "acceptedAnswers": [
+        "Bones"
+      ]
+    },
+    {
+      "id": "A041",
+      "title": "Angel",
+      "subTitle": "",
+      "year": "1999 - 2004",
+      "acceptedAnswers": [
+        "Angel"
+      ]
+    },
+    {
+      "id": "A042",
+      "title": "Smallville",
+      "subTitle": "",
+      "year": "2001 - 2011",
+      "acceptedAnswers": [
+        "Smallville"
+      ]
+    },
+    {
+      "id": "A043",
+      "title": "CSI: Crime Scene Investigation",
+      "subTitle": "",
+      "year": "2000 - 2015",
+      "acceptedAnswers": [
+        "CSI: Crime Scene Investigation",
+        "CSI",
+        "Les Experts",
+        "Experts"
+      ]
+    },
+    {
+      "id": "A044",
+      "title": "NCIS",
+      "subTitle": "",
+      "year": "2003 - En cours",
+      "acceptedAnswers": [
+        "NCIS"
+      ]
+    },
+    {
+      "id": "A045",
+      "title": "The IT Crowd",
+      "subTitle": "",
+      "year": "2006 - 2013",
+      "acceptedAnswers": [
+        "The IT Crowd",
+        "IT Crowd"
+      ]
+    },
+    {
+      "id": "A046",
+      "title": "Gilmore Girls",
+      "subTitle": "",
+      "year": "2000 - 2007",
+      "acceptedAnswers": [
+        "Gilmore Girls"
+      ]
+    },
+    {
+      "id": "A047",
+      "title": "Everybody Hates Chris",
+      "subTitle": "",
+      "year": "2005 - 2009",
+      "acceptedAnswers": [
+        "Everybody Hates Chris",
+        "Tout le monde déteste Chris"
+      ]
+    },
+    {
+      "id": "A048",
+      "title": "Battlestar Galactica",
+      "subTitle": "",
+      "year": "2003 - 2009",
+      "acceptedAnswers": [
+        "Battlestar Galactica"
+      ]
+    },
+    {
+      "id": "A049",
+      "title": "One Tree Hill",
+      "subTitle": "",
+      "year": "2003 - 2012",
+      "acceptedAnswers": [
+        "One Tree Hill",
+        "Les frères Scott",
+        "Frères Scott"
+      ]
+    },
+    {
+      "id": "A050",
+      "title": "Dark Angel",
+      "subTitle": "",
+      "year": "2000 - 2002",
+      "acceptedAnswers": [
+        "Dark Angel"
+      ]
+    },
+    {
+      "id": "A051",
+      "title": "Ghost Whisperer",
+      "subTitle": "",
+      "year": "2005 - 2010",
+      "acceptedAnswers": [
+        "Ghost Whisperer"
+      ]
+    },
+    {
+      "id": "A052",
+      "title": "Tru Calling",
+      "subTitle": "",
+      "year": "2003 - 2005",
+      "acceptedAnswers": [
+        "Tru Calling"
+      ]
+    },
+    {
+      "id": "A053",
+      "title": "Mysterious Ways",
+      "subTitle": "",
+      "year": "2000 - 2002",
+      "acceptedAnswers": [
+        "Mysterious Ways",
+        "Mysterious Ways : Les chemins de l'étrange",
+        "Les chemins de l'étrange"
+      ]
+    }
+  ]
+}

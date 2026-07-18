@@ -120,9 +120,9 @@ const APPController = (function(UICtrl, APICtrl) {
     var audioPlayerHardcore = document.getElementById("audio_player_hardcore");
     var jsAudioPlayer = $('.js-audio-player');
     var jsAudioPlayerHardcore = $('.js-audio-player-hardcore');
-    var soundRight = new Audio('assets/right.m4a');
+    var soundRight = new Audio('assets/sounds/right.m4a');
     soundRight.volume = 0.5;
-    var soundWrong = new Audio('assets/wrong.m4a');
+    var soundWrong = new Audio('assets/sounds/wrong.m4a');
     // Data
     var playersData = [];
     var playersDataBuild = '';

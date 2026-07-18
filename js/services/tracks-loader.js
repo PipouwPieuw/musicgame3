@@ -48,7 +48,27 @@ function validateTrack(track, index, genreId) {
     });
 }
 
-async function fetchGenreTracks(genreId, genreUrl) {
+function validateGenrePayload(genreId, payload) {
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+        throw new Error(
+            `Le genre "${genreId}" doit être un objet contenant "label" et "tracks".`
+        );
+    }
+
+    if (typeof payload.label !== 'string' || !payload.label.trim()) {
+        throw new Error(`Le genre "${genreId}" doit avoir un "label" non vide.`);
+    }
+
+    if (!Array.isArray(payload.tracks) || payload.tracks.length === 0) {
+        throw new Error(`Le genre "${genreId}" doit contenir un tableau de morceaux non vide.`);
+    }
+
+    payload.tracks.forEach(function (track, trackIndex) {
+        validateTrack(track, trackIndex, genreId);
+    });
+}
+
+async function fetchGenre(genreId, genreUrl) {
     let response;
 
     try {
@@ -63,23 +83,20 @@ async function fetchGenreTracks(genreId, genreUrl) {
         throw new Error(`Impossible de charger le genre "${genreId}" (${response.status}).`);
     }
 
-    let tracks;
+    let payload;
 
     try {
-        tracks = await response.json();
+        payload = await response.json();
     } catch (error) {
         throw new Error(`Le fichier du genre "${genreId}" est invalide (JSON mal formé).`, { cause: error });
     }
 
-    if (!Array.isArray(tracks) || tracks.length === 0) {
-        throw new Error(`Le genre "${genreId}" doit contenir un tableau de morceaux non vide.`);
-    }
+    validateGenrePayload(genreId, payload);
 
-    tracks.forEach(function (track, trackIndex) {
-        validateTrack(track, trackIndex, genreId);
-    });
-
-    return tracks;
+    return {
+        label: payload.label.trim(),
+        tracks: payload.tracks,
+    };
 }
 
 async function fetchCatalog() {
@@ -94,15 +111,15 @@ async function fetchCatalog() {
         throw new Error('Le catalogue de morceaux ne contient aucun genre.');
     }
 
-    const tracksByGenre = await Promise.all(
+    const genres = await Promise.all(
         genreEntries.map(async function ([genreId, genreUrl]) {
-            const tracks = await fetchGenreTracks(genreId, genreUrl);
-            return [genreId, tracks];
+            const genre = await fetchGenre(genreId, genreUrl);
+            return [genreId, genre];
         })
     );
 
-    tracksByGenre.forEach(function ([genreId, tracks]) {
-        catalog[genreId] = tracks;
+    genres.forEach(function ([genreId, genre]) {
+        catalog[genreId] = genre;
     });
 
     cachedCatalog = catalog;
@@ -118,10 +135,56 @@ export async function loadTracks(genre = DEFAULT_GENRE) {
         throw new Error(`Genre inconnu : "${genre}". Genres disponibles : ${availableGenres}.`);
     }
 
-    return catalog[genre];
+    return catalog[genre].tracks;
+}
+
+export async function getGenreLabel(genre = DEFAULT_GENRE) {
+    const catalog = await fetchCatalog();
+
+    if (!catalog[genre]) {
+        const availableGenres = Object.keys(catalog).join(', ');
+        throw new Error(`Genre inconnu : "${genre}". Genres disponibles : ${availableGenres}.`);
+    }
+
+    return catalog[genre].label;
 }
 
 export async function getAvailableGenres() {
     const catalog = await fetchCatalog();
-    return Object.keys(catalog);
+
+    return Object.entries(catalog).map(function ([id, genre]) {
+        return {
+            id: id,
+            label: genre.label,
+        };
+    });
+}
+
+export async function groupTrackIdsByGenre(trackIds) {
+    const catalog = await fetchCatalog();
+    const foundIds = new Set(trackIds || []);
+
+    return Object.entries(catalog)
+        .map(function ([id, genre]) {
+            const tracks = genre.tracks.map(function (track) {
+                return {
+                    id: track.id,
+                    title: track.title,
+                    found: foundIds.has(track.id),
+                };
+            });
+
+            return {
+                id: id,
+                label: genre.label,
+                totalTracks: tracks.length,
+                foundCount: tracks.filter(function (track) {
+                    return track.found;
+                }).length,
+                tracks: tracks,
+            };
+        })
+        .filter(function (group) {
+            return group.foundCount > 0;
+        });
 }

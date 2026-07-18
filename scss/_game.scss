@@ -121,10 +121,10 @@
 	}
 }
 .track_display__like[data-liked="false"] {
-	background-image: url(assets/heart-empty.svg);
+	background-image: url(assets/icons/heart-empty.svg);
 }
 .track_display__like[data-liked="true"] {
-	background-image: url(assets/heart-full.svg);
+	background-image: url(assets/icons/heart-full.svg);
 }
 .track_display__like[data-liked="false"] [data-liked="true"],
 .track_display__like[data-liked="true"] [data-liked="false"] {

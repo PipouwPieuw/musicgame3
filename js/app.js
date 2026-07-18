@@ -10,9 +10,9 @@ import {
     setNextRoundCallback,
     setRoundJquery,
 } from './game/round.js';
-import { buildSetlist } from './game/setlist.js';
+import { buildSetlist, getTracksForCurrentMode } from './game/setlist.js';
 import { getAudioElements, resetStreak, updateScoreUI } from './game/scoring.js';
-import { gameState, resetGameState, getDifficultyName } from './game/state.js';
+import { gameState, resetGameState, getDifficultyName, isClassicMode } from './game/state.js';
 import { loadTracks } from './services/tracks-loader.js';
 import { filterPlayableTracks, getPreviewPath, migrateLikedTracksToIds } from './lib/track-utils.js';
 import {
@@ -33,6 +33,7 @@ import {
     buildTrophies,
     buildFoundTracks,
     closeLeaderboard,
+    initFoundTracksReveal,
     openLeaderboard,
     returnBestScores,
     updateStatsAnswers,
@@ -151,14 +152,21 @@ function quitGame() {
 
 function resetGame() {
     quitGame();
-    buildSetlist(gameState.tracks, gameState.tracksByGame);
+    buildSetlist(getTracksForCurrentMode(), gameState.tracksByGame);
 }
 
 function startGame() {
+    const trackPool = getTracksForCurrentMode();
+
+    if (isClassicMode() && gameState.onlyUnfoundTracks && trackPool.length === 0) {
+        alert('Tous les morceaux ont déjà été trouvés. Décochez l\'option ou choisissez un autre mode.');
+        return;
+    }
+
     if(gameState.difficultyLevel == 1) {
         gameState.foundTracksIds = [];
     }
-    buildSetlist(gameState.tracks, gameState.tracksByGame);
+    buildSetlist(trackPool, gameState.tracksByGame);
     $('.js-track-total').text(gameState.tracksByGame);
     $('.js-wrapper').removeClass('game_ended');
     $('.js-settings').removeClass('visible');
@@ -168,7 +176,7 @@ function startGame() {
 }
 
 function syncTracksByGameToCatalog() {
-    const availableTracks = gameState.tracks.length;
+    const availableTracks = getTracksForCurrentMode().length;
 
     if (availableTracks === 0) {
         return;
@@ -274,7 +282,8 @@ function bindEvents() {
 
     $('.js-nb-tracks').on('keyup mouseup', function () {
         const min = +$(this).attr('min');
-        const max = Math.min(+$(this).attr('max'), gameState.tracks.length || +$(this).attr('max'));
+        const poolSize = getTracksForCurrentMode().length;
+        const max = Math.min(+$(this).attr('max'), poolSize || +$(this).attr('max'));
 
         if (+$(this).val() < min) {
             $(this).val(min);
@@ -285,11 +294,17 @@ function bindEvents() {
         gameState.tracksByGame = +$(this).val();
     });
 
+    $('.js-unfound-only').on('change', function () {
+        gameState.onlyUnfoundTracks = $(this).prop('checked');
+        syncTracksByGameToCatalog();
+    });
+
     $('.js-input-difficulty').on('change', function () {
         const difficultyName = $('label[for="' + this.id + '"] .text_no_glitch').text();
         const selectedLevel = String($(this).val());
         applyDifficulty(selectedLevel);
         updateDifficultyUI($, difficultyName);
+        syncTracksByGameToCatalog();
 
         if (selectedLevel === '2' && gameState.playerData && !gameState.playerData.hasSeenVignettesMode) {
             gameState.playerData.hasSeenVignettesMode = true;
@@ -351,7 +366,7 @@ function bindEvents() {
                 leaderboardCustom[DIFFICULTYNAMES[difficulty]] = {};
             }
             const [classic, custom] = returnBestScores(result, leaderboard, leaderboardCustom);
-            buildLeaderboard($, classic, 'Classement parties classiques');
+            buildLeaderboard($, classic, 'Classement parties standards');
             buildLeaderboard($, custom, 'Classement parties personnalisées');
             openLeaderboard($);
         });
@@ -394,6 +409,7 @@ function init() {
     applyDifficulty(1);
     updateAnswerModeUI($);
     loadPlaylist();
+    initFoundTracksReveal($);
     bindEvents();
 }
 

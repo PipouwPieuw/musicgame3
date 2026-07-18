@@ -17,6 +17,7 @@ import {
     resetImageAnswers,
 } from './image-answers.js';
 import { applyCorrectAnswer, applyWrongAnswer, playCorrectSound, resetCountdownBar, updateTrackNumberUI } from './scoring.js';
+import { getFoundPlayableTracks } from './setlist.js';
 import { gameState, isClassicMode, isImageAnswerMode } from './state.js';
 
 const WRONG_ANSWER_FLASH_MS = 400;
@@ -320,7 +321,7 @@ export function playRound($) {
     gameState.isPlaying = true;
 
     if (isImageAnswerMode()) {
-        gameState.roundChoices = buildImageChoices(trackId, gameState.tracks);
+        gameState.roundChoices = buildImageChoices(trackId, getFoundPlayableTracks());
         renderImageChoices($, gameState.roundChoices);
         enableImageAnswers($);
     } else {

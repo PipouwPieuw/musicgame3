@@ -22,7 +22,8 @@
 	.panel_tabs__tab {
 		flex: 1;
 		font-size: 14px;
-		padding: 0 10px;
+		line-height: 16px;
+		padding: 10px;
 	}
 }
 .panel_tabs__section:not(.active) {

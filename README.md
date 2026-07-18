@@ -296,7 +296,7 @@ The repo includes SVG icons under `assets/`. The app also expects (may be gitign
 |------|----------|
 | `assets/previews/*.mp3` | Game audio (one file per playlist track) |
 | `assets/avatars/*.png` | Player avatars (+ `-glitched`, `-glitched2` variants) |
-| `assets/right.m4a`, `assets/wrong.m4a` | Feedback sounds |
+| `assets/sounds/right.m4a`, `assets/sounds/wrong.m4a` | Feedback sounds |
 
 Without previews, avatars, and sound files, the game cannot run fully in a fresh clone.
 

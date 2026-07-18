@@ -35,6 +35,7 @@ export const gameState = {
     segmentDurations1: [...SEGMENT_DURATIONS_1],
     segmentDurations2: [...SEGMENT_DURATIONS_2],
     foundTracksIds: [],
+    onlyUnfoundTracks: false,
 };
 
 export function getDifficultyName() {

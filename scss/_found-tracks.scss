@@ -1,11 +1,58 @@
 .found_tracks {
 
+	&__genres {
+		display: flex;
+		flex-direction: column;
+		// gap: 28px;
+	}
+
+	&__genre {
+		width: 100%;
+		position: relative;
+		border-top: 4px solid black;
+	}
+
+	&__genre_label {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 15px;
+		padding: 15px;
+		// margin-bottom: 14px;
+		font-size: 24px;
+		font-weight: 700;
+		// text-align: center;
+		cursor: pointer;
+
+		&:after {
+			content: '';
+			width: 32px;
+			height: 32px;
+			background-image: url(assets/icons/chevron.svg);
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+		}
+
+		@media only screen and (max-width: 640px) {
+			font-size: 18px;
+		}
+	}
+
+	&__genre[open] &__genre_label:after {
+		transform: rotate(180deg);
+	}
+
 	&__list {
         --gap: 10px;
-        --items: 4;
+        --items: 6;
 		display: flex;
         flex-wrap: wrap;
 		gap: var(--gap);
+		padding: 0 15px 15px 15px;
+
+        @media only screen and (max-width: 640px) {	
+            --gap: 6px;
+        }
 	}
 
     &__item {
@@ -17,5 +64,13 @@
             border-radius: 50%;
             border: 4px solid black;
         }
+
+		&--found {
+			cursor: pointer;
+		}
+
+		&--locked {
+			pointer-events: none;
+		}
     }
 }

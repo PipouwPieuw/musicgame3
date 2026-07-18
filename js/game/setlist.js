@@ -1,6 +1,43 @@
 import { SHUFFLE } from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
-import { gameState } from './state.js';
+import { gameState, isClassicMode, isImageAnswerMode } from './state.js';
+
+/**
+ * Playable catalog tracks that the player has found in Classique mode.
+ * Used as the exclusive pool for Vignettes setlist and image distractors.
+ */
+export function getFoundPlayableTracks() {
+    const foundIds = new Set(gameState.playerData?.foundTracksIds || []);
+
+    return gameState.tracks.filter(function (track) {
+        return foundIds.has(track.id);
+    });
+}
+
+/**
+ * Playable catalog tracks not yet found in Classique.
+ * Used when the “non trouvés uniquement” Classique option is checked.
+ */
+export function getUnfoundPlayableTracks() {
+    const foundIds = new Set(gameState.playerData?.foundTracksIds || []);
+
+    return gameState.tracks.filter(function (track) {
+        return !foundIds.has(track.id);
+    });
+}
+
+/** Catalog pool for the active mode and Classique filter options. */
+export function getTracksForCurrentMode() {
+    if (isImageAnswerMode()) {
+        return getFoundPlayableTracks();
+    }
+
+    if (isClassicMode() && gameState.onlyUnfoundTracks) {
+        return getUnfoundPlayableTracks();
+    }
+
+    return gameState.tracks;
+}
 
 export function buildSetlist(tracks, requestedCount) {
     const maxTracks = tracks.length;
