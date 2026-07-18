@@ -1,20 +1,25 @@
-import { SEGMENT_DURATIONS_1 } from '../config.js';
-import { gameState, isClassicMode } from './state.js';
+import { GAME_MODE_CLASSIQUE, GAME_MODE_VIGNETTES, SEGMENT_DURATIONS_1 } from '../config.js';
+import { gameState, getDisplayLabel, isClassicMode, isImageAnswerMode } from './state.js';
 
+/**
+ * Apply difficulty ladder (audio, multiplier, glitch).
+ * Answer UI (typed vs vignettes) is driven by gameMode via updateAnswerModeUI.
+ */
 export function applyDifficulty(level) {
     const difficultyLevel = parseInt(level, 10);
     gameState.difficultyLevel = difficultyLevel;
-    // gameState.pointsMultiplier = difficultyLevel;
-    gameState.pointsMultiplier = 1;
+
+    if (isClassicMode()) {
+        gameState.pointsMultiplier = 1;
+    } else {
+        gameState.pointsMultiplier = difficultyLevel;
+    }
 
     const audioPlayer = document.getElementById('audio_player');
     const audioPlayerHardcore = document.getElementById('audio_player_hardcore');
-    const answerForm = document.getElementById('answer_form');
 
     audioPlayer.volume = difficultyLevel < 5 ? 1 : 0;
     audioPlayerHardcore.volume = difficultyLevel < 5 ? 0 : 1;
-
-    answerForm.classList.toggle('visually_hidden', difficultyLevel > 1);
 
     document.body.classList.toggle('glitched', difficultyLevel === 5);
 
@@ -23,8 +28,18 @@ export function applyDifficulty(level) {
     }
 }
 
+export function applyGameMode(mode) {
+    gameState.gameMode = mode === GAME_MODE_VIGNETTES ? GAME_MODE_VIGNETTES : GAME_MODE_CLASSIQUE;
+
+    if (isClassicMode()) {
+        applyDifficulty(1);
+    } else {
+        applyDifficulty(gameState.difficultyLevel || 1);
+    }
+}
+
 export function updateAnswerModeUI($) {
-    if (gameState.difficultyLevel === 2) {
+    if (isImageAnswerMode()) {
         $('.js-answer-form').addClass('visually_hidden');
         $('.js-answers').removeClass('visually_hidden');
     } else {
@@ -35,11 +50,25 @@ export function updateAnswerModeUI($) {
     $('.js-skip-round').toggleClass('visually_hidden', !isClassicMode());
 }
 
-export function updateDifficultyUI($, difficultyName) {
-    $('.js-difficulty').text(difficultyName);
+export function updateDifficultyUI($, displayLabel) {
+    const label = displayLabel || getDisplayLabel();
+    $('.js-difficulty').text(label);
     $('.js-difficulty').attr('data-difficulty', gameState.difficultyLevel);
-    $('.js-difficulty-details').removeClass('visible');
-    $('.js-difficulty-details-' + gameState.difficultyLevel).addClass('visible');
+    $('.js-difficulty').attr('data-game-mode', gameState.gameMode);
+
+    $('.js-mode-details').removeClass('visible');
+    $('.js-mode-details-' + gameState.gameMode).addClass('visible');
+
+    const $difficultySettings = $('.js-difficulty-settings');
+    if (isImageAnswerMode()) {
+        $difficultySettings.removeClass('is-hidden');
+        $('.js-difficulty-details').removeClass('visible');
+        $('.js-difficulty-details-' + gameState.difficultyLevel).addClass('visible');
+    } else {
+        $difficultySettings.addClass('is-hidden');
+        $('.js-difficulty-details').removeClass('visible');
+    }
+
     $('.js-multiplicator').text(gameState.pointsMultiplier);
     $('.js-multiplicator-wrapper').attr('data-value', gameState.pointsMultiplier);
     $('.js-track-cover').removeClass('hidden');

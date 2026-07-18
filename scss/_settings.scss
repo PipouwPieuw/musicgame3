@@ -67,6 +67,9 @@
 	pointer-events: none;
 	opacity: .4;
 }
+.settings_panel__line.is-hidden {
+	display: none;
+}
 .settings_panel__line:not(:last-child) {
 	padding-bottom: 15px;
 	border-bottom: 1px solid black;
@@ -152,6 +155,19 @@
 
 		@media only screen and (max-width: 640px) {	
 			align-items: flex-start;
+		}
+
+		&--ladder {
+			flex-wrap: wrap;
+
+			.settings_difficulty__radio + label {
+				width: 20%;
+				font-size: 14px;
+
+				@media only screen and (max-width: 640px) {
+					font-size: 12px;
+				}
+			}
 		}
 	}
 
@@ -292,30 +308,30 @@
 		// 	margin: auto;
 		// }
 
-		&--1 + label,
-		&--1 + label:before {
-			background: #eeeeee;
-		}
+		// &--1 + label,
+		// &--1 + label:before {
+		// 	background: #eeeeee;
+		// }
 
-		&--2 + label,
-		&--2 + label:before {
-			background: #dddddd;
-		}
+		// &--2 + label,
+		// &--2 + label:before {
+		// 	background: #dddddd;
+		// }
 
-		&--3 + label,
-		&--3 + label:before {
-			background: #cccccc;
-		}
+		// &--3 + label,
+		// &--3 + label:before {
+		// 	background: #cccccc;
+		// }
 
-		&--4 + label,
-		&--4 + label:before {
-			background: #bbbbbb;
-		}
+		// &--4 + label,
+		// &--4 + label:before {
+		// 	background: #bbbbbb;
+		// }
 
-		&--5 + label,
-		&--5 + label:before {
-			background: #aaaaaa;
-		}
+		// &--5 + label,
+		// &--5 + label:before {
+		// 	background: #aaaaaa;
+		// }
 
 		@media only screen and (max-width: 640px) {
 			& + label span {
@@ -332,68 +348,68 @@
 			background-color: green;
 		}
 
-		&--1 + label:has(~ &--2:checked),
-		&--1 + label:has(~ &--2:checked):before,
-		&--1 + label:has(~ .settings_difficulty__option:has(&--2:checked)),
-		&--1 + label:has(~ .settings_difficulty__option:has(&--2:checked)):before {
-			background-color: #0039FF;
-		}
+		// &--1 + label:has(~ &--2:checked),
+		// &--1 + label:has(~ &--2:checked):before,
+		// &--1 + label:has(~ .settings_difficulty__option:has(&--2:checked)),
+		// &--1 + label:has(~ .settings_difficulty__option:has(&--2:checked)):before {
+		// 	background-color: #0039FF;
+		// }
 
 		&--2:checked + label,
 		&--2:checked + label:before {
 			background-color: #0000FF;
 		}
 
-		&--1 + label:has(~ &--3:checked),
-		&--1 + label:has(~ &--3:checked):before {
-			background-color: #FF4B4B;
-		}
+		// &--1 + label:has(~ &--3:checked),
+		// &--1 + label:has(~ &--3:checked):before {
+		// 	background-color: #FF4B4B;
+		// }
 
-		&--2 + label:has(~ &--3:checked),
-		&--2 + label:has(~ &--3:checked):before {
-			background-color: #FF2626;
-		}
+		// &--2 + label:has(~ &--3:checked),
+		// &--2 + label:has(~ &--3:checked):before {
+		// 	background-color: #FF2626;
+		// }
 
 		&--3:checked + label,
 		&--3:checked + label:before {
 			background-color: #FF0000;
 		}
 
-		&--1 + label:has(~ &--4:checked),
-		&--1 + label:has(~ &--4:checked):before {
-			background-color: #800080;
-		}
+		// &--1 + label:has(~ &--4:checked),
+		// &--1 + label:has(~ &--4:checked):before {
+		// 	background-color: #800080;
+		// }
 
-		&--2 + label:has(~ &--4:checked),
-		&--2 + label:has(~ &--4:checked):before {
-			background-color: #69006B;
-		}
+		// &--2 + label:has(~ &--4:checked),
+		// &--2 + label:has(~ &--4:checked):before {
+		// 	background-color: #69006B;
+		// }
 
-		&--3 + label:has(~ &--4:checked),
-		&--3 + label:has(~ &--4:checked):before {
-			background-color: #520057;
-		}
+		// &--3 + label:has(~ &--4:checked),
+		// &--3 + label:has(~ &--4:checked):before {
+		// 	background-color: #520057;
+		// }
 
 		&--4:checked + label,
 		&--4:checked + label:before {
 			background-color: #3B0042;
 		}
 
-		&--1 + label:has(~ &--5:checked),
-		&--1 + label:has(~ &--5:checked):before {
-			background-color: #444444;
-		}
+		// &--1 + label:has(~ &--5:checked),
+		// &--1 + label:has(~ &--5:checked):before {
+		// 	background-color: #444444;
+		// }
 
-		&--2 + label:has(~ &--5:checked),
-		&--2 + label:has(~ &--5:checked):before {
-			background-color: #333333;
-		}
+		// &--2 + label:has(~ &--5:checked),
+		// &--2 + label:has(~ &--5:checked):before {
+		// 	background-color: #333333;
+		// }
 
-		&--3 + label:has(~ &--5:checked),
-		&--3 + label:has(~ &--5:checked),
-		&--4 + label:has(~ &--5:checked):before {
-			background-color: #111111;
-		}
+		// &--3 + label:has(~ &--5:checked),
+		// &--3 + label:has(~ &--5:checked),
+		// &--4 + label:has(~ &--5:checked):before {
+		// 	background-color: #111111;
+		// }
 
 		&--5:checked + label,
 		&--5:checked + label:before {
@@ -415,21 +431,20 @@
 		font-size: 26px;
 		margin-bottom: 6px;
 		
-		&--1,
-		.leaderboard__title--1 {
+		&--1 {
 			color: green;
 		}
-		&--2,
-		.leaderboard__title--2 {
+		&--2 {
 			color: blue;
 		}
-		&--3,
-		.leaderboard__title--3 {
+		&--3 {
 			color: red;
 		}
-		&--4,
-		.leaderboard__title--4 {
+		&--4 {
 			color: purple;
+		}
+		&--5 {
+			color: #000000;
 		}
 
 		@media only screen and (min-width: 641px) {	

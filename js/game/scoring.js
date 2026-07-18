@@ -1,8 +1,8 @@
-import { DIFFICULTYNAMES, MINSTREAK, POINTSBYANSWER } from '../config.js';
+import { MINSTREAK, POINTSBYANSWER } from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { animateCorrectAnswer } from '../ui/answer-reveal.js';
 import { getRoundDuration } from './audio-player.js';
-import { gameState } from './state.js';
+import { gameState, getScoreKey } from './state.js';
 
 const soundRight = new Audio('assets/sounds/right.m4a');
 soundRight.volume = 0.5;
@@ -34,19 +34,19 @@ export function incrementStreak() {
 }
 
 export function recordGoodAnswer() {
-    const difficultyName = DIFFICULTYNAMES[gameState.difficultyLevel - 1];
-    if (!(difficultyName in gameState.playerData.good_answers) || gameState.playerData.good_answers[difficultyName] == null) {
-        gameState.playerData.good_answers[difficultyName] = 0;
+    const scoreKey = getScoreKey();
+    if (!(scoreKey in gameState.playerData.good_answers) || gameState.playerData.good_answers[scoreKey] == null) {
+        gameState.playerData.good_answers[scoreKey] = 0;
     }
-    gameState.playerData.good_answers[difficultyName] += 1;
+    gameState.playerData.good_answers[scoreKey] += 1;
 }
 
 export function recordWrongAnswer() {
-    const difficultyName = DIFFICULTYNAMES[gameState.difficultyLevel - 1];
-    if (!(difficultyName in gameState.playerData.wrong_answers) || gameState.playerData.wrong_answers[difficultyName] == null) {
-        gameState.playerData.wrong_answers[difficultyName] = 0;
+    const scoreKey = getScoreKey();
+    if (!(scoreKey in gameState.playerData.wrong_answers) || gameState.playerData.wrong_answers[scoreKey] == null) {
+        gameState.playerData.wrong_answers[scoreKey] = 0;
     }
-    gameState.playerData.wrong_answers[difficultyName] += 1;
+    gameState.playerData.wrong_answers[scoreKey] += 1;
 }
 
 export function applyCorrectAnswer($) {

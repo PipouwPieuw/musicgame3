@@ -1,0 +1,27 @@
+{
+    "label": "Séries jeunesse 1990",
+    "description": "",
+    "tracks": [
+      {
+        "id": "G001",
+        "title": "Are You Afraid of the Dark?",
+        "subTitle": "",
+        "year": "1992 - 2000",
+        "acceptedAnswers": [
+          "Are You Afraid of the Dark?",
+          "Fais-moi peur"
+        ]
+      },
+      {
+        "id": "G002",
+        "title": "Goosebumps",
+        "subTitle": "",
+        "year": "19995 - 1998",
+        "acceptedAnswers": [
+          "Goosebumps",
+          "Chair de poule"
+        ]
+      }
+    ]
+  }
+  

@@ -11,6 +11,40 @@
         "Rick et Morty",
         "Rick Morty"
       ]
+    }, 
+    {
+      "id": "D002",
+      "title": "Avatar: The Last Airbender",
+      "subTitle": "",
+      "year": "2005 - 2008",
+      "acceptedAnswers": [
+        "Avatar: The Last Airbender",
+        "Avatar",
+        "Avatar; le dernier maître de l'air",
+        "The Last Airbender",
+        "Le dernier maître de l'air"
+      ]
+    },
+    {
+      "id": "D003",
+      "title": "Les Mystérieuses Cités d'Or",
+      "subTitle": "",
+      "year": "1982 - 1983",
+      "acceptedAnswers": [
+        "Les Mystérieuses Cités d'Or",
+        "Les Cités d'Or"
+      ]
+    },
+    {
+      "id": "D004",
+      "title": "The Simpsons",
+      "subTitle": "",
+      "year": "1989 - En cours",
+      "acceptedAnswers": [
+        "The Simpsons",
+        "Les Simpsons",
+        "Simpsons"
+      ]
     }
   ]
 }

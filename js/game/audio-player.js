@@ -1,6 +1,6 @@
 import { DEFAULTTRACKDURATION, DIFFICILETRACKDURATION, HARDCOREMODETRACKDURATION } from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
-import { gameState } from './state.js';
+import { gameState, usesRandomTrackStart } from './state.js';
 import { setPlaybackRate } from './scoring.js';
 
 /** One retry with cache-bust after a failed load (e.g. ERR_CACHE_READ_FAILURE). */
@@ -15,13 +15,15 @@ function getPlayableDuration(audioPlayer) {
 
 function pickTrackStart(audioPlayer) {
     const duration = getPlayableDuration(audioPlayer);
-    const maxStart = Math.min(24, Math.max(0, Math.floor(duration) - 1));
+    const clipSeconds = getRoundDuration();
+    const trackLength = Number.isFinite(duration) ? Math.floor(duration) : 30;
+    const maxStart = Math.max(0, trackLength - clipSeconds);
 
     if (maxStart <= 0) {
         return 0;
     }
 
-    return Math.floor(Math.random() * maxStart + 1);
+    return Math.floor(Math.random() * (maxStart + 1));
 }
 
 function pickHardcoreStart(audioPlayer) {
@@ -121,7 +123,7 @@ export function setupAudioListeners($, { audioPlayer, audioPlayerHardcore, jsAud
             return;
         }
 
-        audioPlayer.currentTime = gameState.difficultyLevel >= 3 ? gameState.trackStart : 0;
+        audioPlayer.currentTime = usesRandomTrackStart() ? gameState.trackStart : 0;
         audioPlayer.play();
     });
 
@@ -173,7 +175,7 @@ function beginRoundPlayback($, audioPlayer, audioPlayerHardcore) {
         audioPlayerHardcore.playbackRate = setPlaybackRate();
     }
 
-    if (gameState.difficultyLevel >= 3) {
+    if (usesRandomTrackStart()) {
         gameState.trackStart = pickTrackStart(audioPlayer);
         audioPlayer.currentTime = gameState.trackStart;
     } else {

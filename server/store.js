@@ -1,13 +1,5 @@
-import { DIFFICULTYNAMES } from '../js/config.js';
+import { emptyScoreMap, migrateScoresList, migrateStatMap, SCORE_KEYS } from '../js/config.js';
 import { supabase } from './supabase.js';
-
-function emptyDifficultyMap() {
-    const map = {};
-    for (const name of DIFFICULTYNAMES) {
-        map[name] = 0;
-    }
-    return map;
-}
 
 export function createDefaultProfile(username) {
     return {
@@ -15,9 +7,9 @@ export function createDefaultProfile(username) {
         username,
         initials: username.slice(0, 3).toLowerCase(),
         likedTracks: [],
-        games_played: emptyDifficultyMap(),
-        good_answers: emptyDifficultyMap(),
-        wrong_answers: emptyDifficultyMap(),
+        games_played: emptyScoreMap(),
+        good_answers: emptyScoreMap(),
+        wrong_answers: emptyScoreMap(),
         scores: [],
         foundTracksIds: [],
         hasSeenVignettesMode: false,
@@ -28,18 +20,6 @@ export function normalizeProfile(profile) {
     if (!profile.likedTracks) {
         profile.likedTracks = [];
     }
-    if (!profile.games_played) {
-        profile.games_played = emptyDifficultyMap();
-    }
-    if (!profile.good_answers) {
-        profile.good_answers = emptyDifficultyMap();
-    }
-    if (!profile.wrong_answers) {
-        profile.wrong_answers = emptyDifficultyMap();
-    }
-    if (!profile.scores) {
-        profile.scores = [];
-    }
     if (!profile.foundTracksIds) {
         profile.foundTracksIds = [];
     }
@@ -47,7 +27,12 @@ export function normalizeProfile(profile) {
         profile.hasSeenVignettesMode = false;
     }
 
-    for (const name of DIFFICULTYNAMES) {
+    profile.games_played = migrateStatMap(profile.games_played);
+    profile.good_answers = migrateStatMap(profile.good_answers);
+    profile.wrong_answers = migrateStatMap(profile.wrong_answers);
+    profile.scores = migrateScoresList(profile.scores);
+
+    for (const name of SCORE_KEYS) {
         if (profile.games_played[name] == null) {
             profile.games_played[name] = 0;
         }

@@ -23,7 +23,7 @@
             </button>
             <span class="bar_top__title">
                 <span class="text_no_glitch">TV Shows Blind Test</span>
-                <span class="text_glitch">Á̶̱͚̬͓͎̮̔́ḑ̸͎̖̜́v̴͖̙̝̗̝͕͔̘̂̂͂e̸͈̓͂͛͊̋̓ͅn̷̛͙̭̼̈́̇̆c̶̩̠͕͍̒̽͛́̿͜y̵̩̻̟̜̗̳͂͛̈́͜ ̴̡͕̙̹̇̑͒̂̇ͅS̷̳͓̣̭͎̫̟̪͂̓̚͠͝o̶̳̣̪̬̭̳͂̋̋̍̄̚ų̸̛͔͕̩̌̐̈́̓̇̉̕̚n̴̡̦̘͉͙̰̈́̄̑͂̕ḏ̴̏͂̾͋̓̆͘ ̴̘͎͙̦͑͆́̈́͊̇͝S̶͍̻̗̖͍͔̥̬͊̍̈́́y̷͈̱͇͍̓̓̈́̊̄̈́s̷̘̱̱̖̦̬̻͕͂̈́͋t̶̫̜̖̃̓̓͊̏́̑ë̷̼͇̼̹̮̺͋͒͜m̶͈̲̬͕͍͓̮͂̂̈́̌͘</span>
+                <span class="text_glitch">TV Shows Blind Test</span>
             </span>
             <button class="bar_top__leaderboard js-display-leaderboard" aria-label="Afficher les scores" title="Hall of fame">
                 <img class="bar_top__icon" src="assets/icons/trophy.svg"/>
@@ -63,34 +63,79 @@
                             <span class="text_glitch">Ń̵̗͖̤̠̲͓̟͉̳i̶̛̩̩͇̳͈̰̊͛̽͝v̶̪̖̬̺̉͌̐̌̈́̾̃̊͘e̷̡̥̮̙̱̹͗͛͊̆̈͝ͅá̴̡̡̛̛̦̱̘̟̠̋̍̑̅̋͠u̶̫͇̱̮̺̙̞͚͋̌̀̊̈́͋͂̚͜͝ ̶̧͇̮̬̠̋͜d̵̨̲̱̪̮̫͑̽͐̒ê̶̪͗̋̂̽͆̌̐́ ̸̻̎͌̿̓͝͠d̷̗̣͍̪̺̹̙̹̈́͂̎ḯ̵̘̹̰͍̚͝f̵̢͔̙̓̒̈́͠͝f̶̨̛̟̪̬͖̣̞̄̽̽̒̕̚̕͝i̵̬̺͙̤̘̖̳̹̇ͅc̸̛̩̈́͑ṳ̵̦͇͕̝̗͎̿̉̆̚͘̕͜͝ͅl̶̘̠͓͍̗̙̀́ṭ̵̛̜͐͛̎̊̂̈é̶͍͇͙͔͈̼̼͔̀͂̽͑́͘͝</span>
                         </label>
                         <div class="settings_difficulty__inputs">
-                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--1 js-input-difficulty" name="difficultyLevel" id="difficultyLevel1" value="1" checked/>
-                            <label class="default_transition" for="difficultyLevel1">
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--1 js-input-game-mode" name="gameMode" id="gameModeClassique" value="classique" checked/>
+                            <label class="default_transition" for="gameModeClassique">
                                 <span class="default_transition">
                                     <span class="text_no_glitch">Classique</span>
                                     <span class="text_glitch"></span>
                                 </span>
                             </label>
                             <div class="settings_difficulty__option js-vignettes-option is-locked">
-                                <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2" disabled/>
-                                <label class="default_transition" for="difficultyLevel2">
+                                <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-game-mode" name="gameMode" id="gameModeVignettes" value="vignettes" disabled/>
+                                <label class="default_transition" for="gameModeVignettes">
                                     <span class="default_transition">
                                         <span class="text_no_glitch">Vignettes</span>
-                                        <span class="text_glitch"></span>                                    
+                                        <span class="text_glitch"></span>
                                     </span>
                                 </label>
                             </div>
-                            <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--3 js-input-difficulty" name="difficultyLevel" id="difficultyLevel3" value="3"/>
+                        </div>
+                        <div class="settings_difficulty__row">
+                            <div class="settings_difficulty__details js-mode-details js-mode-details-classique visible">
+                                <div class="settings_panel__description">
+                                    <ul class="settings_difficulty__description">
+                                        <li><span>Les extraits durent <b><u>30 secondes</u></b></span></li>
+                                        <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
+                                        <li><span>Les morceaux trouvés sont sauvegardés et permettent de <b><u>débloquer les modes de jeu suivants</u></b>.</span></li>
+                                    </ul>
+                                    <label class="settings_difficulty__checkbox settings_difficulty__unfound js-unfound-only-label" for="unfoundOnly">
+                                        <input type="checkbox" id="unfoundOnly" class="js-unfound-only" />
+                                        <span>Jouer avec les morceaux non trouvés uniquement.</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="settings_difficulty__details js-mode-details js-mode-details-vignettes">
+                                <div class="settings_panel__description">
+                                    <ul class="settings_difficulty__description">
+                                        <li><span>Choix parmi <b><u>8 vignettes</u></b></span></li>
+                                        <li><span>Ce mode reprend uniquement les <b><u>morceaux trouvés en mode classique</u></b></span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings_panel__line js-difficulty-settings is-hidden">
+                        <label class="settings_panel__label settings_panel__label--full panel_label">
+                            <span class="text_no_glitch">Difficulté</span>
+                            <span class="text_glitch">D̵̗̓i̶̊f̴̌f̶̄i̵̇c̸̈́u̵͝l̶̀t̵̛é̶̀</span>
+                        </label>
+                        <div class="settings_difficulty__inputs settings_difficulty__inputs--ladder">
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--1 js-input-difficulty" name="difficultyLevel" id="difficultyLevel1" value="1" checked/>
+                            <label class="default_transition" for="difficultyLevel1">
+                                <span class="default_transition">
+                                    <span class="text_no_glitch">Normal</span>
+                                    <span class="text_glitch"></span>
+                                </span>
+                            </label>
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2"/>
+                            <label class="default_transition" for="difficultyLevel2">
+                                <span class="default_transition">
+                                    <span class="text_no_glitch">Difficile</span>
+                                    <span class="text_glitch"></span>
+                                </span>
+                            </label>
+                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--3 js-input-difficulty" name="difficultyLevel" id="difficultyLevel3" value="3"/>
                             <label class="default_transition" for="difficultyLevel3">
                                 <span class="default_transition">
                                     <span class="text_no_glitch">Infernal</span>
-                                    <span class="text_glitch">I̸̤̦̣̹͙̋͂̄͆̔̚n̷̦̺̘͖̒͝f̴͖̟̦̙̌͠è̷͚͚̼͔͍̦͇̃̀̇́͝͠r̵̢͔̮̣͎̣͎̠̓̎̇̋͜ň̷͉̹͔͕͔͓̊ã̸̭͙͔̀̑̋̾̋͑̔̈́l̴̢̟͚̥̣̼̻̜͔̈́́̆̎͒̎̍̈́͝</span> 
+                                    <span class="text_glitch">I̸̤̦̣̹͙̋͂̄͆̔̚n̷̦̺̘͖̒͝f̴͖̟̦̙̌͠è̷͚͚̼͔͍̦͇̃̀̇́͝͠r̵̢͔̮̣͎̣͎̠̓̎̇̋͜ň̷͉̹͔͕͔͓̊ã̸̭͙͔̀̑̋̾̋͑̔̈́l̴̢̟͚̥̣̼̻̜͔̈́́̆̎͒̎̍̈́͝</span>
                                 </span>
                             </label>
-                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--4 js-input-difficulty" name="difficultyLevel" id="difficultyLevel4" value="4"/>
+                            <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--4 js-input-difficulty" name="difficultyLevel" id="difficultyLevel4" value="4"/>
                             <label class="default_transition" for="difficultyLevel4">
                                 <span class="default_transition">
                                     <span class="text_no_glitch">Extrême</span>
-                                    <span class="text_glitch">E̸̛̛͚̙͖̯̲̒̅̓̐̆̌͝x̵͇͇́́̆̎̎͐̽̕t̷̛̤̮̊͌̽͋͒͝ṟ̶̈́͑̈́̂̀̎ę̵̟͈̳̼̂̓̈́̍̃͛̈́̃͆̚͜m̴̢͈̻̂̔͆̓͛̈̋͝ͅͅe̵͓͎͌͆͋̔͂̓̒͐̍</span> 
+                                    <span class="text_glitch">E̸̛̛͚̙͖̯̲̒̅̓̐̆̌͝x̵͇͇́́̆̎̎͐̽̕t̷̛̤̮̊͌̽͋͒͝ṟ̶̈́͑̈́̂̀̎ę̵̟͈̳̼̂̓̈́̍̃͛̈́̃͆̚͜m̴̢͈̻̂̔͆̓͛̈̋͝ͅͅe̵͓͎͌͆͋̔͂̓̒͐̍</span>
                                 </span>
                             </label>
                             <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--5 js-input-difficulty" name="difficultyLevel" id="difficultyLevel5" value="5"/>
@@ -102,64 +147,50 @@
                             </label> -->
                         </div>
                         <div class="settings_difficulty__row">
-                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-1 visible">
-                                <!-- <span class="settings_panel__label  panel_label settings_difficulty__title settings_difficulty__title--1">Classique</span> -->
+                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-1">
                                 <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
                                         <li><span>Les extraits durent <b><u>30 secondes</u></b></span></li>
-                                        <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
-                                        <li><span>Les morceaux trouvés sont sauvegardés et permettent de <b><u>débloquer les modes de jeu suivants</u></b>.</span></li>
-                                        <!-- <li><span>Multiplicateur de points : <b><u style="color: green">x1</u></b></span></li> -->
+                                        <li><span>Multiplicateur de points : <b><u style="color: green">x1</u></b></span></li>
                                     </ul>
-                                    <label class="settings_difficulty__checkbox settings_difficulty__unfound js-unfound-only-label" for="unfoundOnly">
-                                        <input type="checkbox" id="unfoundOnly" class="js-unfound-only" />
-                                        <span>Jouer avec les morceaux non trouvés uniquement.</span>
-                                    </label>
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-2">
-                                <!-- <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--2">Vignettes</span> -->
                                 <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
-                                        <li><span>Les extraits durent <b><u>30 secondes</u></b></span></li>
-                                        <li><span>Choix parmi <b><u>8 vignettes</u></b></span></li>
-                                        <li><span>Ce mode reprend uniquement les <b><u>morceaux trouvés en mode classique</u></b></span></li>
-                                        <!-- <li><span>Multiplicateur de points : <b><u style="color: #0000FF">x1</u></b></span></li> -->
+                                        <li><span>Les extraits durent <b><u style="color: #0000FF">10 secondes</u></b></span></li>
+                                        <li><span>La portion jouée de chaque extrait est <b><u style="color: #0000FF">aléatoire</u></b></span></li>
+                                        <li><span>Multiplicateur de points : <b><u style="color: #0000FF">x2</u></b></span></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-3">
-                                <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--3">Infernal</span>
-                                <ul class="settings_panel__description settings_difficulty__description">
-                                    <li><span>Les extraits durent <b><u style="color: #FF0000">5 secondes</u></b></span></li>
-                                    <li><span>La portion jouée de chaque extrait est <b><u style="color: #FF0000">aléatoire</u></b></span></li>
-                                    <li><span>Les informations des morceaux sont <b><u>cachées</u></b></span></li>
-                                    <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
-                                    <li><span>Multiplicateur de points : <b><u style="color: #FF0000">x3</u></b></span></li>
-                                </ul>
+                                <div class="settings_panel__description">
+                                    <ul class="settings_difficulty__description">
+                                        <li><span>Les extraits durent <b><u style="color: #FF0000">5 secondes</u></b></span></li>
+                                        <li><span>La portion jouée de chaque extrait est <b><u style="color: #FF0000">aléatoire</u></b></span></li>
+                                        <li><span>Multiplicateur de points : <b><u style="color: #FF0000">x3</u></b></span></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-4">
-                                <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--4">Extrême</span>
-                                <ul class="settings_panel__description settings_difficulty__description">
-                                    <li><span>Les extraits durent <b><u>5 secondes</u></b></span></li>
-                                    <li><span>La portion jouée de chaque extrait est <b><u>aléatoire</u></b></span></li>
-                                    <li><span>Les informations des morceaux sont <b><u>cachées</u></b></span></li>
-                                    <li><span><b><u>Saisie du titre</u></b> du morceau</span></li>
-                                    <li><span>Extrait <b><u style="color: #800080">plus court et aléatoire</u></b></span></li>
-                                    <li><span>Multiplicateur de points : <b><u style="color: #800080">x4</u></b></span></li>
-                                </ul>
+                            <!-- <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-4">
+                                <div class="settings_panel__description">
+                                    <ul class="settings_difficulty__description">
+                                        <li><span>Les extraits durent <b><u>5 secondes</u></b></span></li>
+                                        <li><span>La portion jouée de chaque extrait est <b><u>aléatoire</u></b></span></li>
+                                        <li><span>Multiplicateur de points : <b><u style="color: #800080">x4</u></b></span></li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-5">
-                                <span class="settings_panel__label panel_label settings_difficulty__title settings_difficulty__title--5">G̵͍̪̾̒̆̀̈́̈́l̶͉͔͆̒͒́̋̋͑̏̐͒̈́͘͘̚ī̴̠̺͎̤͔̜̻̣̮̺͈̍t̴̛͎̬̞̹̫͎͍͈̲̻̱̳̩̪̎̓̓͆́́̍̃̕͝͝͝c̴̠̱̒̓̔̑̋͝h̶̠̥͇̺͈͓̮̱̤̠͚̐̒̇͜͝͝ͅe̴͉͍̗̱̝̤̝͎͈̥͎͇͑͗͆d̸̫̋̓̒̔́ͅ</span>
-                                <ul class="settings_panel__description settings_difficulty__description">
-                                    <li><span>L̶̨͊͑̈ȩ̷͍͛̀̌s̴̫̿̆ ̴̱̣̊̔͜e̸̩̕x̴̱̭̆̂t̵̓̌͠ͅr̵̼̖͙̉̾̈́à̴͇̫́̐ï̸̗̉͊t̴̰͇̺͗̔͝s̷̬̍ ̵͙͎̠̿d̸̜͒͗̏u̷͚̭̾͘͜r̵͎̈́͑̀e̸̻͆͆͗n̷̡̙͈̄͝t̴̞̥̃ ̶̮͖̩̄̏<b><u>5̸̝͚̲́ ̶̮͍͛s̶̟̏e̷͓̥̰̓c̶̻̞̻̈ó̵̩̍̈́ǹ̵̥d̴̡̧̝͌͝ȅ̸͍̤̫͑s̸̖͒ </u></b></span></li>
-                                    <li><span>L̵͉̐͐ą̸̩̘͆̐̚ ̶̬̟͑p̵̻͇̯̌̐͠o̷̟͋ṛ̶͉̿t̸͓͌ͅí̶̢̬͔ǒ̶͚͉n̶̻̻͈̋ ̸̬͊̾j̷̩͔̬̒̅͛ȯ̷̰͝ȕ̸̧̜͍̈̀é̵̙͗͆͒e̶̡̚ ̴̪͎̗͑ḓ̵̑̅̂e̷̜̼͆͌͠ ̷̡̹͖̎c̵̞͕̟͊́̈́h̵͓͉̾͆à̵͍̫́q̵͈͔̘̈u̸͌̾͜ḛ̶̦̄͌ ̴̰͒̓e̴̹͠x̶͖̯̒̉̀t̸̰̭̅r̷̡͚̙̽̍̚á̴̘͗ͅi̷̱̦͓̾t̵̛͔͓͉̚ ̶̢̣̳̑͑e̶̠͠s̸̤̝̖̕̕t̵̪̾ <b><u>g̶͕̩̹̀̾̆l̴̲̠̏ȉ̸̭̝t̸͉̰͆̈c̶̨̩̮̿̑h̶͕̺͕̓̊̒é̶̡͕͓͊̔ẻ̴̡̤̹̚</u></b></span></li>
-                                    <li><span>Ĺ̴̥̻͘ĕ̷̡͇̻̒ș̵̝̒ͅ ̵̰̭͚̈́̄i̵͚̖̩̾̈́ň̷̬̝̯̅͠f̶̯̀̈́͝ò̶̫̿͝ȓ̵̘̫m̵͈͉̤̃͗͝ą̸̲̺̌̓͝t̸͙̽i̸̫͔̓ỏ̵̬̹̝͐̒n̸̖͋̃͝s̴͉̙͝͠ ̴̨͕̕d̸̖̠̗̄̑ë̸̞̱̰́ś̷̢̭̟ ̴̬͓̊m̷͓̹̌̑̈́o̷̲̊̕͘r̴̠̺̄̂͜c̴̥̄̋̓ę̵̥͚̐̚a̸̠͋̂ụ̶͎̭̐̎̓ẍ̴̤̬̜́͋ ̶̬̞͕̐̅́s̷̜̥͙͐͛͘ǫ̴̭̫̍ñ̷͔̃̀t̷͉̑͝ <b><u>c̷̺͙̍a̷̒͂͜͠c̵̘̪̒̂͗h̴̢̯͝é̴̛͎̳̠̈ë̸̳͎̭́̈̒s̸̭̯͐̂̊</u></b></span></li>
-                                    <li><span><b><u style="color: #000000">S̵̝̆̾a̷̰̓̂ḭ̸͗ͅs̷̓̂i̸͗e̷̓ ̂d̸͗ũ̷ ̔t̶̹̏i̸̊t̶̏r̸̆ẽ̷</u></b> du morceau</span></li>
-                                    <li><span>Extrait <b><u style="color: #000000">glitché</u></b> et portions aléatoires</span></li>
-                                    <li><span>M̶̗͆u̶̲͂ĺ̶̼͚t̸͇̆i̵͇̦̣̐̀͆p̸͙͈̮͐͘l̵̨̝̭͛̑͘i̴̤̾̅̃c̴͓̣͌́ā̶̭̻͊͝ṭ̶̿̈̋e̶̠̲̹͒u̵͓͍̹̾͛̎ṛ̴̰̟̆͝ ̵̡̉d̵̩͉̈̌̃ę̸͍͐͜ ̸̛͓͈p̵̛̘͜ͅǫ̷͓̓͘ḯ̸̱͂̏n̶̤͙̩͐͗t̸̢͙̼̂̽s̶̩̖̭̉̄ ̵̼͈̭͋̇̕:̷̞̘̔̃̅ <b><u style="color: #000000">x̵̮̗͖̅5̶̲̟̇͂</u></b></span></li>
-                                </ul>
-                            </div>
+                                <div class="settings_panel__description">
+                                    <ul class="settings_difficulty__description">
+                                        <li><span>Les extraits durent <b><u>5 secondes</u></b></span></li>
+                                        <li><span>Extrait <b><u style="color: #000000">glitché</u></b> et portions aléatoires</span></li>
+                                        <li><span>Multiplicateur de points : <b><u style="color: #000000">x5</u></b></span></li>
+                                    </ul>
+                                </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -262,76 +293,83 @@
                 <div class="panel_box__box js-leaderboard-content"></div>
             </div>   
             <div class="statistics panel_tabs__section js-tab-section" rel="stats">
-                <div class="panel_box__box">
-                    <div class="stats_row hide_mobile">                 
+                <div class="panel_box__box panel_box__box--stats">
+                    <div class="stats_row hide_mobile">
                         <span class="stats_cell stats_cell--first"></span>
-                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Classique</span>
-                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Vignettes</span>
-                        <!-- <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
-                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
-                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span> -->
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label js-stats-col" data-score-key="Classique">Classique</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label js-stats-col" data-score-key="Vignettes_Normal">V. Normal</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label js-stats-col" data-score-key="Vignettes_Difficile">V. Difficile</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label js-stats-col" data-score-key="Vignettes_Infernal">V. Infernal</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label js-stats-col" data-score-key="Vignettes_Extrême">V. Extrême</span>
+                        <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--6 panel_label js-stats-col" data-score-key="Vignettes_Glitched">V. Glitched</span>
                     </div>
-                    <div class="stats_row">  
+                    <div class="stats_row">
                         <span class="stats_cell stats_cell--first stats_label">Parties jouées</span>
                         <div class="stats_row stats_row--mobile hide_desktop">
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Classique</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Vignettes</span>
-                            <!-- <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span> -->
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label js-stats-col" data-score-key="Classique">Classique</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label js-stats-col" data-score-key="Vignettes_Normal">V. Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label js-stats-col" data-score-key="Vignettes_Difficile">V. Difficile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label js-stats-col" data-score-key="Vignettes_Infernal">V. Infernal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label js-stats-col" data-score-key="Vignettes_Extrême">V. Extrême</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--6 panel_label js-stats-col" data-score-key="Vignettes_Glitched">V. Glitched</span>
                         </div>
-                        <span class="stats_cell stats_value js-games-played" rel="Normal">0</span>
-                        <span class="stats_cell stats_value js-games-played" rel="Difficile">0</span>
-                        <!-- <span class="stats_cell stats_value js-games-played" rel="Infernal">0</span>
-                        <span class="stats_cell stats_value js-games-played" rel="Extrême">0</span>
-                        <span class="stats_cell stats_value js-games-played" rel="Glitched">0</span> -->
-
+                        <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Classique" rel="Classique">0</span>
+                        <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Normal" rel="Vignettes_Normal">0</span>
+                        <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Difficile" rel="Vignettes_Difficile">0</span>
+                        <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Infernal" rel="Vignettes_Infernal">0</span>
+                        <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Extrême" rel="Vignettes_Extrême">0</span>
+                        <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Glitched" rel="Vignettes_Glitched">0</span>
                     </div>
-                    <div class="stats_row">  
+                    <div class="stats_row">
                         <span class="stats_cell stats_cell--first stats_label">Réponses correctes</span>
                         <div class="stats_row stats_row--mobile hide_desktop">
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Classique</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Vignettes</span>
-                            <!-- <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span> -->
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label js-stats-col" data-score-key="Classique">Classique</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label js-stats-col" data-score-key="Vignettes_Normal">V. Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label js-stats-col" data-score-key="Vignettes_Difficile">V. Difficile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label js-stats-col" data-score-key="Vignettes_Infernal">V. Infernal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label js-stats-col" data-score-key="Vignettes_Extrême">V. Extrême</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--6 panel_label js-stats-col" data-score-key="Vignettes_Glitched">V. Glitched</span>
                         </div>
-                        <span class="stats_cell stats_value js-good-answers" rel="Normal">0</span>
-                        <span class="stats_cell stats_value js-good-answers" rel="Difficile">0</span>
-                        <!-- <span class="stats_cell stats_value js-good-answers" rel="Infernal">0</span>
-                        <span class="stats_cell stats_value js-good-answers" rel="Extrême">0</span>
-                        <span class="stats_cell stats_value js-good-answers" rel="Glitched">0</span> -->
-
+                        <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Classique" rel="Classique">0</span>
+                        <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Normal" rel="Vignettes_Normal">0</span>
+                        <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Difficile" rel="Vignettes_Difficile">0</span>
+                        <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Infernal" rel="Vignettes_Infernal">0</span>
+                        <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Extrême" rel="Vignettes_Extrême">0</span>
+                        <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Glitched" rel="Vignettes_Glitched">0</span>
                     </div>
-                    <div class="stats_row">  
+                    <div class="stats_row">
                         <span class="stats_cell stats_cell--first stats_label">Réponses incorrectes</span>
                         <div class="stats_row stats_row--mobile hide_desktop">
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Classique</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Vignettes</span>
-                            <!-- <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span> -->
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label js-stats-col" data-score-key="Classique">Classique</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label js-stats-col" data-score-key="Vignettes_Normal">V. Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label js-stats-col" data-score-key="Vignettes_Difficile">V. Difficile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label js-stats-col" data-score-key="Vignettes_Infernal">V. Infernal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label js-stats-col" data-score-key="Vignettes_Extrême">V. Extrême</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--6 panel_label js-stats-col" data-score-key="Vignettes_Glitched">V. Glitched</span>
                         </div>
-                        <span class="stats_cell stats_value js-wrong-answers" rel="Normal">0</span>
-                        <span class="stats_cell stats_value js-wrong-answers" rel="Difficile">0</span>
-                        <!-- <span class="stats_cell stats_value js-wrong-answers" rel="Infernal">0</span>
-                        <span class="stats_cell stats_value js-wrong-answers" rel="Extrême">0</span>
-                        <span class="stats_cell stats_value js-wrong-answers" rel="Glitched">0</span> -->
+                        <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Classique" rel="Classique">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Normal" rel="Vignettes_Normal">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Difficile" rel="Vignettes_Difficile">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Infernal" rel="Vignettes_Infernal">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Extrême" rel="Vignettes_Extrême">0</span>
+                        <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Glitched" rel="Vignettes_Glitched">0</span>
                     </div>
-                    <div class="stats_row">  
+                    <div class="stats_row">
                         <span class="stats_cell stats_cell--first stats_label">Meilleurs scores</span>
                         <div class="stats_row stats_row--mobile hide_desktop">
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label">Classique</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label">Vignettes</span>
-                            <!-- <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label">Infernal</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label">Extrême</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label">Glitched</span> -->
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--1 panel_label js-stats-col" data-score-key="Classique">Classique</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--2 panel_label js-stats-col" data-score-key="Vignettes_Normal">V. Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--3 panel_label js-stats-col" data-score-key="Vignettes_Difficile">V. Difficile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--4 panel_label js-stats-col" data-score-key="Vignettes_Infernal">V. Infernal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--5 panel_label js-stats-col" data-score-key="Vignettes_Extrême">V. Extrême</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title leaderboard__title--6 panel_label js-stats-col" data-score-key="Vignettes_Glitched">V. Glitched</span>
                         </div>
-                        <span class="stats_cell stats_value js-best-score" rel="Normal">0</span>
-                        <span class="stats_cell stats_value js-best-score" rel="Difficile">0</span>
-                        <!-- <span class="stats_cell stats_value js-best-score" rel="Infernal">0</span>
-                        <span class="stats_cell stats_value js-best-score" rel="Extrême">0</span>
-                        <span class="stats_cell stats_value js-best-score" rel="Glitched">0</span> -->
+                        <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Classique" rel="Classique">0</span>
+                        <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Normal" rel="Vignettes_Normal">0</span>
+                        <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Difficile" rel="Vignettes_Difficile">0</span>
+                        <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Infernal" rel="Vignettes_Infernal">0</span>
+                        <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Extrême" rel="Vignettes_Extrême">0</span>
+                        <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Glitched" rel="Vignettes_Glitched">0</span>
                     </div>
                 </div>
             </div>    

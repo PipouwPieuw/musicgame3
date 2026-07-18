@@ -1,6 +1,6 @@
-import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES, DEVMODE } from './config.js';
+import { DEFAULTTRACKSBYGAME, SCORE_KEYS, DEVMODE, GAME_MODE_VIGNETTES } from './config.js';
 import { setupAudioListeners } from './game/audio-player.js';
-import { applyDifficulty, updateAnswerModeUI, updateDifficultyUI } from './game/difficulty.js';
+import { applyDifficulty, applyGameMode, updateAnswerModeUI, updateDifficultyUI } from './game/difficulty.js';
 import {
     cancelNextRoundSchedule,
     handleTimeout,
@@ -12,7 +12,7 @@ import {
 } from './game/round.js';
 import { buildSetlist, getTracksForCurrentMode } from './game/setlist.js';
 import { getAudioElements, resetStreak, updateScoreUI } from './game/scoring.js';
-import { gameState, resetGameState, getDifficultyName, isClassicMode } from './game/state.js';
+import { gameState, resetGameState, getDisplayLabel, getScoreKey, isClassicMode } from './game/state.js';
 import { loadTracks } from './services/tracks-loader.js';
 import { filterPlayableTracks, getPreviewPath, migrateLikedTracksToIds } from './lib/track-utils.js';
 import {
@@ -36,6 +36,7 @@ import {
     initFoundTracksReveal,
     openLeaderboard,
     returnBestScores,
+    syncStatsDifficultyColumns,
     updateStatsAnswers,
     updateStatsBestScore,
     updateStatsGamesPlayed,
@@ -82,8 +83,6 @@ async function loadPlayerSession(username) {
             return false;
         }
 
-        // console.log(result);
-
         // Use the stored casing from the server (canonical username).
         gameState.username = result.username;
         gameState.playerData = result;
@@ -101,9 +100,9 @@ async function loadPlayerSession(username) {
 }
 
 async function endGame() {
-    gameState.playerData.scores.push([getDifficultyName(), gameState.tracksByGame, gameState.score]);
+    gameState.playerData.scores.push([getScoreKey(), gameState.tracksByGame, gameState.score]);
 
-    if (gameState.difficultyLevel == 1) {
+    if (isClassicMode()) {
         for (let id of gameState.foundTracksIds) {
             if (!gameState.playerData.foundTracksIds.includes(id)) {
                 gameState.playerData.foundTracksIds.push(id);
@@ -114,11 +113,11 @@ async function endGame() {
 
     markVignettesUnlockIfNeeded();
 
-    const difficultyName = getDifficultyName();
-    if (!(difficultyName in gameState.playerData.games_played) || gameState.playerData.games_played[difficultyName] == null) {
-        gameState.playerData.games_played[difficultyName] = 0;
+    const scoreKey = getScoreKey();
+    if (!(scoreKey in gameState.playerData.games_played) || gameState.playerData.games_played[scoreKey] == null) {
+        gameState.playerData.games_played[scoreKey] = 0;
     }
-    gameState.playerData.games_played[difficultyName] += 1;
+    gameState.playerData.games_played[scoreKey] += 1;
     updateStatsGamesPlayed($);
     updateStatsAnswers($);
 
@@ -163,7 +162,7 @@ function startGame() {
         return;
     }
 
-    if(gameState.difficultyLevel == 1) {
+    if (isClassicMode()) {
         gameState.foundTracksIds = [];
     }
     buildSetlist(trackPool, gameState.tracksByGame);
@@ -299,23 +298,37 @@ function bindEvents() {
         syncTracksByGameToCatalog();
     });
 
-    $('.js-input-difficulty').on('change', function () {
-        const difficultyName = $('label[for="' + this.id + '"] .text_no_glitch').text();
-        const selectedLevel = String($(this).val());
-        applyDifficulty(selectedLevel);
-        updateDifficultyUI($, difficultyName);
-        syncTracksByGameToCatalog();
+    $('.js-input-game-mode').on('change', function () {
+        const selectedMode = String($(this).val());
+        applyGameMode(selectedMode);
+        updateDifficultyUI($);
 
-        if (selectedLevel === '2' && gameState.playerData && !gameState.playerData.hasSeenVignettesMode) {
-            gameState.playerData.hasSeenVignettesMode = true;
-            clearVignettesNewHighlight($);
-            savePlayerProfile(gameState.username, gameState.playerData).catch(function (error) {
-                console.error('Failed to save vignettes seen flag', error);
-                gameState.playerData.hasSeenVignettesMode = false;
-                $('.js-vignettes-option').addClass('settings_difficulty__option--new');
-                alert('Impossible de sauvegarder le statut du mode Vignettes. Vérifiez que le serveur est démarré.');
-            });
+        if (selectedMode === GAME_MODE_VIGNETTES) {
+            const $checkedDifficulty = $('.js-input-difficulty:checked');
+            if ($checkedDifficulty.length) {
+                applyDifficulty($checkedDifficulty.val());
+                updateDifficultyUI($);
+            }
+
+            if (gameState.playerData && !gameState.playerData.hasSeenVignettesMode) {
+                gameState.playerData.hasSeenVignettesMode = true;
+                clearVignettesNewHighlight($);
+                savePlayerProfile(gameState.username, gameState.playerData).catch(function (error) {
+                    console.error('Failed to save vignettes seen flag', error);
+                    gameState.playerData.hasSeenVignettesMode = false;
+                    $('.js-vignettes-option').addClass('settings_difficulty__option--new');
+                    alert('Impossible de sauvegarder le statut du mode Vignettes. Vérifiez que le serveur est démarré.');
+                });
+            }
         }
+
+        syncTracksByGameToCatalog();
+    });
+
+    $('.js-input-difficulty').on('change', function () {
+        applyDifficulty($(this).val());
+        updateDifficultyUI($);
+        syncTracksByGameToCatalog();
     });
 
     $(document).on('click', '.js-like-track', function () {
@@ -357,13 +370,14 @@ function bindEvents() {
         updateStatsGamesPlayed($);
         updateStatsAnswers($);
         updateStatsBestScore($);
+        syncStatsDifficultyColumns($);
 
         getAllScores().then(function (result) {
             const leaderboard = {};
             const leaderboardCustom = {};
-            for (const difficulty in DIFFICULTYNAMES) {
-                leaderboard[DIFFICULTYNAMES[difficulty]] = {};
-                leaderboardCustom[DIFFICULTYNAMES[difficulty]] = {};
+            for (const i in SCORE_KEYS) {
+                leaderboard[SCORE_KEYS[i]] = {};
+                leaderboardCustom[SCORE_KEYS[i]] = {};
             }
             const [classic, custom] = returnBestScores(result, leaderboard, leaderboardCustom);
             buildLeaderboard($, classic, 'Classement parties standards');
@@ -406,8 +420,10 @@ function init() {
 
     updateScoreUI($);
     gameState.tracksByGame = DEFAULTTRACKSBYGAME;
-    applyDifficulty(1);
+    applyGameMode('classique');
+    updateDifficultyUI($, getDisplayLabel());
     updateAnswerModeUI($);
+    syncStatsDifficultyColumns($);
     loadPlaylist();
     initFoundTracksReveal($);
     bindEvents();

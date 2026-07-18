@@ -1,0 +1,35 @@
+{
+    "label": "Animes",
+    "tracks": [
+      {
+        "id": "E001",
+        "title": "Death Note",
+        "subTitle": "",
+        "year": "2006 - 2007",
+        "acceptedAnswers": [
+          "Death Note"
+        ]
+      },
+      {
+        "id": "E002",
+        "title": "Steins;Gate",
+        "subTitle": "",
+        "year": "2011 - 2015",
+        "acceptedAnswers": [
+          "Steins;Gate"
+        ]
+      },
+      {
+        "id": "E003",
+        "title": "Cardcaptor Sakura",
+        "subTitle": "",
+        "year": "1998 - 2000",
+        "acceptedAnswers": [
+          "Cardcaptor Sakura",
+          "Sakura",
+          "Sakura chasseuse de cartes"
+        ]
+      }
+    ]
+  }
+  

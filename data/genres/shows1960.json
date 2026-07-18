@@ -1,0 +1,27 @@
+{
+    "label": "Années 1960",
+    "tracks": [
+      {
+        "id": "F001",
+        "title": "The Addams Family",
+        "subTitle": "",
+        "year": "1964 - 1966",
+        "acceptedAnswers": [
+          "The Addams Family",
+          "Addams Family",
+          "La Famille Addams",
+          "Famille Addams"
+        ]
+      },
+      {
+        "id": "F002",
+        "title": "Bewitched",
+        "subTitle": "",
+        "year": "1964 - 1972",
+        "acceptedAnswers": [
+          "Bewitched",
+          "Ma sorcière bien-aimée"
+        ]
+    ]
+  }
+  

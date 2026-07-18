@@ -3,9 +3,12 @@ import {
     DEFAULTTRACKSBYGAME,
     DIFFICILETRACKDURATION,
     DIFFICULTYNAMES,
+    GAME_MODE_CLASSIQUE,
+    GAME_MODE_VIGNETTES,
     HARDCOREMODETRACKDURATION,
     MODIFIER_RATES,
     POINTSBYANSWER,
+    SCORE_KEY_LABELS,
     SEGMENT_DURATIONS_1,
     SEGMENT_DURATIONS_2,
 } from '../config.js';
@@ -16,6 +19,7 @@ export const gameState = {
     setList: [],
     setListLength: 0,
     tracksByGame: DEFAULTTRACKSBYGAME,
+    gameMode: GAME_MODE_CLASSIQUE,
     difficultyLevel: 1,
     trackStart: 0,
     roundStartTime: 0,
@@ -44,16 +48,35 @@ export function getDifficultyName() {
     return DIFFICULTYNAMES[gameState.difficultyLevel - 1];
 }
 
+/** Persistence key for scores / stats maps. */
+export function getScoreKey() {
+    if (isClassicMode()) {
+        return 'Classique';
+    }
+
+    return 'Vignettes_' + getDifficultyName();
+}
+
+/** French label for end screen / UI. */
+export function getDisplayLabel() {
+    return SCORE_KEY_LABELS[getScoreKey()] || getScoreKey();
+}
+
 export function isHardcoreAudio() {
     return gameState.difficultyLevel >= 3;
 }
 
+/** Random clip start (Difficile+), same picker as Infernal. */
+export function usesRandomTrackStart() {
+    return gameState.difficultyLevel >= 2;
+}
+
 export function isImageAnswerMode() {
-    return gameState.difficultyLevel === 2;
+    return gameState.gameMode === GAME_MODE_VIGNETTES;
 }
 
 export function isClassicMode() {
-    return gameState.difficultyLevel === 1;
+    return gameState.gameMode === GAME_MODE_CLASSIQUE;
 }
 
 export function getClipDuration() {

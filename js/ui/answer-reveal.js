@@ -1,18 +1,12 @@
 import { DEFAULT_COVER_PATH } from '../config.js';
+import { preloadImage } from '../lib/preload-image.js';
 
-export function setAnswerRevealContent($, { title, imagePath }) {
+export async function setAnswerRevealContent($, { title, imagePath }) {
     $('.js-answer-reveal-text').text(title || '');
 
     const $coverReveal = $('.js-answer-reveal-image img');
-    const probe = new Image();
-
-    probe.onload = function () {
-        $coverReveal.attr('src', imagePath);
-    };
-    probe.onerror = function () {
-        $coverReveal.attr('src', DEFAULT_COVER_PATH);
-    };
-    probe.src = imagePath;
+    const resolvedPath = await preloadImage(imagePath || DEFAULT_COVER_PATH);
+    $coverReveal.attr('src', resolvedPath);
 }
 
 export function playAnswerRevealAppear($) {

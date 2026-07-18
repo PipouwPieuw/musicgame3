@@ -20,27 +20,27 @@
         "The X-Files",
         "X-Files",
         "Aux frontières du réel",
-        "X-files aux frontières du réel"
+        "X-Files aux frontières du réel"
       ]
     },
     {
       "id": "C003",
-      "title": "Are You Afraid of the Dark?",
+      "title": "Twin Peaks",
       "subTitle": "",
-      "year": "1992 - 2000",
+      "year": "1990 - 1991 / 2017",
       "acceptedAnswers": [
-        "Are You Afraid of the Dark",
-        "Fais-moi peur"
+        "Twin Peaks",
+        "Mystères à Twin Peaks"
       ]
     },
     {
       "id": "C004",
-      "title": "Goosebumps",
+      "title": "Tales From the Crypt",
       "subTitle": "",
-      "year": "19995 - 1998",
+      "year": "1989 - 1996",
       "acceptedAnswers": [
-        "Goosebumps",
-        "Chair de poule"
+        "Tales From the Crypt",
+        "Les Contes de la Crypte"
       ]
     }
   ]

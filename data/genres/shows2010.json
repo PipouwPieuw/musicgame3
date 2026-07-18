@@ -110,6 +110,110 @@
       "acceptedAnswers": [
         "Game of Thrones"
       ]
+    },
+    {
+      "id": "B013",
+      "title": "iZombie",
+      "subTitle": "",
+      "year": "2015 - 2019",
+      "acceptedAnswers": [
+        "iZombie"
+      ]
+    },
+    {
+      "id": "B014",
+      "title": "House of Cards",
+      "subTitle": "",
+      "year": "2013 - 2018",
+      "acceptedAnswers": [
+        "House of Cards"
+      ]
+    },
+    {
+      "id": "B015",
+      "title": "The Walking Dead",
+      "subTitle": "",
+      "year": "2010 - 2022",
+      "acceptedAnswers": [
+        "The Walking Dead"
+      ]
+    },
+    {
+      "id": "B016",
+      "title": "The Vampire Diaries",
+      "subTitle": "",
+      "year": "2009 - 2017",
+      "acceptedAnswers": [
+        "The Vampire Diaries"
+      ]
+    },
+    {
+      "id": "B017",
+      "title": "American Vandal",
+      "subTitle": "",
+      "year": "2017 - 2018",
+      "acceptedAnswers": [
+        "American Vandal"
+      ]
+    },
+    {
+      "id": "B018",
+      "title": "Unbreakable Kimmy Schmidt",
+      "subTitle": "",
+      "year": "2015 - 2019",
+      "acceptedAnswers": [
+        "Unbreakable Kimmy Schmidt",
+        "Kimmy Schmidt"
+      ]
+    },
+    {
+      "id": "B019",
+      "title": "The Good Place",
+      "subTitle": "",
+      "year": "2016 - 2020",
+      "acceptedAnswers": [
+        "The Good Place"
+      ]
+    },
+    {
+      "id": "B020",
+      "title": "13 Reasons Why",
+      "subTitle": "",
+      "year": "2017 - 2020",
+      "acceptedAnswers": [
+        "13 Reasons Why"
+      ]
+    },
+    {
+      "id": "B021",
+      "title": "Dirk Gently's Holistic Detective Agency",
+      "subTitle": "",
+      "year": "2016 - 2017",
+      "acceptedAnswers": [
+        "Dirk Gently's Holistic Detective Agency",
+        "Dirk Gently",
+        "Dirk Gently, détective holistique"
+      ]
+    },
+    {
+      "id": "B022",
+      "title": "A Series of Unfortunate Events",
+      "subTitle": "",
+      "year": "2017 - 2019",
+      "acceptedAnswers": [
+        "A Series of Unfortunate Events",
+        "Les Désastreuses Aventures des Orphelins Baudelaire",
+        "Les Orphelins Baudelaire"
+      ]
+    },
+    {
+      "id": "B023",
+      "title": "Santa Clarita Diet",
+      "subTitle": "",
+      "year": "2017 - 2019",
+      "acceptedAnswers": [
+        "Santa Clarita Diet"
+      ]
     }
   ]
 }

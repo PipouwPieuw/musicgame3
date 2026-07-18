@@ -1,7 +1,7 @@
-import { DEFAULT_COVER_PATH } from '../config.js';
 import { isTitleCorrect } from '../lib/normalize-title.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { findTrackById, getPreviewPath, getTrackMetadata } from '../lib/track-utils.js';
+import { setAnswerRevealContent } from '../ui/answer-reveal.js';
 import {
     getCountdownPercentage,
     pauseAudio,
@@ -91,33 +91,15 @@ function showGuessingPhaseUI($) {
     // $('.js-description').text('');
 }
 
-function setCoverImage($, imagePath) {
-    // const $cover = $('.js-cover');
-    const $coverReveal = $('.js-answer-reveal-image img');
-    const probe = new Image();
-
-    probe.onload = function () {
-        // $cover.attr('src', imagePath);
-        $coverReveal.attr('src', imagePath);
-    };
-    probe.onerror = function () {
-        // $cover.attr('src', DEFAULT_COVER_PATH);
-        $coverReveal.attr('src', DEFAULT_COVER_PATH);
-    };
-    probe.src = imagePath;
-}
-
 function revealTrackMetadata($, trackId) {
     const meta = getTrackMetadata(gameState.tracks, trackId);
     // $('.js-name').text(meta.name);
-    $('.js-answer-reveal-text').text(meta.name);
     // $('.js-description').text(meta.subTitle?.trim() ? meta.subTitle : '');
-
-    if (meta.image) {
-        setCoverImage($, meta.image);
-    } else {
-        // $('.js-cover').attr('src', DEFAULT_COVER_PATH);
-    }
+    // Quiet preload into the hidden overlay (no animation) for the next reveal.
+    setAnswerRevealContent($, {
+        title: meta.name,
+        imagePath: meta.image,
+    });
 }
 
 function revealAnswer($, trackId) {
@@ -143,7 +125,7 @@ function handleWrongAttempt($) {
     }, WRONG_ANSWER_FLASH_MS);
 }
 
-function finishRound($, audioPlayer) {
+async function finishRound($, audioPlayer) {
     gameState.isPlaying = false;
     resetRoundTimer();
     pauseAudio($);
@@ -160,11 +142,16 @@ function finishRound($, audioPlayer) {
     resetCountdownBar($, countdownPercentage + '%');
 
     playCorrectSound();
+
+    const meta = getTrackMetadata(gameState.tracks, gameState.currentTrackId);
+    await setAnswerRevealContent($, {
+        title: meta.name,
+        imagePath: meta.image,
+    });
+
     applyCorrectAnswer($);
 
     enableNextRoundInput($);
-
-    revealTrackMetadata($, gameState.currentTrackId);
     scheduleNextRound();
 }
 
@@ -275,7 +262,7 @@ export function submitAnswer($) {
 
     if (isCorrect) {
         const { audioPlayer } = { audioPlayer: document.getElementById('audio_player') };
-        if (gameState.difficultyLevel == 1) {
+        if (isClassicMode()) {
             gameState.foundTracksIds.push(trackId);
         }
         finishRound($, audioPlayer);
@@ -348,8 +335,11 @@ function bindCurrentTrackForRound($, trackId) {
 
     if (isImageAnswerMode()) {
         gameState.roundChoices = buildImageChoices(trackId, getFoundPlayableTracks());
-        renderImageChoices($, gameState.roundChoices);
-        enableImageAnswers($);
+        renderImageChoices($, gameState.roundChoices).then(function () {
+            if (gameState.isPlaying && gameState.currentTrackId === trackId) {
+                enableImageAnswers($);
+            }
+        });
     }
 }
 
@@ -424,8 +414,11 @@ export function playRound($) {
 
     if (isImageAnswerMode()) {
         gameState.roundChoices = buildImageChoices(trackId, getFoundPlayableTracks());
-        renderImageChoices($, gameState.roundChoices);
-        enableImageAnswers($);
+        renderImageChoices($, gameState.roundChoices).then(function () {
+            if (gameState.isPlaying && gameState.currentTrackId === trackId) {
+                enableImageAnswers($);
+            }
+        });
     } else {
         enableAnswerForm($);
     }

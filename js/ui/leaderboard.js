@@ -1,4 +1,4 @@
-import { DEFAULTTRACKSBYGAME, DIFFICULTYNAMES, LEADERBOARDDIFFICULTYNAMES, NOT_FOUND_COVER_PATH } from '../config.js';
+import { DEFAULTTRACKSBYGAME, migrateScoreKey, NOT_FOUND_COVER_PATH, SCORE_KEY_LABELS, SCORE_KEYS } from '../config.js';
 import { getCoverPath, getTrackMetadata } from '../lib/track-utils.js';
 import { getAllProfiles, getAllScores } from '../services/player-api.js';
 import { groupTrackIdsByGenre } from '../services/tracks-loader.js';
@@ -8,6 +8,7 @@ import {
     playAnswerRevealDismiss,
     setAnswerRevealContent,
 } from './answer-reveal.js';
+import { isScoreKeyEnabled, isScoreKeyUnlocked } from './vignettes-unlock.js';
 
 let foundTrackRevealDismissArmed = false;
 
@@ -20,7 +21,11 @@ export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
         const name = allScores[element].name;
         const initials = allScores[element].initials;
         for (const currentScore in scores) {
-            const [difficulty, tracks, points] = scores[currentScore];
+            const [rawDifficulty, tracks, points] = scores[currentScore];
+            const difficulty = migrateScoreKey(rawDifficulty);
+            if (!(difficulty in leaderboard) || !(difficulty in leaderboardCustom)) {
+                continue;
+            }
             if (tracks != DEFAULTTRACKSBYGAME) {
                 if (!(name in leaderboardCustom[difficulty])) {
                     leaderboardCustom[difficulty][name] = [name, tracks, points, initials];
@@ -37,38 +42,40 @@ export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
         }
     }
 
-    for (const difficulty in DIFFICULTYNAMES) {
+    for (const difficulty in SCORE_KEYS) {
+        const key = SCORE_KEYS[difficulty];
         const difficultyTableCustom = [];
-        for (const playerName in leaderboardCustom[DIFFICULTYNAMES[difficulty]]) {
-            difficultyTableCustom.push(leaderboardCustom[DIFFICULTYNAMES[difficulty]][playerName]);
+        for (const playerName in leaderboardCustom[key]) {
+            difficultyTableCustom.push(leaderboardCustom[key][playerName]);
         }
         difficultyTableCustom.sort((a, b) => (a[2] < b[2] ? 1 : b[2] < a[2] ? -1 : 0));
-        leaderboardCustom[DIFFICULTYNAMES[difficulty]] = difficultyTableCustom;
+        leaderboardCustom[key] = difficultyTableCustom;
 
         const difficultyTable = [];
-        for (const playerName in leaderboard[DIFFICULTYNAMES[difficulty]]) {
-            difficultyTable.push(leaderboard[DIFFICULTYNAMES[difficulty]][playerName]);
+        for (const playerName in leaderboard[key]) {
+            difficultyTable.push(leaderboard[key][playerName]);
         }
         difficultyTable.sort((a, b) => (a[2] < b[2] ? 1 : b[2] < a[2] ? -1 : 0));
-        leaderboard[DIFFICULTYNAMES[difficulty]] = difficultyTable;
+        leaderboard[key] = difficultyTable;
     }
 
     return [leaderboard, leaderboardCustom];
 }
 
 export function buildLeaderboard($, object, title) {
-    let counter = 0;
-    $('.js-leaderboard-content').append('<span class="leaderboard__section_title">' + title + '</span>');
-    for (const difficulty in DIFFICULTYNAMES) {
-        counter += 1;
-        const label = DIFFICULTYNAMES[difficulty];
-        const displayedLabel = LEADERBOARDDIFFICULTYNAMES[difficulty];
-        if (object[label].length == 0) {
+    const sections = [];
+
+    for (const difficulty in SCORE_KEYS) {
+        const label = SCORE_KEYS[difficulty];
+        if (!isScoreKeyUnlocked(label, gameState.playerData)) {
             continue;
         }
-        $('.js-leaderboard-content').append(
-            '<span class="leaderboard__title leaderboard__title--' + counter + ' panel_label">' + displayedLabel + '</span>'
-        );
+        if (!object[label] || object[label].length == 0) {
+            continue;
+        }
+
+        const displayedLabel = SCORE_KEY_LABELS[label] || label;
+        const titleModifier = parseInt(difficulty, 10) + 1;
         const scoresList = $('<ul class="leaderboard__list"></ul>');
         scoresList.append(
             $('<li class="leaderboard__item"><span class="leaderboard__value--head leaderboard__value--name">Joueur</span><span class="leaderboard__value--head leaderboard__value--tracks">Nombre de morceaux</span><span class="leaderboard__value--head leaderboard__value--points">Score</span></li>')
@@ -81,7 +88,26 @@ export function buildLeaderboard($, object, title) {
             scoresItem.append($('<span class="leaderboard__value leaderboard__value--points">' + points + '</span>'));
             scoresList.append(scoresItem);
         }
-        $('.js-leaderboard-content').append(scoresList);
+
+        sections.push({
+            titleHtml:
+                '<span class="leaderboard__title leaderboard__title--' +
+                titleModifier +
+                ' panel_label">' +
+                displayedLabel +
+                '</span>',
+            scoresList: scoresList,
+        });
+    }
+
+    if (sections.length === 0) {
+        return;
+    }
+
+    $('.js-leaderboard-content').append('<span class="leaderboard__section_title">' + title + '</span>');
+    for (const section of sections) {
+        $('.js-leaderboard-content').append(section.titleHtml);
+        $('.js-leaderboard-content').append(section.scoresList);
     }
 }
 
@@ -188,9 +214,9 @@ export async function buildTrophies($) {
     const allScores = await getAllScores();
     const leaderboard = {};
     const leaderboardCustom = {};
-    for (const difficulty in DIFFICULTYNAMES) {
-        leaderboard[DIFFICULTYNAMES[difficulty]] = {};
-        leaderboardCustom[DIFFICULTYNAMES[difficulty]] = {};
+    for (const difficulty in SCORE_KEYS) {
+        leaderboard[SCORE_KEYS[difficulty]] = {};
+        leaderboardCustom[SCORE_KEYS[difficulty]] = {};
     }
     const [leaderboardResult] = returnBestScores(allScores, leaderboard, leaderboardCustom);
 
@@ -292,56 +318,66 @@ export function initFoundTracksReveal($) {
         setAnswerRevealContent($, {
             title: title,
             imagePath: getCoverPath(trackId),
-        });
-        playAnswerRevealAppear($);
+        }).then(function () {
+            playAnswerRevealAppear($);
 
-        setTimeout(function () {
-            foundTrackRevealDismissArmed = true;
-            $(document).on('click.foundTrackReveal', function () {
-                dismissFoundTrackReveal($);
-            });
-        }, 0);
+            setTimeout(function () {
+                foundTrackRevealDismissArmed = true;
+                $(document).on('click.foundTrackReveal', function () {
+                    dismissFoundTrackReveal($);
+                });
+            }, 0);
+        });
     });
+}
+
+/** Hide stats columns for difficulties disabled in VIGNETTES_DIFFICULTY_ENABLED. */
+export function syncStatsDifficultyColumns($) {
+    for (const i in SCORE_KEYS) {
+        const scoreKey = SCORE_KEYS[i];
+        const enabled = isScoreKeyEnabled(scoreKey);
+        $('.js-stats-col[data-score-key="' + scoreKey + '"]').toggleClass('is-hidden', !enabled);
+    }
 }
 
 export function updateStatsGamesPlayed($) {
     $('.js-games-played').each(function () {
         const level = $(this).attr('rel');
-        $(this).text(gameState.playerData.games_played[level]);
+        $(this).text((gameState.playerData.games_played && gameState.playerData.games_played[level]) || 0);
     });
 }
 
 export function updateStatsAnswers($) {
     $('.js-good-answers').each(function () {
         const level = $(this).attr('rel');
-        $(this).text(gameState.playerData.good_answers[level]);
+        $(this).text((gameState.playerData.good_answers && gameState.playerData.good_answers[level]) || 0);
     });
     $('.js-wrong-answers').each(function () {
         const level = $(this).attr('rel');
-        $(this).text(gameState.playerData.wrong_answers[level]);
+        $(this).text((gameState.playerData.wrong_answers && gameState.playerData.wrong_answers[level]) || 0);
     });
 }
 
 export function updateStatsBestScore($) {
-    const bestScores = {
-        Normal: 0,
-        Difficile: 0,
-        Infernal: 0,
-        Extrême: 0,
-        Glitched: 0,
-    };
+    const bestScores = {};
+    for (const i in SCORE_KEYS) {
+        bestScores[SCORE_KEYS[i]] = 0;
+    }
 
     for (const scoreItem in gameState.playerData.scores) {
         const currentData = gameState.playerData.scores[scoreItem];
-        const currentDifficulty = currentData[0];
+        const currentDifficulty = migrateScoreKey(currentData[0]);
         const currentScore = currentData[2];
+        if (!(currentDifficulty in bestScores)) {
+            continue;
+        }
         bestScores[currentDifficulty] =
             bestScores[currentDifficulty] > currentScore ? bestScores[currentDifficulty] : currentScore;
     }
 
     $('.js-best-score').each(function () {
         const level = $(this).attr('rel');
-        $(this).text(bestScores[level]);
+        $(this).text(bestScores[level] || 0);
     });
 }
 

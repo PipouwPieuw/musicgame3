@@ -1,7 +1,7 @@
 import { DEFAULT_COVER_PATH, IMAGE_ANSWER_COUNT } from '../config.js';
+import { preloadImages } from '../lib/preload-image.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { getCoverPath } from '../lib/track-utils.js';
-import { gameState } from './state.js';
 
 export function buildImageChoices(correctTrackId, tracks) {
     const choices = [{ trackId: correctTrackId, isCorrect: true }];
@@ -25,12 +25,16 @@ export function buildImageChoices(correctTrackId, tracks) {
     return shuffleArray(choices);
 }
 
-export function renderImageChoices($, choices) {
+export async function renderImageChoices($, choices) {
     const $list = $('.js-answers');
-    $list.empty();
+    $list.empty().removeClass('is-ready');
+
+    const coverPaths = choices.map(function (choice) {
+        return getCoverPath(choice.trackId);
+    });
 
     choices.forEach(function (choice, index) {
-        const coverPath = getCoverPath(choice.trackId);
+        const coverPath = coverPaths[index];
         const $item = $(
             '<li class="list_answers__item list_answers__item--avatar">' +
                 '<button type="button" class="list_answers__avatar js-answer" data-index="' +
@@ -49,11 +53,22 @@ export function renderImageChoices($, choices) {
 
         $list.append($item);
     });
+
+    const resolvedPaths = await preloadImages(coverPaths);
+
+    $list.find('.list_answers__img').each(function (index) {
+        const resolvedPath = resolvedPaths[index];
+        if (resolvedPath && resolvedPath !== coverPaths[index]) {
+            $(this).attr('src', resolvedPath);
+        }
+    });
+
+    $list.addClass('is-ready');
 }
 
 export function resetImageAnswers($) {
     const $list = $('.js-answers');
-    $list.empty().removeClass('playing');
+    $list.empty().removeClass('playing is-ready');
     $list.find('.js-answer').removeClass('correct incorrect');
 }
 
