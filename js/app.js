@@ -98,6 +98,7 @@ async function applyPlayerSession(profile) {
     migrateStoredLikedTracks();
     syncVignettesModeUnlock($);
     showLoggedInUI();
+    $('.js-username-display').text("Bienvenue " + gameState.username);
     return true;
 }
 

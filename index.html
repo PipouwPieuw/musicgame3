@@ -21,10 +21,16 @@
             <button class="bar_top__menu js-close-leaderboard" aria-label="Retour au menu" title="Retour au menu">
                 <img class="bar_top__icon" src="assets/icons/arrow-left.svg" role="decoration"/>
             </button>
-            <span class="bar_top__title">
-                <span class="text_no_glitch">TV Shows Blind Test</span>
-                <span class="text_glitch">TV Shows Blind Test</span>
-            </span>
+            <div class="bar_top__content">
+                <span class="bar_top__title">
+                    <span class="text_no_glitch">TV Shows Blind Test</span>
+                    <span class="text_glitch">TV Shows Blind Test</span>
+                </span>
+                <span class="bar_top__username">
+                    <span class="text_no_glitch js-username-display"></span>
+                    <span class="text_glitch js-username-display"></span>
+                </span>
+            </div>
             <button class="bar_top__leaderboard js-display-leaderboard" aria-label="Afficher les scores" title="Hall of fame">
                 <img class="bar_top__icon" src="assets/icons/trophy.svg"/>
             </button>
@@ -297,6 +303,7 @@
             </div>   
             <div class="statistics panel_tabs__section js-tab-section" rel="stats">
                 <div class="panel_box__box panel_box__box--stats">
+                    <span class="leaderboard__section_title">Vos statistiques personnelles</span>
                     <div class="stats_table stats_table--single">
                         <span class="stats_table__mode_title leaderboard__title leaderboard__title--1 panel_label">Classique</span>
                         <div class="stats_row"></div>
@@ -318,7 +325,7 @@
                         </div>
                     </div>
                     <div class="stats_table">
-                        <span class="stats_table__mode_title leaderboard__title--2 panel_label">Vignettes</span>
+                        <span class="stats_table__mode_title leaderboard__title leaderboard__title--2 panel_label">Vignettes</span>
                         <div class="stats_row hide_mobile">
                             <span class="stats_cell stats_cell--first"></span>
                             <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Normal">Normal</span>

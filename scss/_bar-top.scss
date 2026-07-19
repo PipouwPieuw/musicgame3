@@ -10,89 +10,107 @@
 	justify-content: space-between;
 	background: black;
 	color: white;
-}
-.bar_top:not(.visible) {
-	display: none;
-}
-#wrapper.game_started .bar_top {
-	padding-right: 90px;
-}
-@media only screen and (max-width: 640px) {	
-	.bar_top {
+	
+	@media only screen and (max-width: 640px) {	
 		height: 50px;
 	}
-	#wrapper.game_started .bar_top {
+	
+	&:not(.visible) {
+		display: none;
+	}
+
+	&__content {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	
+		@media only screen and (min-width: 641px) {	
+			gap: 4px;
+		}
+	}
+
+	&__title {
+		font-size: 30px;
+		font-weight: 700;
+		// flex: 1;
+		text-align: center;
+		
+		@media only screen and (max-width: 640px) {	
+			font-size: 20px;
+			padding: 0 15px;
+		}
+		
+		@media only screen and (max-width: 350px) {
+			font-size: 16px;
+		}
+	}
+
+
+	&__username {
+		font-size: 16px;
+		font-weight: 700;
+		text-align: center;
+	}
+
+	&__logout,
+	&__leaderboard,
+	&__back,
+	&__menu {
+		background: transparent;
+		border: 0;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 90px;
+		height: 90px;
+
+		@media only screen and (max-width: 640px) {
+			width: 50px;
+			height: 50px;
+		}
+	}
+
+	@media only screen and (min-width: 641px) {	
+		&__logout:hover,
+		&__back:hover {
+			background: red;
+		}
+
+		&__leaderboard:hover,
+		&__menu:hover {
+			background: green;
+		}
+	}
+
+	&__leaderboard.active {
+		background: green;
+	}
+	
+	&__icon {
+		width: 50px;
+		height: auto;
+		
+		@media only screen and (max-width: 640px) {
+			width: 30px;
+		}
+	}
+}
+
+#wrapper.game_started .bar_top {
+	padding-right: 90px;
+	
+	@media only screen and (max-width: 640px) {	
 		padding-right: 50px;
 	}
 }
 
-.bar_top__title {
-	font-size: 40px;
-	font-weight: 700;
-	flex: 1;
-	text-align: center;
-}
-@media only screen and (max-width: 640px) {	
-	.bar_top__title {
-		font-size: 20px;
-		padding: 0 15px;
-	}
-}
-@media only screen and (max-width: 350px) {
-	.bar_top__title {
-		font-size: 16px;
-	}
-}
-.bar_top__logout,
-.bar_top__leaderboard,
-.bar_top__back,
-.bar_top__menu {
-	background: transparent;
-	border: 0;
-	padding: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 90px;
-	height: 90px;
-}
 #wrapper.game_started .bar_top__logout,
 .bar_top__logout.hidden,
 #wrapper.game_started .bar_top__leaderboard,
 #wrapper:not(.game_started) .bar_top__back,
 .bar_top__menu:not(.visible) {
 	display: none;
-}
-@media only screen and (max-width: 640px) {
-	.bar_top__logout,
-	.bar_top__leaderboard,
-	.bar_top__back,
-	.bar_top__menu {
-		width: 50px;
-	    height: 50px;
-	}
-}
-
-@media only screen and (min-width: 641px) {	
-	.bar_top__logout:hover,
-	.bar_top__back:hover {
-		background: red;
-	}
-	.bar_top__leaderboard:hover,
-	.bar_top__menu:hover {
-		background: green;
-	}
-}
-.bar_top__leaderboard.active {
-	background: green;
-}
-
-.bar_top__icon {
-	width: 50px;
-	height: auto;
-}
-@media only screen and (max-width: 640px) {
-	.bar_top__icon {
-		width: 30px;
-	}
 }

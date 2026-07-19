@@ -129,7 +129,7 @@ export const VIGNETTES_UNLOCK_THRESHOLD = 20;
  */
 export const VIGNETTES_DIFFICULTY_ENABLED = {
     1: true,
-    2: false,
+    2: true,
     3: false,
     4: false,
     5: false,

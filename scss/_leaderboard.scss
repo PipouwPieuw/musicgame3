@@ -9,10 +9,10 @@
 .panel_box__box--stats {
 	overflow-x: auto;
 }
-.stats_table:not(:first-child) {
+.stats_table + .stats_table {
 	margin-top: 12px;
 	padding-top: 48px;
-	border-top: 2px solid black;
+	border-top: 1px solid black;
 }
 .stats_table__mode_title {
 	display: block;
@@ -34,7 +34,7 @@
 }
 .stats_table .stats_row:not(:first-child) {
 	padding-top: 12px;
-    border-top: 2px solid black;
+    border-top: 1px solid black;
     margin-top: 12px;
 }
 .stats_table .stats_table__mode_title + .stats_row {
@@ -92,14 +92,18 @@
 		font-size: 13px;
 		padding-bottom: 8px;
 	}
-	.stats_cell.panel_label:not(.is-hidden) ~ .stats_cell.panel_label:not(.is-hidden) {
-		border-left: 1px solid black;
-	}
+	// .stats_cell.panel_label:not(.is-hidden) ~ .stats_cell.panel_label:not(.is-hidden) {
+	// 	border-left: 1px solid black;
+	// }
 }
 .stats_label {
-	font-size: 18px;
-	font-weight: 700;
-	letter-spacing: -.2px;
+	font-size: 20px;
+	// font-weight: 700;
+	// letter-spacing: -.2px;
+
+	@media only screen and (max-width: 640px) {	
+		font-size: 15px;
+	}
 }
 .stats_value {
 	font-size: 20px;
@@ -109,10 +113,11 @@
 	.stats_value {
 		text-align: center;
 		font-size: 15px;
+		flex: 1 0 auto;
 	}
-	.stats_value:not(.is-hidden) ~ .stats_value:not(.is-hidden) {
-		border-left: 1px solid black;
-	}
+	// .stats_value:not(.is-hidden) ~ .stats_value:not(.is-hidden) {
+	// 	border-left: 1px solid black;
+	// }
 }
 
 .leaderboard {
@@ -154,19 +159,19 @@
 		margin-top: 10px;
 	}
 }
-.leaderboard__mode_title.leaderboard__title {
-	font-size: 28px;
-}
-.leaderboard__mode_title:not(:first-of-type) {
-	margin-top: 8px;
-}
-@media only screen and (max-width: 640px) {
-	.leaderboard__mode_title,
-	.leaderboard__mode_title.leaderboard__title {
-		font-size: 22px;
-		margin-bottom: 10px;
-	}
-}
+// .leaderboard__mode_title.leaderboard__title {
+// 	font-size: 28px;
+// }
+// .leaderboard__mode_title:not(:first-of-type) {
+// 	margin-top: 8px;
+// }
+// @media only screen and (max-width: 640px) {
+// 	.leaderboard__mode_title,
+// 	.leaderboard__mode_title.leaderboard__title {
+// 		font-size: 22px;
+// 		margin-bottom: 10px;
+// 	}
+// }
 
 .leaderboard__title {
 	display: block;
