@@ -514,15 +514,27 @@
 	}
 }
 
-.login_panel__input {
-	margin-top: 6px;
-	width: 100%;
-}
-.login_panel__input:not(:last-child) {
-	margin-bottom: 15px;
-}
-.login_panel__button {
-	margin-left: auto;
+.login_panel {
+	
+	&__input {
+		margin-top: 6px;
+		width: 100%;
+		
+		&:not(:last-child) {
+			margin-bottom: 15px;
+		}
+	}
+
+	&__description {
+		margin-bottom: 15px;
+		font-size: 16px;
+		line-height: 20px;
+		width: 100%;
+	}
+	
+	&__button {
+		margin-left: auto;
+	}
 }
 
 .button_default {

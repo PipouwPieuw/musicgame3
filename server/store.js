@@ -1,4 +1,11 @@
-import { emptyScoreMap, migrateScoresList, migrateStatMap, SCORE_KEYS } from '../js/config.js';
+import {
+    emptyScoreMap,
+    KEYWORD_MAX_LENGTH,
+    KEYWORD_MIN_LENGTH,
+    migrateScoresList,
+    migrateStatMap,
+    SCORE_KEYS,
+} from '../js/config.js';
 import { supabase } from './supabase.js';
 
 export function createDefaultProfile(username) {
@@ -44,6 +51,9 @@ export function normalizeProfile(profile) {
         }
     }
 
+    // Never expose keyword on client-facing profiles.
+    delete profile.keyword;
+
     return profile;
 }
 
@@ -55,6 +65,24 @@ export function trimUsername(username) {
 /** Lowercase key used for case-insensitive matching. */
 export function normalizeUsername(username) {
     return trimUsername(username).toLowerCase();
+}
+
+/** Soft login keyword as typed (no trim). */
+export function asKeyword(keyword) {
+    return keyword == null ? '' : String(keyword);
+}
+
+export function isValidKeyword(keyword) {
+    const value = asKeyword(keyword);
+    return value.length >= KEYWORD_MIN_LENGTH && value.length <= KEYWORD_MAX_LENGTH;
+}
+
+export class LoginError extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.name = 'LoginError';
+        this.statusCode = statusCode || 400;
+    }
 }
 
 function escapeIlikeExact(value) {
@@ -84,7 +112,7 @@ function rowToProfile(row) {
     });
 }
 
-function profileToRow(username, profile) {
+function profileToRow(username, profile, keyword) {
     const normalized = normalizeProfile({
         ...profile,
         id: username,
@@ -92,7 +120,7 @@ function profileToRow(username, profile) {
         initials: profile.initials || username.slice(0, 3).toLowerCase(),
     });
 
-    return {
+    const row = {
         username,
         initials: normalized.initials,
         liked_tracks: normalized.likedTracks,
@@ -104,6 +132,12 @@ function profileToRow(username, profile) {
         has_seen_vignettes_mode: Boolean(normalized.hasSeenVignettesMode),
         updated_at: new Date().toISOString(),
     };
+
+    if (keyword !== undefined) {
+        row.keyword = keyword;
+    }
+
+    return row;
 }
 
 function throwIfError(error, context) {
@@ -113,7 +147,7 @@ function throwIfError(error, context) {
     }
 }
 
-export async function getPlayer(username) {
+async function getPlayerRow(username) {
     const key = normalizeUsername(username);
     if (!key) {
         return null;
@@ -123,7 +157,7 @@ export async function getPlayer(username) {
     const exact = await supabase.from('players').select('*').eq('username', key).maybeSingle();
     throwIfError(exact.error, 'getPlayer failed');
     if (exact.data) {
-        return rowToProfile(exact.data);
+        return exact.data;
     }
 
     // Case-insensitive match for mixed-case stored usernames.
@@ -133,35 +167,70 @@ export async function getPlayer(username) {
         .ilike('username', escapeIlikeExact(key))
         .maybeSingle();
     throwIfError(ilike.error, 'getPlayer failed');
-    return rowToProfile(ilike.data);
+    return ilike.data || null;
 }
 
-export async function getOrCreatePlayer(username) {
+export async function getPlayer(username) {
+    const row = await getPlayerRow(username);
+    return rowToProfile(row);
+}
+
+/**
+ * Soft-password login: create, claim missing keyword, or verify match.
+ * Keyword is never returned on the profile.
+ */
+export async function loginWithKeyword(username, keyword) {
     const display = trimUsername(username);
     const key = normalizeUsername(display);
+    const keywordValue = asKeyword(keyword);
+
     if (!key) {
-        return { profile: null, created: false };
+        throw new LoginError('Nom d\'utilisateur invalide', 400);
+    }
+    if (!isValidKeyword(keywordValue)) {
+        throw new LoginError(
+            `Le mot-clé doit contenir entre ${KEYWORD_MIN_LENGTH} et ${KEYWORD_MAX_LENGTH} caractères.`,
+            400
+        );
     }
 
-    const existing = await getPlayer(display);
-    if (existing) {
-        return { profile: existing, created: false };
-    }
+    const existing = await getPlayerRow(display);
 
-    const profile = createDefaultProfile(display);
-    const row = profileToRow(display, profile);
-    const { data, error } = await supabase.from('players').insert(row).select('*').single();
+    if (!existing) {
+        const profile = createDefaultProfile(display);
+        const row = profileToRow(display, profile, keywordValue);
+        const { data, error } = await supabase.from('players').insert(row).select('*').single();
 
-    if (isUniqueViolation(error)) {
-        const raced = await getPlayer(display);
-        if (raced) {
-            return { profile: raced, created: false };
+        if (isUniqueViolation(error)) {
+            // Race: another request created the row — re-run as existing-user login.
+            return loginWithKeyword(display, keywordValue);
         }
+
+        throwIfError(error, 'loginWithKeyword insert failed');
+        return { profile: rowToProfile(data), created: true };
     }
 
-    throwIfError(error, 'getOrCreatePlayer insert failed');
+    const storedKeyword = existing.keyword == null ? '' : String(existing.keyword);
 
-    return { profile: rowToProfile(data), created: true };
+    if (!storedKeyword) {
+        const { data, error } = await supabase
+            .from('players')
+            .update({ keyword: keywordValue, updated_at: new Date().toISOString() })
+            .eq('username', existing.username)
+            .select('*')
+            .single();
+        throwIfError(error, 'loginWithKeyword claim failed');
+        return { profile: rowToProfile(data), created: false };
+    }
+
+    if (storedKeyword !== keywordValue) {
+        throw new LoginError(
+            'Ce nom d\'utilisateur existe déjà et le mot-clé ne correspond pas.',
+            403
+        );
+    }
+
+    return { profile: rowToProfile(existing), created: false };
 }
 
 export async function savePlayer(username, profile) {
@@ -170,13 +239,15 @@ export async function savePlayer(username, profile) {
         throw new Error('Invalid username');
     }
 
-    const existing = await getPlayer(username);
+    const existing = await getPlayerRow(username);
     const canonical = existing?.username || trimUsername(username);
     if (!canonical) {
         throw new Error('Invalid username');
     }
 
-    const row = profileToRow(canonical, profile);
+    // Preserve DB keyword — never accept it from client profile payloads.
+    const preservedKeyword = existing ? existing.keyword : undefined;
+    const row = profileToRow(canonical, profile, preservedKeyword);
     const { data, error } = await supabase
         .from('players')
         .upsert(row, { onConflict: 'username' })

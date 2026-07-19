@@ -110,6 +110,10 @@ export function migrateScoresList(scores) {
     });
 }
 
+/** Soft login keyword length bounds (plaintext ownership check, not real auth). */
+export const KEYWORD_MIN_LENGTH = 4;
+export const KEYWORD_MAX_LENGTH = 128;
+
 export const MINSTREAK = 3;
 export const DEFAULTTRACKSBYGAME = 20;
 export const DEFAULTTRACKDURATION = 30;
@@ -125,7 +129,7 @@ export const VIGNETTES_UNLOCK_THRESHOLD = 20;
  */
 export const VIGNETTES_DIFFICULTY_ENABLED = {
     1: true,
-    2: true,
+    2: false,
     3: false,
     4: false,
     5: false,

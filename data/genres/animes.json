@@ -29,6 +29,25 @@
           "Sakura",
           "Sakura chasseuse de cartes"
         ]
+      },
+      {
+        "id": "E004",
+        "title": "Excel Saga",
+        "subTitle": "",
+        "year": "1999 - 2000",
+        "acceptedAnswers": [
+          "Excel Saga"
+        ]
+      },
+      {
+        "id": "E005",
+        "title": "La Mélancolie de Haruhi Suzumiya",
+        "subTitle": "",
+        "year": "2006 - 2009",
+        "acceptedAnswers": [
+          "La Mélancolie de Haruhi Suzumiya",
+          "Haruhi Suzumiya"
+        ]
       }
     ]
   }

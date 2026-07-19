@@ -34,6 +34,9 @@
             <div class="panel_box__box">
                 <label class="login_panel__label panel_label" for="username">Nom d'utilisateur</label>
                 <input type="text" class="login_panel__input panel_input js-username" id="username" autocomplete="username"/>
+                <label class="login_panel__label panel_label" for="keyword">Mot-clé</label>
+                <input type="password" class="login_panel__input panel_input js-keyword" id="keyword" autocomplete="current-password" minlength="8" maxlength="128"/>
+                <p class="login_panel__description">Si vous créez un nouveau compte, choisissez un mot-clé à lui associer. Sinon, entrez votre mot-clé pour vous connecter.</p>
                 <button class="button_big js-login-button">Se connecter</button>
             </div>
         </div>
@@ -117,13 +120,13 @@
                                     <span class="text_glitch"></span>
                                 </span>
                             </label>
-                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2"/>
+                            <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2"/>
                             <label class="default_transition" for="difficultyLevel2">
                                 <span class="default_transition">
                                     <span class="text_no_glitch">Difficile</span>
                                     <span class="text_glitch"></span>
                                 </span>
-                            </label>
+                            </label> -->
                             <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--3 js-input-difficulty" name="difficultyLevel" id="difficultyLevel3" value="3"/>
                             <label class="default_transition" for="difficultyLevel3">
                                 <span class="default_transition">

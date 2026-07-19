@@ -1,4 +1,11 @@
-import { DEFAULTTRACKSBYGAME, SCORE_KEYS, DEVMODE, GAME_MODE_VIGNETTES } from './config.js';
+import {
+    DEFAULTTRACKSBYGAME,
+    SCORE_KEYS,
+    DEVMODE,
+    GAME_MODE_VIGNETTES,
+    KEYWORD_MIN_LENGTH,
+    KEYWORD_MAX_LENGTH,
+} from './config.js';
 import { setupAudioListeners } from './game/audio-player.js';
 import { applyDifficulty, applyGameMode, updateAnswerModeUI, updateDifficultyUI } from './game/difficulty.js';
 import {
@@ -24,6 +31,7 @@ import {
     getAllScores,
     getPlayerData,
     getScores,
+    loginPlayer,
     savePlayerProfile,
     updateLikedTracks,
 } from './services/player-api.js';
@@ -76,23 +84,27 @@ function migrateStoredLikedTracks() {
     updateLikedTracks(gameState.username, migrated);
 }
 
+async function applyPlayerSession(profile) {
+    if (!profile || profile.id == null) {
+        return false;
+    }
+
+    // Use the stored casing from the server (canonical username).
+    gameState.username = profile.username;
+    gameState.playerData = profile;
+    const scoresResult = await getScores(gameState.username);
+    gameState.playerData.scores = scoresResult[0]?.scores || [];
+    setStoredUsername(gameState.username);
+    migrateStoredLikedTracks();
+    syncVignettesModeUnlock($);
+    showLoggedInUI();
+    return true;
+}
+
 async function loadPlayerSession(username) {
     try {
         const result = await getPlayerData(username);
-        if (result.id == null) {
-            return false;
-        }
-
-        // Use the stored casing from the server (canonical username).
-        gameState.username = result.username;
-        gameState.playerData = result;
-        const scoresResult = await getScores(gameState.username);
-        gameState.playerData.scores = scoresResult[0]?.scores || [];
-        setStoredUsername(gameState.username);
-        migrateStoredLikedTracks();
-        syncVignettesModeUnlock($);
-        showLoggedInUI();
-        return true;
+        return await applyPlayerSession(result);
     } catch (error) {
         console.error('Failed to load player session', error);
         return false;
@@ -223,18 +235,34 @@ async function loadPlaylist() {
 
 async function login() {
     const username = $('.js-username').val().trim();
-    if (!username) {
-        alert('Veuillez entrer un nom d\'utilisateur');
+    const keyword = $('.js-keyword').val();
+
+    if (!username || !keyword) {
+        alert('Veuillez entrer un nom d\'utilisateur et un mot-clé');
+        return;
+    }
+    if (keyword.length < KEYWORD_MIN_LENGTH) {
+        alert('Le mot-clé doit contenir au moins ' + KEYWORD_MIN_LENGTH + ' caractères.');
+        return;
+    }
+    if (keyword.length > KEYWORD_MAX_LENGTH) {
+        alert('Le mot-clé ne peut pas dépasser ' + KEYWORD_MAX_LENGTH + ' caractères.');
         return;
     }
 
-    const loggedIn = await loadPlayerSession(username);
-    if (!loggedIn) {
-        alert('Impossible de charger le profil. Vérifiez que le serveur est démarré.');
-        return;
+    try {
+        const profile = await loginPlayer(username, keyword);
+        const loggedIn = await applyPlayerSession(profile);
+        if (!loggedIn) {
+            alert('Impossible de charger le profil. Vérifiez que le serveur est démarré.');
+            return;
+        }
+        $('.js-username').val('');
+        $('.js-keyword').val('');
+    } catch (error) {
+        console.error('Login failed', error);
+        alert(error.message || 'Impossible de se connecter. Vérifiez que le serveur est démarré.');
     }
-
-    $('.js-username').val('');
 }
 
 function logout() {
@@ -349,7 +377,7 @@ function bindEvents() {
 
     $('.js-login-button').on('click', login);
 
-    $('.js-username').on('keyup', function (e) {
+    $('.js-username, .js-keyword').on('keyup', function (e) {
         if (e.which == 13) {
             login();
         }

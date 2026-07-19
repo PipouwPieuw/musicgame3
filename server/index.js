@@ -1,10 +1,13 @@
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { KEYWORD_MAX_LENGTH, KEYWORD_MIN_LENGTH } from '../js/config.js';
 import {
     getAllProfiles,
     getAllScores,
-    getOrCreatePlayer,
+    getPlayer,
+    LoginError,
+    loginWithKeyword,
     savePlayer,
     trimUsername,
     updateLikedTracks,
@@ -26,6 +29,41 @@ const app = express();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(ROOT_DIR));
 
+app.post('/api/players/login', async function (req, res) {
+    try {
+        const username = trimUsername(req.body?.username);
+        const keyword = req.body?.keyword;
+
+        if (!username) {
+            res.status(400).json({ error: 'Veuillez entrer un nom d\'utilisateur et un mot-clé' });
+            return;
+        }
+        if (keyword == null || String(keyword).length === 0) {
+            res.status(400).json({ error: 'Veuillez entrer un nom d\'utilisateur et un mot-clé' });
+            return;
+        }
+        if (String(keyword).length < KEYWORD_MIN_LENGTH) {
+            res.status(400).json({ error: 'Le mot-clé doit contenir au moins' + KEYWORD_MIN_LENGTH + 'caractères.' });
+            return;
+        }
+        if (String(keyword).length > KEYWORD_MAX_LENGTH) {
+            res.status(400).json({ error: 'Le mot-clé ne peut pas dépasser' + KEYWORD_MAX_LENGTH + 'caractères.' });
+            return;
+        }
+
+        const { profile, created } = await loginWithKeyword(username, keyword);
+        res.json({ profile, created });
+    } catch (error) {
+        if (error instanceof LoginError) {
+            res.status(error.statusCode).json({ error: error.message });
+            return;
+        }
+
+        console.error('POST /api/players/login failed', error);
+        res.status(500).json({ error: 'Impossible de se connecter' });
+    }
+});
+
 app.get('/api/players/:username', async function (req, res) {
     try {
         const username = trimUsername(req.params.username);
@@ -34,8 +72,13 @@ app.get('/api/players/:username', async function (req, res) {
             return;
         }
 
-        const { profile, created } = await getOrCreatePlayer(username);
-        res.json({ profile, created });
+        const profile = await getPlayer(username);
+        if (!profile) {
+            res.status(404).json({ error: 'Joueur introuvable' });
+            return;
+        }
+
+        res.json({ profile, created: false });
     } catch (error) {
         console.error('GET /api/players/:username failed', error);
         res.status(500).json({ error: 'Impossible de charger le profil' });

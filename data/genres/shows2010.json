@@ -234,6 +234,70 @@
         "Big Bang Theory",
         "TBBT"
       ]
+    },
+    {
+      "id": "B026",
+      "title": "The Killing (US)",
+      "subTitle": "",
+      "year": "2011 - 2014",
+      "acceptedAnswers": [
+        "The Killing (US)",
+        "The Killing"
+      ]
+    },
+    {
+      "id": "B027",
+      "title": "Downton Abbey",
+      "subTitle": "",
+      "year": "2010 - 2015",
+      "acceptedAnswers": [
+        "Downton Abbey"
+      ]
+    },
+    {
+      "id": "B028",
+      "title": "American Horror Story",
+      "subTitle": "",
+      "year": "2011 - En cours",
+      "acceptedAnswers": [
+        "American Horror Story"
+      ]
+    },
+    {
+      "id": "B029",
+      "title": "The Haunting of Hill House",
+      "subTitle": "",
+      "year": "2018",
+      "acceptedAnswers": [
+        "The Haunting of Hill House"
+      ]
+    },
+    {
+      "id": "B030",
+      "title": "Anne with an E",
+      "subTitle": "",
+      "year": "2017 - 2019",
+      "acceptedAnswers": [
+        "Anne with an E"
+      ]
+    },
+    {
+      "id": "B031",
+      "title": "Modern Family",
+      "subTitle": "",
+      "year": "2009 - 2020",
+      "acceptedAnswers": [
+        "Modern Family"
+      ]
+    },
+    {
+      "id": "B032",
+      "title": "Community",
+      "subTitle": "",
+      "year": "2009 - 2015",
+      "acceptedAnswers": [
+        "Community"
+      ]
     }
   ]
 }

@@ -78,6 +78,20 @@ export async function getPlayerData(username) {
     return migratedProfile;
 }
 
+/** Manual login: create, claim keyword, or verify match. */
+export async function loginPlayer(username, keyword) {
+    if (!username) {
+        return { id: null };
+    }
+
+    const { profile, created } = await requestJson('/api/players/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, keyword }),
+    });
+    return migrateLocalProfileIfNeeded(username, profile, created);
+}
+
 export async function updateLikedTracks(username, likedTracks) {
     if (!username) {
         return;
