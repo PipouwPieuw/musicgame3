@@ -1,4 +1,4 @@
-import { DEFAULTTRACKSBYGAME, migrateScoreKey, NOT_FOUND_COVER_PATH, SCORE_KEY_LABELS, SCORE_KEYS } from '../config.js';
+import { DEFAULTTRACKSBYGAME, migrateScoreKey, NOT_FOUND_COVER_PATH, SCORE_KEY_GROUPS, SCORE_KEYS } from '../config.js';
 import { getCoverPath, getTrackMetadata } from '../lib/track-utils.js';
 import { getAllProfiles, getAllScores } from '../services/player-api.js';
 import { groupTrackIdsByGenre } from '../services/tracks-loader.js';
@@ -8,7 +8,7 @@ import {
     playAnswerRevealDismiss,
     setAnswerRevealContent,
 } from './answer-reveal.js';
-import { isScoreKeyEnabled, isScoreKeyUnlocked } from './vignettes-unlock.js';
+import { isScoreKeyUnlocked } from './vignettes-unlock.js';
 
 let foundTrackRevealDismissArmed = false;
 
@@ -62,52 +62,78 @@ export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
     return [leaderboard, leaderboardCustom];
 }
 
+function buildScoresList($, scores) {
+    const scoresList = $('<ul class="leaderboard__list"></ul>');
+    scoresList.append(
+        $('<li class="leaderboard__item"><span class="leaderboard__value--head leaderboard__value--name">Joueur</span><span class="leaderboard__value--head leaderboard__value--tracks">Nombre de morceaux</span><span class="leaderboard__value--head leaderboard__value--points">Score</span></li>')
+    );
+    for (const currentScore in scores) {
+        const [name, tracks, points] = scores[currentScore];
+        const scoresItem = $('<li class="leaderboard__item"></li>');
+        scoresItem.append($('<span class="leaderboard__value leaderboard__value--name">' + name + '</span>'));
+        scoresItem.append($('<span class="leaderboard__value leaderboard__value--tracks">' + tracks + '</span>'));
+        scoresItem.append($('<span class="leaderboard__value leaderboard__value--points">' + points + '</span>'));
+        scoresList.append(scoresItem);
+    }
+    return scoresList;
+}
+
 export function buildLeaderboard($, object, title) {
-    const sections = [];
+    const modeBlocks = [];
 
-    for (const difficulty in SCORE_KEYS) {
-        const label = SCORE_KEYS[difficulty];
-        if (!isScoreKeyUnlocked(label, gameState.playerData)) {
+    for (const group of SCORE_KEY_GROUPS) {
+        const entries = [];
+        for (const entry of group.keys) {
+            const label = entry.key;
+            if (!isScoreKeyUnlocked(label, gameState.playerData)) {
+                continue;
+            }
+            if (!object[label] || object[label].length == 0) {
+                continue;
+            }
+
+            entries.push({
+                difficultyLabel: entry.difficultyLabel,
+                titleModifier: SCORE_KEYS.indexOf(label) + 1,
+                scoresList: buildScoresList($, object[label]),
+            });
+        }
+        if (entries.length === 0) {
             continue;
         }
-        if (!object[label] || object[label].length == 0) {
-            continue;
-        }
-
-        const displayedLabel = SCORE_KEY_LABELS[label] || label;
-        const titleModifier = parseInt(difficulty, 10) + 1;
-        const scoresList = $('<ul class="leaderboard__list"></ul>');
-        scoresList.append(
-            $('<li class="leaderboard__item"><span class="leaderboard__value--head leaderboard__value--name">Joueur</span><span class="leaderboard__value--head leaderboard__value--tracks">Nombre de morceaux</span><span class="leaderboard__value--head leaderboard__value--points">Score</span></li>')
-        );
-        for (const currentScore in object[label]) {
-            const [name, tracks, points] = object[label][currentScore];
-            const scoresItem = $('<li class="leaderboard__item"></li>');
-            scoresItem.append($('<span class="leaderboard__value leaderboard__value--name">' + name + '</span>'));
-            scoresItem.append($('<span class="leaderboard__value leaderboard__value--tracks">' + tracks + '</span>'));
-            scoresItem.append($('<span class="leaderboard__value leaderboard__value--points">' + points + '</span>'));
-            scoresList.append(scoresItem);
-        }
-
-        sections.push({
-            titleHtml:
-                '<span class="leaderboard__title leaderboard__title--' +
-                titleModifier +
-                ' panel_label">' +
-                displayedLabel +
-                '</span>',
-            scoresList: scoresList,
+        modeBlocks.push({
+            modeLabel: group.modeLabel,
+            entries: entries,
         });
     }
 
-    if (sections.length === 0) {
+    if (modeBlocks.length === 0) {
         return;
     }
 
     $('.js-leaderboard-content').append('<span class="leaderboard__section_title">' + title + '</span>');
-    for (const section of sections) {
-        $('.js-leaderboard-content').append(section.titleHtml);
-        $('.js-leaderboard-content').append(section.scoresList);
+    for (const block of modeBlocks) {
+        const hasDifficultyLadder = block.entries.some(function (entry) {
+            return entry.difficultyLabel;
+        });
+        let modeTitleClass = 'leaderboard__mode_title panel_label';
+        // if (!hasDifficultyLadder && block.entries[0]) {
+            modeTitleClass +=
+                ' leaderboard__title leaderboard__title--' + block.entries[0].titleModifier;
+        // }
+        $('.js-leaderboard-content').append(
+            '<span class="' + modeTitleClass + '">' + block.modeLabel + '</span>'
+        );
+        for (const entry of block.entries) {
+            if (entry.difficultyLabel) {
+                $('.js-leaderboard-content').append(
+                    '<span class="leaderboard__title panel_label">' +
+                        entry.difficultyLabel +
+                        '</span>'
+                );
+            }
+            $('.js-leaderboard-content').append(entry.scoresList);
+        }
     }
 }
 
@@ -331,13 +357,26 @@ export function initFoundTracksReveal($) {
     });
 }
 
-/** Hide stats columns for difficulties disabled in VIGNETTES_DIFFICULTY_ENABLED. */
+/**
+ * Hide stats columns / mode tables the player has not unlocked yet
+ * (same gate as Classement via isScoreKeyUnlocked).
+ */
 export function syncStatsDifficultyColumns($) {
     for (const i in SCORE_KEYS) {
         const scoreKey = SCORE_KEYS[i];
-        const enabled = isScoreKeyEnabled(scoreKey);
-        $('.js-stats-col[data-score-key="' + scoreKey + '"]').toggleClass('is-hidden', !enabled);
+        const unlocked = isScoreKeyUnlocked(scoreKey, gameState.playerData);
+        $('.js-stats-col[data-score-key="' + scoreKey + '"]').toggleClass('is-hidden', !unlocked);
     }
+
+    $('.stats_table').each(function () {
+        const $table = $(this);
+        const $cols = $table.find('.js-stats-col[data-score-key]');
+        if ($cols.length === 0) {
+            return;
+        }
+        const hasVisibleCol = $cols.filter(':not(.is-hidden)').length > 0;
+        $table.toggleClass('is-hidden', !hasVisibleCol);
+    });
 }
 
 export function updateStatsGamesPlayed($) {

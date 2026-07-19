@@ -30,6 +30,27 @@ export const SCORE_KEY_LABELS = {
     Vignettes_Glitched: 'Vignettes — Glitched',
 };
 
+/**
+ * UI grouping for Classement / Statistiques: mode label, then optional difficulty labels.
+ * Persistence still uses flat SCORE_KEYS; difficultyLabel null = no ladder (Classique).
+ */
+export const SCORE_KEY_GROUPS = [
+    {
+        modeLabel: 'Classique',
+        keys: [{ key: 'Classique', difficultyLabel: null }],
+    },
+    {
+        modeLabel: 'Vignettes',
+        keys: [
+            { key: 'Vignettes_Normal', difficultyLabel: 'Normal' },
+            { key: 'Vignettes_Difficile', difficultyLabel: 'Difficile' },
+            { key: 'Vignettes_Infernal', difficultyLabel: 'Infernal' },
+            { key: 'Vignettes_Extrême', difficultyLabel: 'Extrême' },
+            { key: 'Vignettes_Glitched', difficultyLabel: 'Glitched' },
+        ],
+    },
+];
+
 /** Map legacy single-axis keys to SCORE_KEYS. */
 export const LEGACY_SCORE_KEY_MAP = {
     Normal: 'Classique',

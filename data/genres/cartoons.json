@@ -45,6 +45,17 @@
         "Les Simpsons",
         "Simpsons"
       ]
+    },
+    {
+      "id": "D005",
+      "title": "Tom and Jerry",
+      "subTitle": "",
+      "year": "1940 - 1967",
+      "acceptedAnswers": [
+        "Tom and Jerry",
+        "Tom et Jerry",
+        "Tom & Jerry"
+      ]
     }
   ]
 }

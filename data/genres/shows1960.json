@@ -22,6 +22,16 @@
           "Bewitched",
           "Ma sorcière bien-aimée"
         ]
+      },
+      {
+        "id": "F003",
+        "title": "Mission: Impossible",
+        "subTitle": "",
+        "year": "1966 - 1973",
+        "acceptedAnswers": [
+          "Mission: Impossible"
+        ]
+      }
     ]
   }
   

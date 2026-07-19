@@ -9,10 +9,38 @@
 .panel_box__box--stats {
 	overflow-x: auto;
 }
-.stats_row:not(:first-child) {
+.stats_table:not(:first-child) {
+	margin-top: 12px;
+	padding-top: 48px;
+	border-top: 2px solid black;
+}
+.stats_table__mode_title {
+	display: block;
+	margin-bottom: 12px;
+	font-size: 26px;
+}
+@media only screen and (max-width: 640px) {
+	.stats_table__mode_title {
+		font-size: 20px;
+		margin-bottom: 10px;
+	}
+}
+.stats_table--single .stats_cell--first {
+	flex: 1 1 auto;
+}
+.stats_table--single .stats_value {
+	flex: 0 0 auto;
+	min-width: 72px;
+}
+.stats_table .stats_row:not(:first-child) {
 	padding-top: 12px;
     border-top: 2px solid black;
     margin-top: 12px;
+}
+.stats_table .stats_table__mode_title + .stats_row {
+	padding-top: 0;
+	border-top: 0;
+	margin-top: 0;
 }
 .stats_row--mobile:not(:first-child) {
 	flex: 0 0 100%;
@@ -23,7 +51,8 @@
 	flex: 1 1 0;
 	min-width: 72px;
 }
-.stats_cell.is-hidden {
+.stats_cell.is-hidden,
+.stats_table.is-hidden {
 	display: none;
 }
 @media only screen and (max-width: 640px) {	
@@ -56,6 +85,7 @@
 }
 .stats_cell.panel_label {
 	font-size: 19px;
+	margin-bottom: 0;
 }
 @media only screen and (max-width: 640px) {	
 	.stats_cell.panel_label {
@@ -115,6 +145,29 @@
 	}
 }
 
+.leaderboard__mode_title {
+	display: block;
+	margin-bottom: 14px;
+	font-size: 28px;
+
+	+ .leaderboard__title {
+		margin-top: 10px;
+	}
+}
+.leaderboard__mode_title.leaderboard__title {
+	font-size: 28px;
+}
+.leaderboard__mode_title:not(:first-of-type) {
+	margin-top: 8px;
+}
+@media only screen and (max-width: 640px) {
+	.leaderboard__mode_title,
+	.leaderboard__mode_title.leaderboard__title {
+		font-size: 22px;
+		margin-bottom: 10px;
+	}
+}
+
 .leaderboard__title {
 	display: block;
 	margin-bottom: 10px;
@@ -137,6 +190,13 @@
 	}
 	&--6 {
 		color: #000000;
+	}
+}
+.leaderboard__mode_title ~ .leaderboard__title:not(.leaderboard__mode_title) {
+	font-size: 22px;
+
+	@media only screen and (max-width: 640px) {
+		font-size: 18px;
 	}
 }
 .leaderboard__list {

@@ -1,0 +1,25 @@
+{
+    "label": "Années 2020",
+    "tracks": [
+      {
+        "id": "G001",
+        "title": "Squid Game",
+        "subTitle": "",
+        "year": "2021 - 2025",
+        "acceptedAnswers": [
+          "Squid Game",
+          "Ojingeo geim"
+        ]
+      },
+      {
+        "id": "G002",
+        "title": "Only Murders in the Building",
+        "subTitle": "",
+        "year": "2021 - En cours",
+        "acceptedAnswers": [
+          "Only Murders in the Building"
+        ]
+      }
+    ]
+  }
+  
