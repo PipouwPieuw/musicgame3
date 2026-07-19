@@ -1,7 +1,7 @@
 import { isTitleCorrect } from '../lib/normalize-title.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { findTrackById, getPreviewPath, getTrackMetadata } from '../lib/track-utils.js';
-import { setAnswerRevealContent } from '../ui/answer-reveal.js';
+import { isTrackDiscovery, setAnswerRevealContent } from '../ui/answer-reveal.js';
 import {
     getCountdownPercentage,
     pauseAudio,
@@ -144,9 +144,11 @@ async function finishRound($, audioPlayer) {
     playCorrectSound();
 
     const meta = getTrackMetadata(gameState.tracks, gameState.currentTrackId);
+    const discovery = isTrackDiscovery(gameState.currentTrackId);
     await setAnswerRevealContent($, {
         title: meta.name,
         imagePath: meta.image,
+        discovery,
     });
 
     applyCorrectAnswer($);

@@ -1,4 +1,9 @@
 /* Answer Reveal */
+
+/* Flip timing — tweak these to adjust the discovery coin animation */
+$answer-reveal-flip-duration: 0.5s; // matches current shine length
+$answer-reveal-flip-easing: ease-in-out;
+
 .answer_reveal {
 	position: fixed;
 	z-index: 1;
@@ -20,8 +25,17 @@
 .answer_reveal__image {
 	position: relative;
     transition: all ease .3s;
-}	
-.answer_reveal__image.visible.shine:before {
+}
+.answer_reveal__image:not(.is-active) {
+	display: none;
+}
+.answer_reveal__image:not(.visible) {
+	scale: 0;
+	/* transform: rotate(-90deg); */
+}
+
+/* --- Plain cover (shine / found-list) --- */
+.answer_reveal__image--cover.visible.shine:before {
 	content: '';
 	position: absolute;
 	inset: 0;
@@ -30,15 +44,44 @@
 	-webkit-mask-image: linear-gradient(-75deg, rgba(0,0,0,0) 30%, #000 50%, rgba(0,0,0,0) 70%);
 	-webkit-mask-size: 200%;
 	animation: shine .5s;
-}	
-.answer_reveal__image:not(.visible) {
-	scale: 0;
-	/* transform: rotate(-90deg); */
 }
-.answer_reveal__image img {
+.answer_reveal__image--cover img {
 	border-radius: 50%;
 	width: 300px;
 	border: 4px solid #ffffff;
+	display: block;
+}
+
+/* --- Discovery coin flip --- */
+.answer_reveal__image--coin {
+	perspective: 800px;
+}
+.answer_reveal__coin {
+	position: relative;
+	width: 300px;
+	height: 300px;
+	transform-style: preserve-3d;
+	transition: transform $answer-reveal-flip-duration $answer-reveal-flip-easing;
+}
+.answer_reveal__image--coin.is-flipped .answer_reveal__coin {
+	transform: rotateY(180deg);
+}
+.answer_reveal__face {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	border: 4px solid #ffffff;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	object-fit: cover;
+}
+.answer_reveal__face--back {
+	transform: rotateY(0deg);
+}
+.answer_reveal__face--front {
+	transform: rotateY(180deg);
 }
 /* .answer_reveal__star {
 	position: absolute;

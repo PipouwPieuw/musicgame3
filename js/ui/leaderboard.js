@@ -319,7 +319,7 @@ export function initFoundTracksReveal($) {
             title: title,
             imagePath: getCoverPath(trackId),
         }).then(function () {
-            playAnswerRevealAppear($);
+            playAnswerRevealAppear($, { effect: 'none' });
 
             setTimeout(function () {
                 foundTrackRevealDismissArmed = true;
