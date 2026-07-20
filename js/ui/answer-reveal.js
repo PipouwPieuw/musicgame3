@@ -84,7 +84,10 @@ export function playAnswerRevealAppear($, { effect = 'shine' } = {}) {
     if (effect === 'flip') {
         setTimeout(function () {
             $image.addClass('is-flipped');
-        }, FLIP_REVEAL_EFFECT_START_MS);
+        }, FLIP_REVEAL_EFFECT_START_MS);        
+        setTimeout(function () {
+            $('.js-answer-reveal-star').addClass('active');
+        }, FLIP_REVEAL_EFFECT_START_MS * 2);
         return;
     }
 
@@ -107,6 +110,7 @@ export function playAnswerRevealDismiss($) {
         $('.js-answer-reveal').removeClass('toggled');
         $('.js-answer-reveal-cover').removeClass('shine is-active');
         $('.js-answer-reveal-flip').removeClass('is-flipped is-active');
+        $('.js-answer-reveal-star').removeClass('active');
     }, 300);
 }
 

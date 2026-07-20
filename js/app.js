@@ -240,7 +240,23 @@ async function loadPlaylist() {
     $('#wrapper').addClass('initialized');
 }
 
+let isLoggingIn = false;
+
+function setLoginLoading(isLoading) {
+    isLoggingIn = isLoading;
+    $('.js-login-button').prop('disabled', isLoading);
+    $('.js-username, .js-keyword').prop('disabled', isLoading);
+    $('.js-login-loader')
+        .toggleClass('visible', isLoading)
+        .attr('aria-hidden', isLoading ? 'false' : 'true')
+        .attr('aria-busy', isLoading ? 'true' : 'false');
+}
+
 async function login() {
+    if (isLoggingIn) {
+        return;
+    }
+
     const username = $('.js-username').val().trim();
     const keyword = $('.js-keyword').val();
 
@@ -257,18 +273,31 @@ async function login() {
         return;
     }
 
+    setLoginLoading(true);
+    let loginError = null;
+    let profileLoadFailed = false;
     try {
         const profile = await loginPlayer(username, keyword);
         const loggedIn = await applyPlayerSession(profile);
         if (!loggedIn) {
-            alert('Impossible de charger le profil. Vérifiez que le serveur est démarré.');
+            profileLoadFailed = true;
             return;
         }
         $('.js-username').val('');
         $('.js-keyword').val('');
     } catch (error) {
         console.error('Login failed', error);
-        alert(error.message || 'Impossible de se connecter. Vérifiez que le serveur est démarré.');
+        loginError = error;
+    } finally {
+        setLoginLoading(false);
+    }
+
+    if (profileLoadFailed) {
+        alert('Impossible de charger le profil. Vérifiez que le serveur est démarré.');
+        return;
+    }
+    if (loginError) {
+        alert(loginError.message || 'Impossible de se connecter. Vérifiez que le serveur est démarré.');
     }
 }
 

@@ -42,8 +42,8 @@
                 <input type="text" class="login_panel__input panel_input js-username" id="username" autocomplete="username"/>
                 <label class="login_panel__label panel_label" for="keyword">Mot-clé</label>
                 <input type="password" class="login_panel__input panel_input js-keyword" id="keyword" autocomplete="current-password" minlength="8" maxlength="128"/>
-                <p class="login_panel__description">Si vous créez un nouveau compte, choisissez un mot-clé à lui associer. Sinon, entrez votre mot-clé pour vous connecter.</p>
-                <button class="button_big js-login-button">Se connecter</button>
+                <p class="login_panel__description">Si vous créez un nouveau compte, choisissez un mot-clé à lui associer.<br/>Sinon, entrez votre mot-clé pour vous connecter.</p>
+                <button type="button" class="button_big js-login-button">Se connecter</button>
             </div>
         </div>
         <div class="settings_panel panel_box js-settings">
@@ -532,6 +532,9 @@
                 </div>
             </div> -->
         </div>
+        <div class="login_loader js-login-loader" aria-hidden="true" aria-busy="false">
+            <div class="login_loader__spinner" role="status" aria-label="Connexion en cours"></div>
+        </div>
         <div class="answer_reveal js-answer-reveal">
             <div class="answer_reveal__content">
                 <!-- Plain cover: shine / found-list (no flip) -->
@@ -541,9 +544,19 @@
                 <!-- Coin: first-discovery flip -->
                 <div class="answer_reveal__image answer_reveal__image--coin default_transition js-answer-reveal-flip">
                     <div class="answer_reveal__coin">
-                        <!-- <span class="answer_reveal__tag">Morceau débloqué</span> -->
                         <img class="answer_reveal__face answer_reveal__face--back js-answer-reveal-back" src="" alt="">
-                        <img class="answer_reveal__face answer_reveal__face--front js-answer-reveal-front" src="" alt="">
+                        <div class="answer_reveal__face answer_reveal__face--front">
+                            <img class="js-answer-reveal-front" src="" alt="">
+                            <span class="answer_reveal__tag">Morceau débloqué</span>
+                        </div>
+                        <span class="answer_reveal__star answer_reveal__star--n js-answer-reveal-star"></span>
+                        <span class="answer_reveal__star answer_reveal__star--e js-answer-reveal-star"></span>
+                        <span class="answer_reveal__star answer_reveal__star--s js-answer-reveal-star"></span>
+                        <span class="answer_reveal__star answer_reveal__star--w js-answer-reveal-star"></span>
+                        <span class="answer_reveal__star answer_reveal__star--ne js-answer-reveal-star"></span>
+                        <span class="answer_reveal__star answer_reveal__star--nw js-answer-reveal-star"></span>
+                        <span class="answer_reveal__star answer_reveal__star--se js-answer-reveal-star"></span>
+                        <span class="answer_reveal__star answer_reveal__star--sw js-answer-reveal-star"></span>
                     </div>
                 </div>
                 <div class="answer_reveal__text_wrapper js-answer-reveal-text-wrapper">

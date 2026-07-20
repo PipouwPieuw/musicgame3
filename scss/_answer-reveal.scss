@@ -79,22 +79,32 @@ $answer-reveal-flip-easing: ease-in-out;
 		inset: 0;
 		width: 100%;
 		height: 100%;
-		border-radius: 50%;
-		border: 4px solid #ffffff;
 		backface-visibility: hidden;
 		-webkit-backface-visibility: hidden;
-		object-fit: cover;
 		
 		&--back {
+			border-radius: 50%;
+			border: 4px solid #ffffff;
+			object-fit: cover;
 			transform: rotateY(0deg);
 		}
 
+		/* Container so the tag shares the front face’s 3D plane */
 		&--front {
 			transform: rotateY(180deg);
+
+			img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+				border: 4px solid #ffffff;
+				object-fit: cover;
+			}
 		}
 	}
 
-	/* .answer_reveal__star {
+	.answer_reveal__star {
 		position: absolute;
 		z-index: -1;
 		width: 20px;
@@ -102,7 +112,7 @@ $answer-reveal-flip-easing: ease-in-out;
 		border-radius: 50%;
 		background-color: #ffffff;
 		margin: auto;
-		transition: all ease .2s;
+		transition: all linear .2s;
 	}
 	.answer_reveal__star.active {
 		opacity: 0;
@@ -177,13 +187,14 @@ $answer-reveal-flip-easing: ease-in-out;
 	.answer_reveal__star--sw.active {
 		top: 100%;
 		right: 100%;
-	} */
+	}
 
 	&__tag {
 		position: absolute;
 		z-index: 1;
 		left: 0;
 		right: 0;
+		top: -24px;
 		width: fit-content;
 		font-size: 20px;
 		font-weight: 700;

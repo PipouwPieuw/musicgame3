@@ -25,6 +25,10 @@
 	font-size: 28px;
 	border-radius: var(--radius);
 }
+.button_big:disabled {
+	opacity: 0.7;
+	cursor: default;
+}
 @media only screen and (max-width: 640px) {
 	.button_big,
 	.replay_game,
@@ -44,10 +48,10 @@
 	}
 }
 @media only screen and (min-width: 641px) {
-	.button_big:hover,
+	.button_big:hover:not(:disabled),
 	.replay_game:hover,
 	.back_to_menu:hover,
-	.button_big:focus,
+	.button_big:focus:not(:disabled),
 	.replay_game:focus,
 	.back_to_menu:focus {
 		background: black;
