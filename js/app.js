@@ -105,6 +105,12 @@ async function applyPlayerSession(profile) {
 async function loadPlayerSession(username) {
     try {
         const result = await getPlayerData(username);
+        if (!result.hasKeyword) {
+            clearStoredUsername();
+            $('.js-username').val(result.username || username);
+            alert('Veuillez vous reconnecter pour définir un mot-clé et sécuriser votre compte.');
+            return false;
+        }
         return await applyPlayerSession(result);
     } catch (error) {
         console.error('Failed to load player session', error);

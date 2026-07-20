@@ -84,9 +84,6 @@ $answer-reveal-flip-easing: ease-in-out;
 		backface-visibility: hidden;
 		-webkit-backface-visibility: hidden;
 		object-fit: cover;
-	}
-
-	&__face {
 		
 		&--back {
 			transform: rotateY(0deg);

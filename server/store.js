@@ -52,6 +52,7 @@ export function normalizeProfile(profile) {
     }
 
     // Never expose keyword on client-facing profiles.
+    profile.hasKeyword = profile.keyword != null && String(profile.keyword).length > 0;
     delete profile.keyword;
 
     return profile;
