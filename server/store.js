@@ -110,6 +110,7 @@ function rowToProfile(row) {
         scores: row.scores,
         foundTracksIds: row.found_tracks_ids,
         hasSeenVignettesMode: row.has_seen_vignettes_mode,
+        keyword: row.keyword,
     });
 }
 
