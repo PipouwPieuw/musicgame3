@@ -36,9 +36,10 @@ import {
     updateLikedTracks,
 } from './services/player-api.js';
 import {
+    buildAchievementsTab,
     buildFavorites,
     buildLeaderboard,
-    buildTrophies,
+    buildGlobalTrophies,
     buildFoundTracks,
     closeLeaderboard,
     initFoundTracksReveal,
@@ -55,6 +56,8 @@ import {
     markVignettesUnlockIfNeeded,
     syncVignettesModeUnlock,
 } from './ui/vignettes-unlock.js';
+import { loadAllAchievementDefinitions } from './achievements/loader.js';
+import { processPostGameAchievements } from './achievements/post-game.js';
 
 const $ = window.jQuery;
 
@@ -154,6 +157,11 @@ async function endGame() {
         document.body.style.setProperty('--glitchedOpacity', 0);
         $('body').removeClass('glitched_halfgame');
     }
+
+    await processPostGameAchievements($, {
+        sessionScore: gameState.score,
+        scoreKey: getScoreKey(),
+    });
 }
 
 function quitGame() {
@@ -450,7 +458,8 @@ function bindEvents() {
         });
 
         buildFavorites($);
-        buildTrophies($);
+        buildAchievementsTab($);
+        buildGlobalTrophies($);
         buildFoundTracks($);
     });
 
@@ -488,6 +497,9 @@ function init() {
     updateDifficultyUI($, getDisplayLabel());
     updateAnswerModeUI($);
     syncStatsDifficultyColumns($);
+    loadAllAchievementDefinitions().catch(function (error) {
+        console.error('Failed to load achievement definitions', error);
+    });
     loadPlaylist();
     initFoundTracksReveal($);
     bindEvents();

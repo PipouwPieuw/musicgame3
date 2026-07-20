@@ -1,0 +1,52 @@
+{
+  "trophies": [
+    {
+      "id": "most_games",
+      "name": "Accro",
+      "description": "A le plus de parties jouées et complétées",
+      "image": "assets/icons/trophy.svg",
+      "metric": { "stat": "games_played", "aggregate": "sum", "order": "desc" },
+      "valueLabel": "parties jouées"
+    },
+    {
+      "id": "least_games",
+      "name": "Fantôme",
+      "description": "A le moins de parties jouées et complétées",
+      "image": "assets/icons/trophy.svg",
+      "metric": { "stat": "games_played", "aggregate": "sum", "order": "asc" },
+      "valueLabel": "parties jouées"
+    },
+    {
+      "id": "best_ratio",
+      "name": "Émérite",
+      "description": "A le meilleur ratio de bonnes réponses",
+      "image": "assets/icons/trophy.svg",
+      "metric": { "stat": "answerRatio", "aggregate": "overall", "order": "desc", "minGames": 1 },
+      "valueLabel": "% de bonnes réponses"
+    },
+    {
+      "id": "worst_ratio",
+      "name": "Godiche",
+      "description": "A le moins bon ratio de bonnes réponses",
+      "image": "assets/icons/trophy.svg",
+      "metric": { "stat": "answerRatio", "aggregate": "overall", "order": "asc", "minGames": 1 },
+      "valueLabel": "% de bonnes réponses"
+    },
+    {
+      "id": "best_cumulative_scores",
+      "name": "Sagace",
+      "description": "A le plus grand cumul de meilleurs scores sur toutes les difficultés",
+      "image": "assets/icons/trophy.svg",
+      "metric": { "stat": "cumulativeBestScores", "aggregate": "sum", "order": "desc" },
+      "valueLabel": "points cumulés"
+    },
+    {
+      "id": "worst_cumulative_scores",
+      "name": "Modique",
+      "description": "A le plus petit cumul de meilleurs scores sur toutes les difficultés",
+      "image": "assets/icons/trophy.svg",
+      "metric": { "stat": "cumulativeBestScores", "aggregate": "sum", "order": "asc" },
+      "valueLabel": "points cumulés"
+    }
+  ]
+}

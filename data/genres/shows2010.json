@@ -208,11 +208,11 @@
     },
     {
       "id": "B023",
-      "title": "Santa Clarita Diet",
+      "title": "Community",
       "subTitle": "",
-      "year": "2017 - 2019",
+      "year": "2009 - 2015",
       "acceptedAnswers": [
-        "Santa Clarita Diet"
+        "Community"
       ]
     },
     {
@@ -288,15 +288,6 @@
       "year": "2009 - 2020",
       "acceptedAnswers": [
         "Modern Family"
-      ]
-    },
-    {
-      "id": "B032",
-      "title": "Community",
-      "subTitle": "",
-      "year": "2009 - 2015",
-      "acceptedAnswers": [
-        "Community"
       ]
     }
   ]

@@ -20,7 +20,34 @@ export function createDefaultProfile(username) {
         scores: [],
         foundTracksIds: [],
         hasSeenVignettesMode: false,
+        unlockedAchievements: [],
+        lastHeldGlobalTrophies: [],
     };
+}
+
+function normalizeUnlockedAchievements(list) {
+    if (!Array.isArray(list)) {
+        return [];
+    }
+    return list
+        .filter(function (entry) {
+            return entry && typeof entry.id === 'string' && entry.id.length > 0;
+        })
+        .map(function (entry) {
+            return {
+                id: entry.id,
+                unlockedAt: entry.unlockedAt || new Date(0).toISOString(),
+            };
+        });
+}
+
+function normalizeHeldGlobalTrophies(list) {
+    if (!Array.isArray(list)) {
+        return [];
+    }
+    return list.filter(function (id) {
+        return typeof id === 'string' && id.length > 0;
+    });
 }
 
 export function normalizeProfile(profile) {
@@ -33,6 +60,8 @@ export function normalizeProfile(profile) {
     if (profile.hasSeenVignettesMode == null) {
         profile.hasSeenVignettesMode = false;
     }
+    profile.unlockedAchievements = normalizeUnlockedAchievements(profile.unlockedAchievements);
+    profile.lastHeldGlobalTrophies = normalizeHeldGlobalTrophies(profile.lastHeldGlobalTrophies);
 
     profile.games_played = migrateStatMap(profile.games_played);
     profile.good_answers = migrateStatMap(profile.good_answers);
@@ -110,6 +139,8 @@ function rowToProfile(row) {
         scores: row.scores,
         foundTracksIds: row.found_tracks_ids,
         hasSeenVignettesMode: row.has_seen_vignettes_mode,
+        unlockedAchievements: row.unlocked_achievements,
+        lastHeldGlobalTrophies: row.last_held_global_trophies,
         keyword: row.keyword,
     });
 }
@@ -132,6 +163,8 @@ function profileToRow(username, profile, keyword) {
         scores: normalized.scores,
         found_tracks_ids: normalized.foundTracksIds,
         has_seen_vignettes_mode: Boolean(normalized.hasSeenVignettesMode),
+        unlocked_achievements: normalized.unlockedAchievements,
+        last_held_global_trophies: normalized.lastHeldGlobalTrophies,
         updated_at: new Date().toISOString(),
     };
 

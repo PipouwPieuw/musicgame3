@@ -1,6 +1,6 @@
-import { DEFAULTTRACKSBYGAME, migrateScoreKey, NOT_FOUND_COVER_PATH, SCORE_KEY_GROUPS, SCORE_KEYS } from '../config.js';
+import { migrateScoreKey, NOT_FOUND_COVER_PATH, SCORE_KEY_GROUPS, SCORE_KEYS } from '../config.js';
+import { returnBestScores } from '../lib/leaderboard-scores.js';
 import { getCoverPath, getTrackMetadata } from '../lib/track-utils.js';
-import { getAllProfiles, getAllScores } from '../services/player-api.js';
 import { groupTrackIdsByGenre } from '../services/tracks-loader.js';
 import { gameState } from '../game/state.js';
 import {
@@ -9,58 +9,17 @@ import {
     setAnswerRevealContent,
 } from './answer-reveal.js';
 import { isScoreKeyUnlocked } from './vignettes-unlock.js';
+import { getAchievementDefinitions } from '../achievements/loader.js';
+import { getConditionProgress } from '../achievements/evaluator.js';
+import {
+    getAchievementUnlockDate,
+    isAchievementUnlocked,
+} from '../achievements/personal.js';
+import { getGlobalTrophiesForDisplay } from '../achievements/global.js';
+
+export { returnBestScores } from '../lib/leaderboard-scores.js';
 
 let foundTrackRevealDismissArmed = false;
-
-export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
-    for (const element in allScores) {
-        const scores = allScores[element].scores;
-        if (scores == null) {
-            continue;
-        }
-        const name = allScores[element].name;
-        const initials = allScores[element].initials;
-        for (const currentScore in scores) {
-            const [rawDifficulty, tracks, points] = scores[currentScore];
-            const difficulty = migrateScoreKey(rawDifficulty);
-            if (!(difficulty in leaderboard) || !(difficulty in leaderboardCustom)) {
-                continue;
-            }
-            if (tracks != DEFAULTTRACKSBYGAME) {
-                if (!(name in leaderboardCustom[difficulty])) {
-                    leaderboardCustom[difficulty][name] = [name, tracks, points, initials];
-                } else if (leaderboardCustom[difficulty][name][2] < points) {
-                    leaderboardCustom[difficulty][name] = [name, tracks, points, initials];
-                }
-            } else {
-                if (!(name in leaderboard[difficulty])) {
-                    leaderboard[difficulty][name] = [name, tracks, points, initials];
-                } else if (leaderboard[difficulty][name][2] < points) {
-                    leaderboard[difficulty][name] = [name, tracks, points, initials];
-                }
-            }
-        }
-    }
-
-    for (const difficulty in SCORE_KEYS) {
-        const key = SCORE_KEYS[difficulty];
-        const difficultyTableCustom = [];
-        for (const playerName in leaderboardCustom[key]) {
-            difficultyTableCustom.push(leaderboardCustom[key][playerName]);
-        }
-        difficultyTableCustom.sort((a, b) => (a[2] < b[2] ? 1 : b[2] < a[2] ? -1 : 0));
-        leaderboardCustom[key] = difficultyTableCustom;
-
-        const difficultyTable = [];
-        for (const playerName in leaderboard[key]) {
-            difficultyTable.push(leaderboard[key][playerName]);
-        }
-        difficultyTable.sort((a, b) => (a[2] < b[2] ? 1 : b[2] < a[2] ? -1 : 0));
-        leaderboard[key] = difficultyTable;
-    }
-
-    return [leaderboard, leaderboardCustom];
-}
 
 function buildScoresList($, scores) {
     const scoresList = $('<ul class="leaderboard__list"></ul>');
@@ -172,106 +131,113 @@ export function buildFavorites($) {
     }
 }
 
+export async function buildGlobalTrophies($) {
+    const trophies = await getGlobalTrophiesForDisplay();
+    const $container = $('.js-global-trophies-list');
+    $container.empty();
+
+    trophies.forEach(function (entry) {
+        const definition = entry.definition;
+        const holder = entry.holder;
+        const $card = $('<div class="liked_track trophy_card"></div>');
+
+        const $image = $('<div class="trophy__image"></div>');
+        $image.append(
+            $('<img>').attr('src', definition.image).attr('alt', '').attr('role', 'decoration')
+        );
+
+        const $details = $('<div class="liked_track__details trophy__details"></div>');
+        const $content = $('<div class="liked_track__content"></div>');
+        $content.append($('<div class="liked_track__name"></div>').text('🏆 ' + definition.name));
+        $content.append(
+            $('<div class="liked_track__description"></div>').text(definition.description)
+        );
+        $details.append($content);
+
+        const $value = $('<div class="trophy__value"></div>');
+        if (holder) {
+            const $holder = $('<div class="trophy__holder"></div>');
+            $holder.append(
+                $('<img class="trophy__holder_avatar">')
+                    .attr('src', 'assets/avatars/' + holder.initials + '.png')
+                    .attr('alt', holder.username)
+            );
+            $holder.append($('<span class="trophy__holder_name"></span>').text(holder.username));
+            $details.append($holder);
+            $value.append($('<span></span>').text(holder.value));
+            $value.append(document.createTextNode(' ' + definition.valueLabel));
+        } else {
+            $value.text('Aucun détenteur pour le moment');
+        }
+        $details.append($value);
+
+        $card.append($image);
+        $card.append($details);
+        $container.append($card);
+    });
+}
+
+export function buildAchievementsTab($) {
+    const definitions = getAchievementDefinitions();
+    const $container = $('.js-achievements-list');
+    $container.empty();
+
+    definitions.forEach(function (achievement) {
+        const unlocked = isAchievementUnlocked(gameState.playerData, achievement.id);
+        const $card = $('<div class="liked_track achievement_card"></div>');
+        $card.toggleClass('achievement_card--locked', !unlocked);
+        $card.toggleClass('achievement_card--unlocked', unlocked);
+
+        const $image = $('<div class="trophy__image achievement_card__image"></div>');
+        if (unlocked) {
+            $image.append(
+                $('<img>').attr('src', achievement.image).attr('alt', achievement.name)
+            );
+        } else {
+            $image.append($('<div class="achievement_card__placeholder" aria-hidden="true"></div>'));
+        }
+
+        const $details = $('<div class="liked_track__details trophy__details"></div>');
+        const $content = $('<div class="liked_track__content"></div>');
+        $content.append($('<div class="liked_track__name"></div>').text(achievement.name));
+        $content.append(
+            $('<div class="liked_track__description"></div>').text(achievement.description)
+        );
+        $details.append($content);
+
+        if (!unlocked && achievement.condition) {
+            const progress = getConditionProgress(achievement.condition, gameState.playerData, {});
+            if (progress) {
+                const label = achievement.progressLabel || '';
+                $details.append(
+                    $('<div class="achievement_card__progress"></div>').text(
+                        progress.current + ' / ' + progress.target + (label ? ' ' + label : '')
+                    )
+                );
+            }
+        }
+
+        if (unlocked) {
+            const unlockedAt = getAchievementUnlockDate(gameState.playerData, achievement.id);
+            if (unlockedAt) {
+                const date = new Date(unlockedAt);
+                $details.append(
+                    $('<div class="achievement_card__date"></div>').text(
+                        'Obtenu le ' + date.toLocaleDateString('fr-FR')
+                    )
+                );
+            }
+        }
+
+        $card.append($image);
+        $card.append($details);
+        $container.append($card);
+    });
+}
+
+/** @deprecated Use buildGlobalTrophies */
 export async function buildTrophies($) {
-    const result = await getAllProfiles();
-    const gamesPlayed = [];
-    const answersRatio = [];
-
-    for (const i in result) {
-        const player = result[i];
-        let totalGames = 0;
-        for (const j in player.games_played) {
-            totalGames += player.games_played[j];
-        }
-        gamesPlayed[i] = [player.initials, totalGames];
-
-        if (totalGames > 0) {
-            let goodAnswers = 0;
-            let wrongAnswers = 0;
-            for (const j in player.good_answers) {
-                goodAnswers += player.good_answers[j];
-            }
-            for (const j in player.wrong_answers) {
-                wrongAnswers += player.wrong_answers[j];
-            }
-            const answersPercent = Math.ceil((goodAnswers / (goodAnswers + wrongAnswers)) * 100) || 0;
-            answersRatio.push([player.initials, answersPercent]);
-        }
-    }
-
-    let mostLikedTracks = [];
-    let lessLikedTracks = [];
-
-    for (const i in result) {
-        const player = result[i];
-        if (player.likedTracks != null) {
-            if (mostLikedTracks.length == 0 || mostLikedTracks[1] < player.likedTracks.length) {
-                mostLikedTracks = [player.initials, player.likedTracks.length];
-            }
-            if (lessLikedTracks.length == 0 || lessLikedTracks[1] > player.likedTracks.length) {
-                lessLikedTracks = [player.initials, player.likedTracks.length];
-            }
-        }
-    }
-
-    if (gamesPlayed.length > 0) {
-        gamesPlayed.sort((a, b) => (a[1] < b[1] ? 1 : b[1] < a[1] ? -1 : 0));
-        $('.js-trophy-most-games').attr('src', 'assets/avatars/' + gamesPlayed[0][0] + '.png');
-        $('.js-trophy-most-games-value').text(gamesPlayed[0][1]);
-        $('.js-trophy-less-games').attr('src', 'assets/avatars/' + gamesPlayed[gamesPlayed.length - 1][0] + '.png');
-        $('.js-trophy-less-games-value').text(gamesPlayed[gamesPlayed.length - 1][1]);
-    }
-
-    if (answersRatio.length > 0) {
-        answersRatio.sort((a, b) => (a[1] < b[1] ? 1 : b[1] < a[1] ? -1 : 0));
-        $('.js-trophy-precision').attr('src', 'assets/avatars/' + answersRatio[0][0] + '.png');
-        $('.js-trophy-precision-value').text(answersRatio[0][1]);
-        $('.js-trophy-less-precision').attr('src', 'assets/avatars/' + answersRatio[answersRatio.length - 1][0] + '.png');
-        $('.js-trophy-less-precision-value').text(answersRatio[answersRatio.length - 1][1]);
-    }
-
-    if (mostLikedTracks.length) {
-        $('.js-trophy-most-favorites').attr('src', 'assets/avatars/' + mostLikedTracks[0] + '.png');
-        $('.js-trophy-most-favorites-value').text(mostLikedTracks[1]);
-        $('.js-trophy-less-favorites').attr('src', 'assets/avatars/' + lessLikedTracks[0] + '.png');
-        $('.js-trophy-less-favorites-value').text(lessLikedTracks[1]);
-    }
-
-    const allScores = await getAllScores();
-    const leaderboard = {};
-    const leaderboardCustom = {};
-    for (const difficulty in SCORE_KEYS) {
-        leaderboard[SCORE_KEYS[difficulty]] = {};
-        leaderboardCustom[SCORE_KEYS[difficulty]] = {};
-    }
-    const [leaderboardResult] = returnBestScores(allScores, leaderboard, leaderboardCustom);
-
-    const totalScores = {};
-    for (const i in leaderboardResult) {
-        for (const j in leaderboardResult[i]) {
-            const initials = leaderboardResult[i][j][3];
-            if (!(initials in totalScores)) {
-                totalScores[leaderboardResult[i][j][3]] = leaderboardResult[i][j][2];
-            } else {
-                totalScores[leaderboardResult[i][j][3]] += leaderboardResult[i][j][2];
-            }
-        }
-    }
-
-    const totalScoresArray = [];
-    let counter = 0;
-    for (const i in totalScores) {
-        totalScoresArray[counter] = [i, totalScores[i]];
-        counter += 1;
-    }
-
-    if (totalScoresArray.length > 0) {
-        totalScoresArray.sort((a, b) => (a[1] < b[1] ? 1 : b[1] < a[1] ? -1 : 0));
-        $('.js-trophy-best-scores').attr('src', 'assets/avatars/' + totalScoresArray[0][0] + '.png');
-        $('.js-trophy-best-scores-value').text(totalScoresArray[0][1]);
-        $('.js-trophy-worst-scores').attr('src', 'assets/avatars/' + totalScoresArray[totalScoresArray.length - 1][0] + '.png');
-        $('.js-trophy-worst-scores-value').text(totalScoresArray[totalScoresArray.length - 1][1]);
-    }
+    await buildGlobalTrophies($);
 }
 
 export async function buildFoundTracks($) {

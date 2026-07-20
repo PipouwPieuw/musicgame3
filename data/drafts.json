@@ -1,0 +1,20 @@
+{
+    "drafts": [
+        {
+            "id": "most_favorites",
+            "name": "Groupie",
+            "description": "A le plus de favoris dans sa liste",
+            "image": "assets/icons/trophy.svg",
+            "metric": { "stat": "likedTracks", "aggregate": "count", "order": "desc" },
+            "valueLabel": "favoris"
+        },
+        {
+            "id": "least_favorites",
+            "name": "Fine bouche",
+            "description": "A le moins de favoris dans sa liste",
+            "image": "assets/icons/trophy.svg",
+            "metric": { "stat": "likedTracks", "aggregate": "count", "order": "asc" },
+            "valueLabel": "favoris"
+        }
+    ]
+}

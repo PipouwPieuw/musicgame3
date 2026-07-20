@@ -1,4 +1,4 @@
-/* Trophies  */
+/* Trophies & achievements */
 .trophy__details {
 	display: flex;
 	flex-direction: column;
@@ -6,12 +6,12 @@
 }
 .trophy__image {
 	flex: 0 0 100px;
-	height: 100px;	
+	height: 100px;
 }
 .trophy__image img {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: contain;
 }
 .trophy__value {
 	margin-top: 10px;
@@ -20,4 +20,64 @@
 .trophy__value span:not(.fw_normal) {
 	font-size: 18px;
 	font-weight: 700;
+}
+.trophy__holder {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 8px;
+}
+.trophy__holder_avatar {
+	width: 32px;
+	height: 32px;
+	object-fit: cover;
+	border-radius: 50%;
+}
+.trophy__holder_name {
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.panel_box__box--trophies {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.trophies__achievements,
+.trophies__global {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.achievement_card--locked {
+	opacity: 0.72;
+}
+.achievement_card--locked .liked_track__name,
+.achievement_card--locked .liked_track__description {
+	color: inherit;
+}
+.achievement_card__placeholder {
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.08);
+	border-radius: var(--radius, 4px);
+}
+.achievement_card__progress {
+	margin-top: 8px;
+	font-size: 13px;
+	font-weight: 600;
+}
+.achievement_card__date {
+	margin-top: 8px;
+	font-size: 12px;
+	opacity: 0.85;
+}
+
+@media only screen and (max-width: 640px) {
+	.trophy__image {
+		flex: 0 0 72px;
+		height: 72px;
+	}
 }

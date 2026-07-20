@@ -295,8 +295,8 @@
                 <button class="panel_box__title panel_tabs__tab active js-tab" rel="leaderboard">Classement</button>
                 <button class="panel_box__title panel_tabs__tab js-tab" rel="stats">Statistiques</button>
                 <button class="panel_box__title panel_tabs__tab js-tab" rel="found-tracks">Morceaux trouvés</button>
+                <button class="panel_box__title panel_tabs__tab js-tab" rel="trophies">Trophées</button>
                 <!-- <button class="panel_box__title panel_tabs__tab js-tab" rel="favorites">Favoris</button> -->
-                <!-- <button class="panel_box__title panel_tabs__tab js-tab" rel="trophies">Trophées</button> -->
             </div>
             <div class="panel_tabs__section js-tab-section active" rel="leaderboard">
                 <div class="panel_box__box js-leaderboard-content"></div>
@@ -403,134 +403,14 @@
                     <div class="found_tracks__genres js-found-tracks-list"></div>
                 </div>
             </div>
-            <!-- <div class="statistics panel_tabs__section js-tab-section" rel="favorites">
-                <div class="panel_box__box panel_box__box--favorite js-favorites-content"></div>
-            </div>  -->
-            <!-- <div class="statistics panel_tabs__section js-tab-section" rel="trophies">
+            <div class="trophies panel_tabs__section js-tab-section" rel="trophies">
                 <div class="panel_box__box panel_box__box--trophies js-trophies-content">
-                    <span class="leaderboard__section_title">Hauts faits et basses œuvres<br/>[work in progress]</span>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img class="js-trophy-most-games" src="">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Accro</div>
-                    			<div class="liked_track__description">A le plus de parties jouées et complétées</div>
-                    		</div>
-                    		<div class="trophy__value"><span class="js-trophy-most-games-value"></span> parties jouées</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img class="js-trophy-less-games" src="">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Fantôme</div>
-                    			<div class="liked_track__description">A le moins de parties jouées et complétées</div>
-                    		</div>
-                    		<div class="trophy__value"><span class="js-trophy-less-games-value"></span> parties jouées</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img class="js-trophy-precision" src="">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Émérite</div>
-                    			<div class="liked_track__description">A le meilleur ratio bonnes réponses / mauvaises réponses</div>
-                    		</div>
-                    		<div class="trophy__value"><span class="js-trophy-precision-value"></span><span>%</span> de bonnes réponses</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img class="js-trophy-less-precision" src="">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Godiche</div>
-                    			<div class="liked_track__description">A le moins bon ratio bonnes réponses / mauvaises réponses</div>
-                    		</div>
-                    		<div class="trophy__value"><span class="js-trophy-less-precision-value"></span><span>%</span> de bonnes réponses</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img class="js-trophy-best-scores" src="">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Sagace</div>
-                    			<div class="liked_track__description">A le plus grand cumul de meilleurs scores sur toutes les difficultés en mode classique</div>
-                    		</div>
-                    		<div class="trophy__value"><span class="js-trophy-best-scores-value"></span> points cumulés</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img class="js-trophy-worst-scores" src="">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Modique</div>
-                    			<div class="liked_track__description">A le plus petit cumul de meilleurs scores sur toutes les difficultés en mode classique</div>
-                    		</div>
-                    		<div class="trophy__value"><span class="js-trophy-worst-scores-value"></span> points cumulés</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img class="js-trophy-most-favorites" src="">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Groupie</div>
-                    			<div class="liked_track__description">A le plus de favoris dans sa liste</div>
-                    		</div>
-                    		<div class="trophy__value"><span class="js-trophy-most-favorites-value"></span> favoris</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img class="js-trophy-less-favorites" src="">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Fine bouche</div>
-                    			<div class="liked_track__description">A le moins de favoris dans sa liste</div>
-                    		</div>
-                    		<div class="trophy__value"><span class="js-trophy-less-favorites-value"></span> favoris</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img src="assets/avatars/mba.png">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Princesse</div>
-                    			<div class="liked_track__description">A proposé le plus de morceaux de Taylor Swift</div>
-                    		</div>
-                    		<div class="trophy__value"><span>1</span> morceau de Taylor Swift 👑</div>
-                    	</div>
-                    </div>
-                    <div class="liked_track">
-                    	<div class="trophy__image">
-                    		<img src="assets/avatars/jca.png">
-                    	</div>
-                    	<div class="liked_track__details trophy__details">
-                    		<div class="liked_track__content">
-                    			<div class="liked_track__name">🏆 Sismologue</div>
-                    			<div class="liked_track__description">A proposé les morceaux les plus décoiffants</div>
-                    		</div>
-                    		<div class="trophy__value"><span>10</span> morceaux qui ont causé l'effondrement de l'immeuble près de chez vous</div>
-                    	</div>
-                    </div>
+                    <span class="leaderboard__section_title">Mes succès</span>
+                    <div class="trophies__achievements js-achievements-list"></div>
+                    <span class="leaderboard__section_title">Trophées globaux</span>
+                    <div class="trophies__global js-global-trophies-list"></div>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="login_loader js-login-loader" aria-hidden="true" aria-busy="false">
             <div class="login_loader__spinner" role="status" aria-label="Connexion en cours"></div>
@@ -547,7 +427,7 @@
                         <img class="answer_reveal__face answer_reveal__face--back js-answer-reveal-back" src="" alt="">
                         <div class="answer_reveal__face answer_reveal__face--front">
                             <img class="js-answer-reveal-front" src="" alt="">
-                            <span class="answer_reveal__tag">Morceau débloqué</span>
+                            <span class="answer_reveal__tag js-answer-reveal-tag">Morceau débloqué</span>
                         </div>
                         <span class="answer_reveal__star answer_reveal__star--n js-answer-reveal-star"></span>
                         <span class="answer_reveal__star answer_reveal__star--e js-answer-reveal-star"></span>

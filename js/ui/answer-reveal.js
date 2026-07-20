@@ -38,8 +38,11 @@ function setRevealMode($, mode) {
     $flip.toggleClass('is-active', mode === 'flip').removeClass('visible is-flipped');
 }
 
-export async function setAnswerRevealContent($, { title, imagePath, discovery = false }) {
+export async function setAnswerRevealContent($, { title, imagePath, discovery = false, tag }) {
     $('.js-answer-reveal-text').text(title || '');
+    if (typeof tag === 'string') {
+        $('.js-answer-reveal-tag').text(tag);
+    }
 
     const { $coverImg, $front, $back } = getRevealEls($);
     setRevealMode($, discovery ? 'flip' : 'cover');
@@ -111,6 +114,7 @@ export function playAnswerRevealDismiss($) {
         $('.js-answer-reveal-cover').removeClass('shine is-active');
         $('.js-answer-reveal-flip').removeClass('is-flipped is-active');
         $('.js-answer-reveal-star').removeClass('active');
+        $('.js-answer-reveal-tag').text('Morceau débloqué');
     }, 300);
 }
 

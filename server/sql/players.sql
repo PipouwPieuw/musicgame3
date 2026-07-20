@@ -46,6 +46,18 @@
 
  *
 
+ * -- alter table public.players
+
+ * --   add column if not exists unlocked_achievements jsonb not null default '[]'::jsonb;
+
+ *
+
+ * -- alter table public.players
+
+ * --   add column if not exists last_held_global_trophies jsonb not null default '[]'::jsonb;
+
+ *
+
  * -- Case-insensitive uniqueness: Pipow and pipow cannot both exist.
 
  * create unique index if not exists players_username_lower_idx
