@@ -2,8 +2,8 @@ export const DEFAULT_GENRE = 'shows2000';
 const GENRE_FILES = {
     shows2000: 'data/genres/shows2000.json',
     shows2010: 'data/genres/shows2010.json',
-    shows1990: 'data/genres/shows1990.json',
-    cartoons: 'data/genres/cartoons.json',
+    // shows1990: 'data/genres/shows1990.json',
+    // cartoons: 'data/genres/cartoons.json',
 };
 
 let cachedCatalog = null;
@@ -127,15 +127,61 @@ async function fetchCatalog() {
     return cachedCatalog;
 }
 
-export async function loadTracks(genre = DEFAULT_GENRE) {
-    const catalog = await fetchCatalog();
-
-    if (!catalog[genre]) {
-        const availableGenres = Object.keys(catalog).join(', ');
-        throw new Error(`Genre inconnu : "${genre}". Genres disponibles : ${availableGenres}.`);
+export async function loadTracksFromGenres(genreIds) {
+    if (!Array.isArray(genreIds) || genreIds.length === 0) {
+        throw new Error('Au moins un genre doit être sélectionné.');
     }
 
-    return catalog[genre].tracks;
+    const catalog = await fetchCatalog();
+    const availableGenres = Object.keys(catalog).join(', ');
+    const tracks = [];
+
+    for (const genreId of Object.keys(GENRE_FILES)) {
+        if (!genreIds.includes(genreId)) {
+            continue;
+        }
+
+        if (!catalog[genreId]) {
+            throw new Error(`Genre inconnu : "${genreId}". Genres disponibles : ${availableGenres}.`);
+        }
+
+        tracks.push(...catalog[genreId].tracks);
+    }
+
+    const unknownGenres = genreIds.filter(function (genreId) {
+        return !catalog[genreId];
+    });
+
+    if (unknownGenres.length > 0) {
+        throw new Error(
+            `Genre inconnu : "${unknownGenres.join('", "')}". Genres disponibles : ${availableGenres}.`
+        );
+    }
+
+    if (tracks.length === 0) {
+        throw new Error('Aucun morceau trouvé pour les genres sélectionnés.');
+    }
+
+    return tracks;
+}
+
+export async function loadTracks(genre = DEFAULT_GENRE) {
+    return loadTracksFromGenres([genre]);
+}
+
+export async function getCatalogGenres() {
+    const catalog = await fetchCatalog();
+
+    return Object.keys(GENRE_FILES).map(function (genreId) {
+        const genre = catalog[genreId];
+
+        return {
+            id: genreId,
+            label: genre.label,
+            trackCount: genre.tracks.length,
+            tracks: genre.tracks,
+        };
+    });
 }
 
 export async function getGenreLabel(genre = DEFAULT_GENRE) {

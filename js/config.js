@@ -115,6 +115,7 @@ export const KEYWORD_MIN_LENGTH = 4;
 export const KEYWORD_MAX_LENGTH = 128;
 
 export const MINSTREAK = 3;
+export const DEFAULT_ACTIVE_GENRES = ['shows2000', 'shows2010'];
 export const DEFAULTTRACKSBYGAME = 20;
 export const DEFAULTTRACKDURATION = 30;
 export const DIFFICILETRACKDURATION = 10;
@@ -122,6 +123,7 @@ export const HARDCOREMODETRACKDURATION = 5;
 export const IMAGE_ANSWER_COUNT = 8;
 export const POINTSBYANSWER = 1;
 export const VIGNETTES_UNLOCK_THRESHOLD = 20;
+export const VIGNETTES_MIN_TRACKS_BY_GAME = 20;
 
 /**
  * Which Vignettes difficulty levels are currently offered (1-indexed).

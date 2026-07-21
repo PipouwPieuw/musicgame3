@@ -1,4 +1,5 @@
 import {
+    DEFAULT_ACTIVE_GENRES,
     DEFAULTTRACKDURATION,
     DEFAULTTRACKSBYGAME,
     DIFFICILETRACKDURATION,
@@ -42,6 +43,7 @@ export const gameState = {
     /** Track IDs already used this game (including the current round). */
     sessionTrackIds: [],
     onlyUnfoundTracks: false,
+    activeGenres: [...DEFAULT_ACTIVE_GENRES],
 };
 
 export function getDifficultyName() {

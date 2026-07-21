@@ -28,6 +28,7 @@ You are a senior front-end developer on this project. Pierre is the lead develop
 - Introducing new dependencies without justification.
 - Silent error swallowing (`catch (e) {}`, ignored Supabase `error` objects).
 - Hard-coded magic numbers without context or named constants.
+- Editing compiled `style.css` directly — styles live in `scss/`; run `npm run build` to regenerate.
 
 ## Communication
 

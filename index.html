@@ -66,6 +66,47 @@
                         </div>
                         <input class="settings_panel__number panel_input text_symbol js-nb-tracks" type="number" id="tracksAmount" min="1" max="1000" value="40"/>
                     </div>
+                    <div class="settings_panel__line settings_panel__line--genres">
+                        <div class="settings_panel__label_wrapper">
+                            <span class="settings_panel__label panel_label">
+                                <span class="text_no_glitch">Morceaux disponibles : <span class="js-active-tracks-count">0</span></span>
+                                <span class="text_glitch">M̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝o̶̺̭̣̖̿ȑ̵̞͒c̴̤͍̪̖̿͊̉̍͛̃̎̿͝ẽ̵̱̯̲̳͕̯̱͂͊͋́̅̌͐̌a̵̬͉̞̳͉̺̳̿̐̊̿ų̵̮̣̖̪͍̭̥̄̾̌̽̃͜x̵̖̒ disponibles</span>
+                            </span>
+                        </div>
+                        <button
+                            type="button"
+                            class="button_default settings_panel__genres_button js-open-genres-picker"
+                            aria-label="Sélectionner les catégories"
+                            title="Sélectionner les catégories"
+                        >
+                            <span class="text_no_glitch">Sélectionner les catégories</span>
+                            <span class="text_glitch">Ŝ̵̰̠̗̱̰̘̠͇́̉͆́͑͝ḙ̴͓͕̺̘̼́̂l̶̗̄̏̍ȇ̷̙̑͗̈́́̔͂c̴̤͍̪̖̿͊̉̍͛̃̎̿͝ṭ̵̛̜͐͛̎̊̂̈i̵̬̺͙̤̘̖̳̹̇ͅo̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝n̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝n̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝e̵̬͓̳͎͖̻͍̋̂͌ȑ̵̞͒</span>
+                        </button>
+                    </div>
+                    <dialog class="genres_picker js-genres-picker" aria-labelledby="genresPickerTitle">
+                        <div class="genres_picker__inner panel_box visible">
+                            <span class="panel_box__title" id="genresPickerTitle">
+                                <span class="text_no_glitch">Catégories</span>
+                                <span class="text_glitch">C̴̤͍̪̖̿͊̉̍͛̃̎̿͝a̵̬͉̞̳͉̺̳̿̐̊̿ṭ̵̛̜͐͛̎̊̂̈ḙ̴͓͕̺̘̼́̂g̶̤̭͇̰̦̃̊̑̈o̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝ȑ̵̞͒i̵̬̺͙̤̘̖̳̹̇ͅe̵̬͓̳͎͖̻͍̋̂͌ş̴̗̬̜̾̋</span>
+                            </span>
+                            <div class="genres_picker__box panel_box__box">
+                                <ul class="genres_picker__list js-genres-list"></ul>
+                                <p class="genres_picker__total">
+                                    <span class="text_no_glitch">Total : <span class="js-genres-modal-total">0</span> morceaux</span>
+                                    <span class="text_glitch">Ṭ̵̛̜͐͛̎̊̂̈o̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝ṭ̵̛̜͐͛̎̊̂̈a̵̬͉̞̳͉̺̳̿̐̊̿l̶̗̄̏̍</span>
+                                </p>
+                                <button
+                                    type="button"
+                                    class="button_default genres_picker__close js-close-genres-picker"
+                                    aria-label="Fermer"
+                                    title="Fermer"
+                                >
+                                    <span class="text_no_glitch">Fermer</span>
+                                    <span class="text_glitch">F̶̤̭͇̰̦̃̊̑̈e̵̬͓̳͎͖̻͍̋̂͌ȑ̵̞͒m̵̡̧̭̤͕̯̫͆̽̓͆̕e̵̬͓̳͎͖̻͍̋̂͌ȑ̵̞͒</span>
+                                </button>
+                            </div>
+                        </div>
+                    </dialog>
                     <div class="settings_panel__line">
                         <label class="settings_panel__label settings_panel__label--full panel_label">
                             <span class="text_no_glitch">Mode</span>
@@ -203,6 +244,10 @@
                         </div>
                     </div>
                 </div>
+                <p class="settings_panel__vignettes_notice js-vignettes-pool-notice is-hidden">
+                    <span class="text_no_glitch">Sélectionnez d'autres catégories : au moins 20 morceaux trouvés sont nécessaires pour une partie Vignettes.</span>
+                    <span class="text_glitch">Ŝ̵̰̠̗̱̰̘̠͇́̉͆́͑͝ḙ̴͓͕̺̘̼́̂l̶̗̄̏̍ȇ̷̙̑͗̈́́̔͂c̴̤͍̪̖̿͊̉̍͛̃̎̿͝ṭ̵̛̜͐͛̎̊̂̈i̵̬̺͙̤̘̖̳̹̇ͅo̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝n̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝n̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝e̵̬͓̳͎͖̻͍̋̂͌z̵̖̒ ̶̨̧̯͔̤͉͝d̸̖̗̭̲̠͚͐̑͛̀̒̿̋͋̌'̵̞̏͒a̵̬͉̞̳͉̺̳̿̐̊̿ų̵̮̣̖̪͍̭̥̄̾̌̽̃͜ṭ̵̛̜͐͛̎̊̂̈ȑ̵̞͒e̵̬͓̳͎͖̻͍̋̂͌ş̴̗̬̜̾̋ ̶̨̧̯͔̤͉͝c̴̤͍̪̖̿͊̉̍͛̃̎̿͝a̵̬͉̞̳͉̺̳̿̐̊̿ṭ̵̛̜͐͛̎̊̂̈ḙ̴͓͕̺̘̼́̂g̶̤̭͇̰̦̃̊̑̈o̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝ȑ̵̞͒i̵̬̺͙̤̘̖̳̹̇ͅe̵̬͓̳͎͖̻͍̋̂͌ş̴̗̬̜̾̋</span>
+                </p>
                 <button class="start_game button_big js-play-track">
                     <span class="text_no_glitch">Lancer la partie</span>
                     <span class="text_glitch">Ļ̸͔̺̮̞͉͉̦͓̠͕̜͇̮̏͛̉à̴̢̱͚̝̹̱̐̏̈́͐͋̓̒̽͐̽̕͘͜͜͝n̸͗͊͜c̸̡͉̐̀̉̌͑̐̓̊̃̏̃͛̈́̕e̴̥̼̻̫͔͖̠̿̈͋̐̒̋͊͜ṙ̶̢̧̝̯̹̐ ̴̥͝l̶̰̱̬̬̻̱̦͓̽̒̐̀͆͌͘ą̸͉̺̻͔͓̙͖̟͚͎̤̒̔̒̄́̄͆͐̕ͅ ̵̼̣̥̖̥̺͕̔̿̚̚͘͝p̸̡̢̖̭̹̳̖̦͎̘̩̍̓̏͂̕ͅa̵̜̫̜̠̖̘̳͊͑́͆r̵̨̨̨͚̦̩̣̖͇̲̩͉͚̅̇́̌̊́ṫ̴̡̰̼̓̀̃̿̇͛͐̐̅͑͒͐̎̒ī̶̙͐̂͐̍͂͋̄̿̃̈́̇̊͠e̶̡̨̛͙̟͓̬͚</span>

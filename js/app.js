@@ -5,6 +5,7 @@ import {
     GAME_MODE_VIGNETTES,
     KEYWORD_MIN_LENGTH,
     KEYWORD_MAX_LENGTH,
+    VIGNETTES_MIN_TRACKS_BY_GAME,
 } from './config.js';
 import { setupAudioListeners } from './game/audio-player.js';
 import { applyDifficulty, applyGameMode, updateAnswerModeUI, updateDifficultyUI } from './game/difficulty.js';
@@ -19,8 +20,8 @@ import {
 } from './game/round.js';
 import { buildSetlist, getTracksForCurrentMode } from './game/setlist.js';
 import { getAudioElements, resetStreak, updateScoreUI } from './game/scoring.js';
-import { gameState, resetGameState, getDisplayLabel, getScoreKey, isClassicMode } from './game/state.js';
-import { loadTracks } from './services/tracks-loader.js';
+import { gameState, resetGameState, getDisplayLabel, getScoreKey, isClassicMode, isImageAnswerMode } from './game/state.js';
+import { loadTracksFromGenres } from './services/tracks-loader.js';
 import { filterPlayableTracks, getPreviewPath, migrateLikedTracksToIds } from './lib/track-utils.js';
 import {
     clearStoredUsername,
@@ -58,6 +59,7 @@ import {
 } from './ui/vignettes-unlock.js';
 import { loadAllAchievementDefinitions } from './achievements/loader.js';
 import { processPostGameAchievements } from './achievements/post-game.js';
+import { initGenreSelection, updateActiveTracksCount } from './ui/genre-selection.js';
 
 const $ = window.jQuery;
 
@@ -100,6 +102,7 @@ async function applyPlayerSession(profile) {
     setStoredUsername(gameState.username);
     migrateStoredLikedTracks();
     syncVignettesModeUnlock($);
+    syncTracksByGameToCatalog();
     showLoggedInUI();
     $('.js-username-display').text("Bienvenue " + gameState.username);
     return true;
@@ -201,36 +204,76 @@ function startGame() {
     playRound($);
 }
 
+function syncPlayButtonState($) {
+    const poolSize = getTracksForCurrentMode().length;
+    const $notice = $('.js-vignettes-pool-notice');
+    const $playButton = $('.js-play-track');
+    const isVignettesPoolTooSmall =
+        isImageAnswerMode() && poolSize < VIGNETTES_MIN_TRACKS_BY_GAME;
+
+    $notice.toggleClass('is-hidden', !isVignettesPoolTooSmall);
+    $playButton.prop('disabled', isVignettesPoolTooSmall);
+}
+
 function syncTracksByGameToCatalog() {
     const availableTracks = getTracksForCurrentMode().length;
+    const $input = $('.js-nb-tracks');
+    let min = 1;
 
-    if (availableTracks === 0) {
-        return;
+    if (isImageAnswerMode() && availableTracks >= VIGNETTES_MIN_TRACKS_BY_GAME) {
+        min = VIGNETTES_MIN_TRACKS_BY_GAME;
     }
 
-    if (gameState.tracksByGame > availableTracks) {
-        gameState.tracksByGame = availableTracks;
+    if (availableTracks > 0) {
+        if (gameState.tracksByGame > availableTracks) {
+            gameState.tracksByGame = availableTracks;
+        }
+
+        if (gameState.tracksByGame < min) {
+            gameState.tracksByGame = min;
+        }
+
+        $input.attr('min', min).attr('max', availableTracks).val(gameState.tracksByGame);
+    } else {
+        $input.attr('min', min).attr('max', min);
     }
 
-    $('.js-nb-tracks').attr('max', availableTracks).val(gameState.tracksByGame);
+    updateActiveTracksCount($);
+    syncPlayButtonState($);
+}
+
+async function reloadActiveTracks() {
+    const tracks = await loadTracksFromGenres(gameState.activeGenres);
+    gameState.tracks = await filterPlayableTracks(tracks);
+
+    if (gameState.tracks.length === 0) {
+        throw new Error(
+            'Aucun morceau jouable trouvé. Vérifiez que les fichiers audio sont présents dans assets/audio/.'
+        );
+    }
+
+    syncTracksByGameToCatalog();
+    migrateStoredLikedTracks();
+}
+
+async function handleGenresChange() {
+    try {
+        await reloadActiveTracks();
+    } catch (error) {
+        console.error(error);
+        alert(error.message || 'Impossible de charger le catalogue de morceaux.');
+        throw error;
+    }
 }
 
 async function loadPlaylist() {
     try {
-        gameState.tracks = await loadTracks();
-        gameState.tracks = await filterPlayableTracks(gameState.tracks);
+        await reloadActiveTracks();
     } catch (error) {
         console.error(error);
         alert(error.message || 'Impossible de charger le catalogue de morceaux.');
-        return;
+        return false;
     }
-
-    if (gameState.tracks.length === 0) {
-        alert('Aucun morceau jouable trouvé. Vérifiez que les fichiers audio sont présents dans assets/audio/.');
-        return;
-    }
-
-    syncTracksByGameToCatalog();
 
     if (DEVMODE) {
         gameState.tracks.forEach(function (track) {
@@ -246,6 +289,7 @@ async function loadPlaylist() {
     }
 
     $('#wrapper').addClass('initialized');
+    return true;
 }
 
 let isLoggingIn = false;
@@ -500,9 +544,20 @@ function init() {
     loadAllAchievementDefinitions().catch(function (error) {
         console.error('Failed to load achievement definitions', error);
     });
-    loadPlaylist();
-    initFoundTracksReveal($);
     bindEvents();
+    initFoundTracksReveal($);
+
+    loadPlaylist()
+        .then(function (loaded) {
+            if (!loaded) {
+                return;
+            }
+
+            return initGenreSelection($, handleGenresChange, syncTracksByGameToCatalog);
+        })
+        .catch(function (error) {
+            console.error('Failed to initialize genre selection', error);
+        });
 }
 
 init();

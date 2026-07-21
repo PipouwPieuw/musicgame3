@@ -157,11 +157,11 @@ export async function buildGlobalTrophies($) {
         const $value = $('<div class="trophy__value"></div>');
         if (holder) {
             const $holder = $('<div class="trophy__holder"></div>');
-            $holder.append(
-                $('<img class="trophy__holder_avatar">')
-                    .attr('src', 'assets/avatars/' + holder.initials + '.png')
-                    .attr('alt', holder.username)
-            );
+            // $holder.append(
+            //     $('<img class="trophy__holder_avatar">')
+            //         .attr('src', 'assets/avatars/' + holder.initials + '.png')
+            //         .attr('alt', holder.username)
+            // );
             $holder.append($('<span class="trophy__holder_name"></span>').text(holder.username));
             $details.append($holder);
             $value.append($('<span></span>').text(holder.value));

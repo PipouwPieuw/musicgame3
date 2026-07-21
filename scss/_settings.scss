@@ -133,6 +133,94 @@
 .settings_panel__number {
 	text-align: right;
 }
+
+.settings_panel__line--genres {
+	align-items: center;
+	gap: 15px;
+
+	@media only screen and (max-width: 640px) {
+		gap: 0;
+	}
+}
+
+.settings_panel__genres_button {
+	margin-left: auto;
+	flex-shrink: 0;
+
+	@media only screen and (max-width: 640px) {
+		margin-left: 0;
+		margin-top: 8px;
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+.settings_panel__vignettes_notice {
+	font-size: 16px;
+	line-height: 20px;
+	font-weight: 700;
+	color: #ff0000;
+	width: 100%;
+
+	&.is-hidden {
+		display: none;
+	}
+
+	@media only screen and (max-width: 640px) {
+		font-size: 14px;
+	}
+}
+
+.genres_picker {
+	border: 0;
+	padding: 0;
+	margin: auto;
+	max-width: 540px;
+	width: calc(100% - 20px);
+	background: transparent;
+
+	&::backdrop {
+		background: rgba(0, 0, 0, 0.8);
+	}
+
+	&__inner {
+		width: 100%;
+	}
+
+	&__box {
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+		background: white;
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	&__item {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	&__count {
+		color: #a9a9a9;
+		font-weight: 400;
+	}
+
+	&__total {
+		font-size: 16px;
+		font-weight: 700;
+		text-align: right;
+	}
+
+	&__close {
+		margin-left: auto;
+	}
+}
+
 .settings_difficulty {
 	
 	&__row {
@@ -489,7 +577,7 @@
 			opacity: 0;
 		}
 
-		span {
+		> span {
 			display: flex;
 			gap: 10px;
 			cursor: pointer;
