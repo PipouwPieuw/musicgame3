@@ -8,6 +8,21 @@ const soundRight = new Audio('assets/sounds/right.m4a');
 soundRight.volume = 0.5;
 const soundWrong = new Audio('assets/sounds/wrong.m4a');
 
+/**
+ * Max score for an unbroken correct run of `tracksByGame` answers.
+ * Matches incrementStreak / applyCorrectAnswer (20 tracks at ×1 → 191).
+ */
+export function computePerfectScore(tracksByGame, pointsMultiplier = 1) {
+    let score = 0;
+    let streak = 0;
+    for (let i = 0; i < tracksByGame; i++) {
+        streak += 1;
+        const streakBonus = streak - MINSTREAK >= 0 ? streak - MINSTREAK + 1 : 0;
+        score += (POINTSBYANSWER + streakBonus) * pointsMultiplier;
+    }
+    return score;
+}
+
 export function playSound(soundElem) {
     soundElem.currentTime = 0;
     soundElem.play();

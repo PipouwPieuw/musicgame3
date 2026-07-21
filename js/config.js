@@ -7,6 +7,9 @@ export const SHUFFLE = true;
 export const GAME_MODE_CLASSIQUE = 'classique';
 export const GAME_MODE_VIGNETTES = 'vignettes';
 
+/** Key in playerData.seenUnlocks for the Vignettes mode “débloqué” tooltip. */
+export const SEEN_UNLOCK_VIGNETTES = 'vignettes';
+
 /** Difficulty ladder names (levels 1–5), used by Vignettes mode. */
 export const DIFFICULTYNAMES = ['Normal', 'Difficile', 'Infernal', 'Extrême', 'Glitched'];
 
@@ -138,16 +141,17 @@ export const VIGNETTES_DIFFICULTY_ENABLED = {
 };
 
 /**
- * Placeholder for progressive Vignettes difficulty unlocks.
- * Currently levels 1–3 unlock with the mode (threshold 0); 4–5 stay disabled via VIGNETTES_DIFFICULTY_ENABLED.
- * Values are found-track thresholds (same unit as VIGNETTES_UNLOCK_THRESHOLD).
+ * Unlock conditions per Vignettes difficulty level (1-indexed).
+ * null = unlocked once the mode is unlocked (and ENABLED).
+ * perfectScoreOnPrevious = perfect DEFAULTTRACKSBYGAME run on the previous difficulty.
+ * Higher levels stay gated by VIGNETTES_DIFFICULTY_ENABLED until re-enabled.
  */
-export const VIGNETTES_DIFFICULTY_UNLOCK_THRESHOLDS = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
+export const VIGNETTES_DIFFICULTY_UNLOCK = {
+    1: null,
+    2: { type: 'perfectScoreOnPrevious' },
+    3: { type: 'perfectScoreOnPrevious' },
+    4: { type: 'perfectScoreOnPrevious' },
+    5: { type: 'perfectScoreOnPrevious' },
 };
 
 /** Maps SCORE_KEYS to Vignettes difficulty level (null = Classique / no ladder). */

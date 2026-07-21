@@ -5,6 +5,7 @@ import {
     GAME_MODE_VIGNETTES,
     KEYWORD_MIN_LENGTH,
     KEYWORD_MAX_LENGTH,
+    SEEN_UNLOCK_VIGNETTES,
     VIGNETTES_MIN_TRACKS_BY_GAME,
 } from './config.js';
 import { setupAudioListeners } from './game/audio-player.js';
@@ -52,9 +53,11 @@ import {
     updateStatsGamesPlayed,
 } from './ui/leaderboard.js';
 import {
-    clearVignettesNewHighlight,
+    clearUnlockNewHighlight,
+    getVignettesScoreKeyForLevel,
     lockVignettesMode,
     markVignettesUnlockIfNeeded,
+    setUnlockSeen,
     syncVignettesModeUnlock,
 } from './ui/vignettes-unlock.js';
 import { loadAllAchievementDefinitions } from './achievements/loader.js';
@@ -102,6 +105,7 @@ async function applyPlayerSession(profile) {
     setStoredUsername(gameState.username);
     migrateStoredLikedTracks();
     syncVignettesModeUnlock($);
+    syncStatsDifficultyColumns($);
     syncTracksByGameToCatalog();
     showLoggedInUI();
     $('.js-username-display').text("Bienvenue " + gameState.username);
@@ -381,6 +385,7 @@ function bindEvents() {
         $('.js-wrapper').removeClass('game_started');
         $('.js-settings').addClass('visible');
         syncVignettesModeUnlock($, { animate: true });
+        syncStatsDifficultyColumns($);
     });
 
     $('.js-quit-game').on('click', function () {
@@ -393,6 +398,7 @@ function bindEvents() {
         $('.js-wrapper').removeClass('game_started');
         $('.js-settings').addClass('visible');
         syncVignettesModeUnlock($, { animate: true });
+        syncStatsDifficultyColumns($);
     });
 
     $('.js-nb-tracks').on('keyup mouseup', function () {
@@ -426,12 +432,11 @@ function bindEvents() {
                 updateDifficultyUI($);
             }
 
-            if (gameState.playerData && !gameState.playerData.hasSeenVignettesMode) {
-                gameState.playerData.hasSeenVignettesMode = true;
-                clearVignettesNewHighlight($);
+            if (gameState.playerData && setUnlockSeen(gameState.playerData, SEEN_UNLOCK_VIGNETTES)) {
+                clearUnlockNewHighlight($, SEEN_UNLOCK_VIGNETTES);
                 savePlayerProfile(gameState.username, gameState.playerData).catch(function (error) {
-                    console.error('Failed to save vignettes seen flag', error);
-                    gameState.playerData.hasSeenVignettesMode = false;
+                    console.error('Failed to save seen unlock flag', error);
+                    delete gameState.playerData.seenUnlocks[SEEN_UNLOCK_VIGNETTES];
                     $('.js-vignettes-option').addClass('settings_difficulty__option--new');
                     alert('Impossible de sauvegarder le statut du mode Vignettes. Vérifiez que le serveur est démarré.');
                 });
@@ -442,9 +447,26 @@ function bindEvents() {
     });
 
     $('.js-input-difficulty').on('change', function () {
-        applyDifficulty($(this).val());
+        const level = parseInt($(this).val(), 10);
+        applyDifficulty(level);
         updateDifficultyUI($);
         syncTracksByGameToCatalog();
+
+        const unlockKey = getVignettesScoreKeyForLevel(level);
+        // Normal (level 1) has no gated tooltip; only Difficile+ options do.
+        if (unlockKey && level > 1 && gameState.playerData && setUnlockSeen(gameState.playerData, unlockKey)) {
+            clearUnlockNewHighlight($, unlockKey);
+            savePlayerProfile(gameState.username, gameState.playerData).catch(function (error) {
+                console.error('Failed to save seen unlock flag', error);
+                delete gameState.playerData.seenUnlocks[unlockKey];
+                $('.js-difficulty-option').each(function () {
+                    if (parseInt($(this).attr('data-difficulty-level'), 10) === level) {
+                        $(this).addClass('settings_difficulty__option--new');
+                    }
+                });
+                alert('Impossible de sauvegarder le statut de la difficulté. Vérifiez que le serveur est démarré.');
+            });
+        }
     });
 
     $(document).on('click', '.js-like-track', function () {

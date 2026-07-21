@@ -200,7 +200,8 @@
       "subTitle": "",
       "year": "2005 - 2022",
       "acceptedAnswers": [
-        "Doctor Who"
+        "Doctor Who",
+        "Dr Who"
       ]
     },
     {
@@ -523,6 +524,66 @@
         "CSI: Miami",
         "Les experts Miami",
         "Experts Miami"
+      ]
+    },
+    {
+      "id": "A055",
+      "title": "Stargate SG-1",
+      "subTitle": "",
+      "year": "1997 - 2007",
+      "acceptedAnswers": [
+        "Stargate SG-1",
+        "Stargate"
+      ]
+    },
+    {
+      "id": "A056",
+      "title": "Gossip Girl",
+      "subTitle": "",
+      "year": "2007 - 2012",
+      "acceptedAnswers": [
+        "Gossip Girl"
+      ]
+    },
+    {
+      "id": "A057",
+      "title": "The Mentalist",
+      "subTitle": "",
+      "year": "2008 - 2015",
+      "acceptedAnswers": [
+        "The Mentalist",
+        "Le Mentalist",
+        "Mentalist"
+      ]
+    },
+    {
+      "id": "A058",
+      "title": "Ugly Betty",
+      "subTitle": "",
+      "year": "2006 - 2010",
+      "acceptedAnswers": [
+        "Ugly Betty"
+      ]
+    },
+    {
+      "id": "A059",
+      "title": "Without a Trace",
+      "subTitle": "",
+      "year": "2002 - 2009",
+      "acceptedAnswers": [
+        "Without a Trace",
+        "FBI : Portés Disparus",
+        "Portés Disparus"
+      ]
+    },
+    {
+      "id": "A060",
+      "title": "Joan of Arcadia",
+      "subTitle": "",
+      "year": "2003 - 2005",
+      "acceptedAnswers": [
+        "Joan of Arcadia",
+        "Le monde de Joan"
       ]
     }
   ]

@@ -42,14 +42,13 @@
                 <input type="text" class="login_panel__input panel_input js-username" id="username" autocomplete="username"/>
                 <label class="login_panel__label panel_label" for="keyword">Mot-clé</label>
                 <input type="password" class="login_panel__input panel_input js-keyword" id="keyword" autocomplete="current-password" minlength="8" maxlength="128"/>
-                <p class="login_panel__description">Si vous créez un nouveau compte, choisissez un mot-clé à lui associer.<br/>Sinon, entrez votre mot-clé pour vous connecter.</p>
+                <p class="login_panel__description"><br/>Si vous créez un nouveau compte, choisissez un mot-clé à lui associer.<br/><br/>Sinon, entrez votre mot-clé pour vous connecter.<br/><br/>Évitez tout mot de passe personnel sensible.<br/><br/></p>
                 <button type="button" class="button_big js-login-button">Se connecter</button>
             </div>
         </div>
         <div class="settings_panel panel_box js-settings">
             <span class="panel_box__title">
                 <span class="text_no_glitch">Paramètres</span>
-                <span class="text_glitch">P̶̹͆̏̋̂̍̋͠ͅa̵̟̅͋̊̿̔͒̚r̶̬̩̞͇̯̯͋̕a̷̩̫͈̱̓̿͋͆́̎̈́ͅm̶̨̝̭̮̓̂̀̅̓̓̇̏̐è̸̹͇̗̂̕t̴̫̺̫͍͙̘͂̓̓͆̋͑͘͘͝r̶̫̟̿ͅe̵͙͌́͗͒͐̇̄̂̈ş̴̗̬̜̾̋</span>
             </span>
             <div class="settings_panel__box panel_box__box">
                 <div class="settings_panel__inner">
@@ -57,11 +56,9 @@
                         <div class="settings_panel__label_wrapper">
                             <label class="settings_panel__label panel_label" for="tracksAmount">
                                 <span class="text_no_glitch">Nombre de morceaux par partie</span>
-                                <span class="text_glitch">N̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝o̶̺̭̣̖̿m̵̡̧̭̤͕̯̫͆̽̓͆̕b̵̠͊̾̀̚ȑ̵̞͒ê̴͇̤̳͇͔̹͇̈́̐̊͊͑͘ ̷̨̧͓̲̝͚̭̪̹͊͊̀d̸̖̗̭̲̠͚͐̑͛̀̒̿̋͋̌e̵̬͓̳͎͖̻͍̋̂͌ ̵̧̰̠̖̠͓͇̏̋͗͛͂̕͝m̶̛̛̠̻̯̱͐͛̑͒͛͝o̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝r̵̡̹̼͚̠͓͍͖͒ͅc̴̤͍̪̖̿͊̉̍͛̃̎̿͝ẽ̵̱̯̲̳͕̯̱͂͊͋́̅̌͐̌a̵̬͉̞̳͉̺̳̿̐̊̿ų̵̮̣̖̪͍̭̥̄̾̌̽̃͜x̵̖̒ ̶̨̧̯͔̤͉͝p̵̘̹̭̉ä̵̘͓͕͙̲̫͕̼́͂́͘r̵̢̢̳̰̜̹̠͎͋͗͗̑̀̓̊̃̄ ̵͙̺͓̯̞͑̋̈́ͅp̵͇͙͇̖̖̙̮̥̅̍͐̑̈̂͠͝á̸̤̮͓̜̞̼͊̊̌̅̎r̵͍̠̤̗̖͙͂̌̿͘ͅţ̶̘̗̻̠̩̜͉̜̈́͑͘̚i̷͖̣̋͋͋͋͑͐̿̒͝ȩ̵̜͓̖̦͒</span>
                             </label>
                             <span class="settings_panel__description">                            
                                 <span class="text_no_glitch">Pour une partie standard : 20</span>
-                                <span class="text_glitch">Ṽ̸̻̫̩͍̬̮͙͍̈́͠ä̶̯́̓l̶̗̄̏̍ȇ̷̙̑͗̈́́̔͂ù̷̲͙̠̖͈̉̆̎̎͗͋͐͜r̶̳͑̅̽ ̶̥̬͇̠̫͑̇̓͛́̈́̿̀̚p̴̨̰̰̆͌̍͝a̴̧̹͔͎͕̞͉͊̔͊r̸̨̯̗̝̼̳̣͔̝͒̋̽̌͆̽̈́̅̓ ̷̖̠̓̿̑͂͒d̴̡̳̱̞̪̰̭͖̮̋̾ḙ̴͓͕̺̘̼́̂f̶̤̭͇̰̦̃̊̑̈ą̸̝̲̍̃̈́̃̐̑̈́u̵̡͓̼͙̟͌t̵̗͍̿͘ ̸̢̡̧̗͍̬̖̰̊́ͅ:̶̥̥̏̎͐̈́̽̋̾ ̸̢̦̮̳̥̮͓͖̲̅̏͐̊͒̉̕͠4̸̨̳̻̠̦̱̹̌͐͐̇̆͐͝0̵̝̰̺̱́̃͠͝.̷̛̞̰̹̭̰̈́̓͝</span>
                             </span>
                         </div>
                         <input class="settings_panel__number panel_input text_symbol js-nb-tracks" type="number" id="tracksAmount" min="1" max="1000" value="40"/>
@@ -70,7 +67,6 @@
                         <div class="settings_panel__label_wrapper">
                             <span class="settings_panel__label panel_label">
                                 <span class="text_no_glitch">Morceaux disponibles : <span class="js-active-tracks-count">0</span></span>
-                                <span class="text_glitch">M̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝o̶̺̭̣̖̿ȑ̵̞͒c̴̤͍̪̖̿͊̉̍͛̃̎̿͝ẽ̵̱̯̲̳͕̯̱͂͊͋́̅̌͐̌a̵̬͉̞̳͉̺̳̿̐̊̿ų̵̮̣̖̪͍̭̥̄̾̌̽̃͜x̵̖̒ disponibles</span>
                             </span>
                         </div>
                         <button
@@ -80,20 +76,17 @@
                             title="Sélectionner les catégories"
                         >
                             <span class="text_no_glitch">Sélectionner les catégories</span>
-                            <span class="text_glitch">Ŝ̵̰̠̗̱̰̘̠͇́̉͆́͑͝ḙ̴͓͕̺̘̼́̂l̶̗̄̏̍ȇ̷̙̑͗̈́́̔͂c̴̤͍̪̖̿͊̉̍͛̃̎̿͝ṭ̵̛̜͐͛̎̊̂̈i̵̬̺͙̤̘̖̳̹̇ͅo̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝n̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝n̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝e̵̬͓̳͎͖̻͍̋̂͌ȑ̵̞͒</span>
                         </button>
                     </div>
                     <dialog class="genres_picker js-genres-picker" aria-labelledby="genresPickerTitle">
                         <div class="genres_picker__inner panel_box visible">
                             <span class="panel_box__title" id="genresPickerTitle">
                                 <span class="text_no_glitch">Catégories</span>
-                                <span class="text_glitch">C̴̤͍̪̖̿͊̉̍͛̃̎̿͝a̵̬͉̞̳͉̺̳̿̐̊̿ṭ̵̛̜͐͛̎̊̂̈ḙ̴͓͕̺̘̼́̂g̶̤̭͇̰̦̃̊̑̈o̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝ȑ̵̞͒i̵̬̺͙̤̘̖̳̹̇ͅe̵̬͓̳͎͖̻͍̋̂͌ş̴̗̬̜̾̋</span>
                             </span>
                             <div class="genres_picker__box panel_box__box">
                                 <ul class="genres_picker__list js-genres-list"></ul>
                                 <p class="genres_picker__total">
                                     <span class="text_no_glitch">Total : <span class="js-genres-modal-total">0</span> morceaux</span>
-                                    <span class="text_glitch">Ṭ̵̛̜͐͛̎̊̂̈o̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝ṭ̵̛̜͐͛̎̊̂̈a̵̬͉̞̳͉̺̳̿̐̊̿l̶̗̄̏̍</span>
                                 </p>
                                 <button
                                     type="button"
@@ -102,7 +95,6 @@
                                     title="Fermer"
                                 >
                                     <span class="text_no_glitch">Fermer</span>
-                                    <span class="text_glitch">F̶̤̭͇̰̦̃̊̑̈e̵̬͓̳͎͖̻͍̋̂͌ȑ̵̞͒m̵̡̧̭̤͕̯̫͆̽̓͆̕e̵̬͓̳͎͖̻͍̋̂͌ȑ̵̞͒</span>
                                 </button>
                             </div>
                         </div>
@@ -110,7 +102,6 @@
                     <div class="settings_panel__line">
                         <label class="settings_panel__label settings_panel__label--full panel_label">
                             <span class="text_no_glitch">Mode</span>
-                            <span class="text_glitch">Ń̵̗͖̤̠̲͓̟͉̳i̶̛̩̩͇̳͈̰̊͛̽͝v̶̪̖̬̺̉͌̐̌̈́̾̃̊͘e̷̡̥̮̙̱̹͗͛͊̆̈͝ͅá̴̡̡̛̛̦̱̘̟̠̋̍̑̅̋͠u̶̫͇̱̮̺̙̞͚͋̌̀̊̈́͋͂̚͜͝ ̶̧͇̮̬̠̋͜d̵̨̲̱̪̮̫͑̽͐̒ê̶̪͗̋̂̽͆̌̐́ ̸̻̎͌̿̓͝͠d̷̗̣͍̪̺̹̙̹̈́͂̎ḯ̵̘̹̰͍̚͝f̵̢͔̙̓̒̈́͠͝f̶̨̛̟̪̬͖̣̞̄̽̽̒̕̚̕͝i̵̬̺͙̤̘̖̳̹̇ͅc̸̛̩̈́͑ṳ̵̦͇͕̝̗͎̿̉̆̚͘̕͜͝ͅl̶̘̠͓͍̗̙̀́ṭ̵̛̜͐͛̎̊̂̈é̶͍͇͙͔͈̼̼͔̀͂̽͑́͘͝</span>
                         </label>
                         <div class="settings_difficulty__inputs">
                             <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--1 js-input-game-mode" name="gameMode" id="gameModeClassique" value="classique" checked/>
@@ -157,7 +148,6 @@
                     <div class="settings_panel__line js-difficulty-settings is-hidden">
                         <label class="settings_panel__label settings_panel__label--full panel_label">
                             <span class="text_no_glitch">Difficulté</span>
-                            <span class="text_glitch">D̵̗̓i̶̊f̴̌f̶̄i̵̇c̸̈́u̵͝l̶̀t̵̛é̶̀</span>
                         </label>
                         <div class="settings_difficulty__inputs settings_difficulty__inputs--ladder">
                             <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--1 js-input-difficulty" name="difficultyLevel" id="difficultyLevel1" value="1" checked/>
@@ -167,32 +157,30 @@
                                     <span class="text_glitch"></span>
                                 </span>
                             </label>
-                            <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2"/>
-                            <label class="default_transition" for="difficultyLevel2">
-                                <span class="default_transition">
-                                    <span class="text_no_glitch">Difficile</span>
-                                    <span class="text_glitch"></span>
-                                </span>
-                            </label> -->
+                            <div class="settings_difficulty__option js-difficulty-option is-locked" data-difficulty-level="2">
+                                <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2" disabled/>
+                                <label class="default_transition" for="difficultyLevel2">
+                                    <span class="default_transition">
+                                        <span class="text_no_glitch">Difficile</span>
+                                    </span>
+                                </label>
+                            </div>
                             <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--3 js-input-difficulty" name="difficultyLevel" id="difficultyLevel3" value="3"/>
                             <label class="default_transition" for="difficultyLevel3">
                                 <span class="default_transition">
                                     <span class="text_no_glitch">Infernal</span>
-                                    <span class="text_glitch">I̸̤̦̣̹͙̋͂̄͆̔̚n̷̦̺̘͖̒͝f̴͖̟̦̙̌͠è̷͚͚̼͔͍̦͇̃̀̇́͝͠r̵̢͔̮̣͎̣͎̠̓̎̇̋͜ň̷͉̹͔͕͔͓̊ã̸̭͙͔̀̑̋̾̋͑̔̈́l̴̢̟͚̥̣̼̻̜͔̈́́̆̎͒̎̍̈́͝</span>
                                 </span>
                             </label> -->
                             <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--4 js-input-difficulty" name="difficultyLevel" id="difficultyLevel4" value="4"/>
                             <label class="default_transition" for="difficultyLevel4">
                                 <span class="default_transition">
                                     <span class="text_no_glitch">Extrême</span>
-                                    <span class="text_glitch">E̸̛̛͚̙͖̯̲̒̅̓̐̆̌͝x̵͇͇́́̆̎̎͐̽̕t̷̛̤̮̊͌̽͋͒͝ṟ̶̈́͑̈́̂̀̎ę̵̟͈̳̼̂̓̈́̍̃͛̈́̃͆̚͜m̴̢͈̻̂̔͆̓͛̈̋͝ͅͅe̵͓͎͌͆͋̔͂̓̒͐̍</span>
                                 </span>
                             </label>
                             <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--5 js-input-difficulty" name="difficultyLevel" id="difficultyLevel5" value="5"/>
                             <label class="default_transition" for="difficultyLevel5">
                                 <span class="default_transition">
                                     <span class="text_no_glitch">Glitched</span>
-                                    <span class="text_glitch">G̵͍̪̾̒̆̀̈́̈́l̶͉͔͆̒͒́̋̋͑̏̐͒̈́͘͘̚ī̴̠̺͎̤͔̜̻̣̮̺͈̍t̴̛͎̬̞̹̫͎͍͈̲̻̱̳̩̪̎̓̓͆́́̍̃̕͝͝͝c̴̠̱̒̓̔̑̋͝h̶̠̥͇̺͈͓̮̱̤̠͚̐̒̇͜͝͝ͅe̴͉͍̗̱̝̤̝͎͈̥͎͇͑͗͆d̸̫̋̓̒̔́ͅ</span>
                                 </span>
                             </label> -->
                         </div>
@@ -246,11 +234,9 @@
                 </div>
                 <p class="settings_panel__vignettes_notice js-vignettes-pool-notice is-hidden">
                     <span class="text_no_glitch">Sélectionnez d'autres catégories : au moins 20 morceaux trouvés sont nécessaires pour une partie Vignettes.</span>
-                    <span class="text_glitch">Ŝ̵̰̠̗̱̰̘̠͇́̉͆́͑͝ḙ̴͓͕̺̘̼́̂l̶̗̄̏̍ȇ̷̙̑͗̈́́̔͂c̴̤͍̪̖̿͊̉̍͛̃̎̿͝ṭ̵̛̜͐͛̎̊̂̈i̵̬̺͙̤̘̖̳̹̇ͅo̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝n̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝n̵̰̠̗̱̰̘̠͇̂́̉͆́͑͝e̵̬͓̳͎͖̻͍̋̂͌z̵̖̒ ̶̨̧̯͔̤͉͝d̸̖̗̭̲̠͚͐̑͛̀̒̿̋͋̌'̵̞̏͒a̵̬͉̞̳͉̺̳̿̐̊̿ų̵̮̣̖̪͍̭̥̄̾̌̽̃͜ṭ̵̛̜͐͛̎̊̂̈ȑ̵̞͒e̵̬͓̳͎͖̻͍̋̂͌ş̴̗̬̜̾̋ ̶̨̧̯͔̤͉͝c̴̤͍̪̖̿͊̉̍͛̃̎̿͝a̵̬͉̞̳͉̺̳̿̐̊̿ṭ̵̛̜͐͛̎̊̂̈ḙ̴͓͕̺̘̼́̂g̶̤̭͇̰̦̃̊̑̈o̶̢̠̫̜̻̦̓̈́͑̏̍̒̕͝ȑ̵̞͒i̵̬̺͙̤̘̖̳̹̇ͅe̵̬͓̳͎͖̻͍̋̂͌ş̴̗̬̜̾̋</span>
                 </p>
                 <button class="start_game button_big js-play-track">
                     <span class="text_no_glitch">Lancer la partie</span>
-                    <span class="text_glitch">Ļ̸͔̺̮̞͉͉̦͓̠͕̜͇̮̏͛̉à̴̢̱͚̝̹̱̐̏̈́͐͋̓̒̽͐̽̕͘͜͜͝n̸͗͊͜c̸̡͉̐̀̉̌͑̐̓̊̃̏̃͛̈́̕e̴̥̼̻̫͔͖̠̿̈͋̐̒̋͊͜ṙ̶̢̧̝̯̹̐ ̴̥͝l̶̰̱̬̬̻̱̦͓̽̒̐̀͆͌͘ą̸͉̺̻͔͓̙͖̟͚͎̤̒̔̒̄́̄͆͐̕ͅ ̵̼̣̥̖̥̺͕̔̿̚̚͘͝p̸̡̢̖̭̹̳̖̦͎̘̩̍̓̏͂̕ͅa̵̜̫̜̠̖̘̳͊͑́͆r̵̨̨̨͚̦̩̣̖͇̲̩͉͚̅̇́̌̊́ṫ̴̡̰̼̓̀̃̿̇͛͐̐̅͑͒͐̎̒ī̶̙͐̂͐̍͂͋̄̿̃̈́̇̊͠e̶̡̨̛͙̟͓̬͚</span>
                 </button>
             </div>
         </div>

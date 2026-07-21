@@ -31,6 +31,17 @@
         "acceptedAnswers": [
           "Mission: Impossible"
         ]
+      },
+      {
+        "id": "F004",
+        "title": "The Avengers",
+        "subTitle": "",
+        "year": "1961 - 1969",
+        "acceptedAnswers": [
+          "The Avengers",
+          "Avengers",
+          "Chapeau melon et bottes de cuir"
+        ]
       }
     ]
   }

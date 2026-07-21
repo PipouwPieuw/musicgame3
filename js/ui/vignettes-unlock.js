@@ -1,24 +1,95 @@
 import {
+    DEFAULTTRACKSBYGAME,
+    DIFFICULTYNAMES,
     GAME_MODE_CLASSIQUE,
     SCORE_KEY_DIFFICULTY_LEVEL,
+    SEEN_UNLOCK_VIGNETTES,
     VIGNETTES_DIFFICULTY_ENABLED,
-    VIGNETTES_DIFFICULTY_UNLOCK_THRESHOLDS,
+    VIGNETTES_DIFFICULTY_UNLOCK,
     VIGNETTES_UNLOCK_THRESHOLD,
 } from '../config.js';
-import { applyGameMode, updateDifficultyUI } from '../game/difficulty.js';
+import { applyDifficulty, applyGameMode, updateDifficultyUI } from '../game/difficulty.js';
+import { computePerfectScore } from '../game/scoring.js';
 import { gameState, isImageAnswerMode } from '../game/state.js';
 
 /** Set when unlock happens mid-session so the expand animation can play on return to settings. */
 let pendingVignettesReveal = false;
 
+/** Difficulty options that crossed the unlock gate this session (for reveal on return to settings). */
+let pendingDifficultyRevealLevels = [];
+
 export function isVignettesUnlocked(playerData) {
     return (playerData?.foundTracksIds?.length || 0) >= VIGNETTES_UNLOCK_THRESHOLD;
+}
+
+export function getVignettesScoreKeyForLevel(level) {
+    const name = DIFFICULTYNAMES[level - 1];
+    if (!name) {
+        return null;
+    }
+    return 'Vignettes_' + name;
+}
+
+export function hasSeenUnlock(playerData, unlockKey) {
+    return Boolean(playerData?.seenUnlocks && playerData.seenUnlocks[unlockKey]);
+}
+
+/** Mark an unlock tooltip as dismissed. Returns true if the flag changed. */
+export function setUnlockSeen(playerData, unlockKey) {
+    if (!playerData || !unlockKey) {
+        return false;
+    }
+    if (!playerData.seenUnlocks) {
+        playerData.seenUnlocks = {};
+    }
+    if (playerData.seenUnlocks[unlockKey]) {
+        return false;
+    }
+    playerData.seenUnlocks[unlockKey] = true;
+    return true;
+}
+
+/**
+ * Whether the player has a full-length perfect run stored for this score key.
+ * Uses DEFAULTTRACKSBYGAME and the Vignettes difficulty multiplier (level === multiplier).
+ */
+export function hasPerfectScoreForKey(playerData, scoreKey) {
+    const level = SCORE_KEY_DIFFICULTY_LEVEL[scoreKey];
+    if (level == null) {
+        return false;
+    }
+
+    const perfect = computePerfectScore(DEFAULTTRACKSBYGAME, level);
+    const scores = playerData?.scores || [];
+    for (let i = 0; i < scores.length; i++) {
+        const entry = scores[i];
+        if (entry[0] === scoreKey && entry[1] === DEFAULTTRACKSBYGAME && entry[2] === perfect) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function meetsUnlockCondition(condition, level, playerData) {
+    if (condition == null) {
+        return true;
+    }
+
+    if (condition.type === 'perfectScoreOnPrevious') {
+        const previousKey = getVignettesScoreKeyForLevel(level - 1);
+        if (!previousKey) {
+            return false;
+        }
+        return hasPerfectScoreForKey(playerData, previousKey);
+    }
+
+    return false;
 }
 
 /**
  * Progressive difficulty unlock.
  * Disabled levels (VIGNETTES_DIFFICULTY_ENABLED) never unlock.
- * Thresholds live in VIGNETTES_DIFFICULTY_UNLOCK_THRESHOLDS for future progressive gates.
+ * Conditions live in VIGNETTES_DIFFICULTY_UNLOCK.
  */
 export function isVignettesDifficultyUnlocked(level, playerData) {
     if (!VIGNETTES_DIFFICULTY_ENABLED[level]) {
@@ -29,12 +100,7 @@ export function isVignettesDifficultyUnlocked(level, playerData) {
         return false;
     }
 
-    const threshold = VIGNETTES_DIFFICULTY_UNLOCK_THRESHOLDS[level];
-    if (threshold == null || threshold <= 0) {
-        return true;
-    }
-
-    return (playerData?.foundTracksIds?.length || 0) >= threshold;
+    return meetsUnlockCondition(VIGNETTES_DIFFICULTY_UNLOCK[level], level, playerData);
 }
 
 /** Whether this score bucket is offered at all (ignores player unlock progress). */
@@ -74,11 +140,60 @@ function forceClassiqueMode($) {
     updateDifficultyUI($, 'Classique');
 }
 
-function syncVignettesDifficultyRadios($) {
+function forceNormalDifficulty($) {
+    const $normal = $('#difficultyLevel1');
+    if (!$normal.prop('checked')) {
+        $normal.prop('checked', true);
+    }
+    applyDifficulty(1);
+    updateDifficultyUI($);
+}
+
+function syncDifficultyNewHighlight($option, level) {
+    const scoreKey = getVignettesScoreKeyForLevel(level);
+    // Normal has no unlock tooltip; only gated difficulties (wrapped options) do.
+    const showNew = Boolean(scoreKey && !hasSeenUnlock(gameState.playerData, scoreKey));
+    $option.toggleClass('settings_difficulty__option--new', showNew);
+}
+
+function syncVignettesDifficultyRadios($, options) {
+    const animate = Boolean(options && options.animate);
+
     $('.js-input-difficulty').each(function () {
         const level = parseInt($(this).val(), 10);
         const unlocked = isVignettesDifficultyUnlocked(level, gameState.playerData);
-        $(this).prop('disabled', !unlocked);
+        const $radio = $(this);
+        const $option = $radio.closest('.js-difficulty-option');
+
+        $radio.prop('disabled', !unlocked);
+
+        if (!$option.length) {
+            return;
+        }
+
+        if (!unlocked) {
+            $option.addClass('is-locked').removeClass('settings_difficulty__option--new');
+            if ($radio.prop('checked')) {
+                forceNormalDifficulty($);
+            }
+            return;
+        }
+
+        const pendingIndex = pendingDifficultyRevealLevels.indexOf(level);
+        if (animate && pendingIndex !== -1) {
+            pendingDifficultyRevealLevels.splice(pendingIndex, 1);
+            $option.addClass('is-locked');
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    $option.removeClass('is-locked');
+                    syncDifficultyNewHighlight($option, level);
+                });
+            });
+            return;
+        }
+
+        $option.removeClass('is-locked');
+        syncDifficultyNewHighlight($option, level);
     });
 }
 
@@ -96,19 +211,20 @@ export function syncVignettesModeUnlock($, options) {
 
     if (!unlocked) {
         pendingVignettesReveal = false;
+        pendingDifficultyRevealLevels = [];
         $option.addClass('is-locked').removeClass('settings_difficulty__option--new');
         $radio.prop('disabled', true);
         if ($radio.prop('checked') || isImageAnswerMode()) {
             forceClassiqueMode($);
         }
-        syncVignettesDifficultyRadios($);
+        syncVignettesDifficultyRadios($, options);
         return;
     }
 
     $radio.prop('disabled', false);
-    syncVignettesDifficultyRadios($);
+    syncVignettesDifficultyRadios($, options);
 
-    const showNewHighlight = !gameState.playerData.hasSeenVignettesMode;
+    const showNewHighlight = !hasSeenUnlock(gameState.playerData, SEEN_UNLOCK_VIGNETTES);
     $option.toggleClass('settings_difficulty__option--new', showNewHighlight);
 
     if (animate && pendingVignettesReveal) {
@@ -126,7 +242,7 @@ export function syncVignettesModeUnlock($, options) {
 }
 
 /**
- * After endGame merges foundTracksIds: mark a pending reveal if this session crossed the threshold.
+ * After endGame merges foundTracksIds / scores: mark pending reveals if this session crossed a gate.
  */
 export function markVignettesUnlockIfNeeded() {
     if (!isVignettesUnlocked(gameState.playerData)) {
@@ -137,10 +253,23 @@ export function markVignettesUnlockIfNeeded() {
     if ($option.hasClass('is-locked')) {
         pendingVignettesReveal = true;
     }
+
+    $('.js-difficulty-option').each(function () {
+        const level = parseInt($(this).attr('data-difficulty-level'), 10);
+        if (!level || !$(this).hasClass('is-locked')) {
+            return;
+        }
+        if (isVignettesDifficultyUnlocked(level, gameState.playerData)) {
+            if (pendingDifficultyRevealLevels.indexOf(level) === -1) {
+                pendingDifficultyRevealLevels.push(level);
+            }
+        }
+    });
 }
 
 export function lockVignettesMode($) {
     pendingVignettesReveal = false;
+    pendingDifficultyRevealLevels = [];
     const $option = $('.js-vignettes-option');
     const $radio = $('#gameModeVignettes');
     $option.addClass('is-locked').removeClass('settings_difficulty__option--new');
@@ -149,6 +278,16 @@ export function lockVignettesMode($) {
     syncVignettesDifficultyRadios($);
 }
 
-export function clearVignettesNewHighlight($) {
-    $('.js-vignettes-option').removeClass('settings_difficulty__option--new');
+export function clearUnlockNewHighlight($, unlockKey) {
+    if (unlockKey === SEEN_UNLOCK_VIGNETTES) {
+        $('.js-vignettes-option').removeClass('settings_difficulty__option--new');
+        return;
+    }
+
+    $('.js-difficulty-option').each(function () {
+        const level = parseInt($(this).attr('data-difficulty-level'), 10);
+        if (getVignettesScoreKeyForLevel(level) === unlockKey) {
+            $(this).removeClass('settings_difficulty__option--new');
+        }
+    });
 }

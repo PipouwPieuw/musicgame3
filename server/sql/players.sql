@@ -24,6 +24,8 @@
 
  *   found_tracks_ids jsonb not null default '[]'::jsonb,
 
+ *   seen_unlocks jsonb not null default '{}'::jsonb,
+
  *   has_seen_vignettes_mode boolean not null default false,
 
  *   keyword text,
@@ -39,6 +41,20 @@
  * -- alter table public.players
 
  * --   add column if not exists has_seen_vignettes_mode boolean not null default false;
+
+ * -- alter table public.players
+
+ * --   add column if not exists seen_unlocks jsonb not null default '{}'::jsonb;
+
+ * -- Backfill from legacy boolean (optional; also done at read time in store.js):
+
+ * -- update public.players
+
+ * --   set seen_unlocks = coalesce(seen_unlocks, '{}'::jsonb) || '{"vignettes": true}'::jsonb
+
+ * --   where has_seen_vignettes_mode = true
+
+ * --     and coalesce(seen_unlocks->>'vignettes', 'false') <> 'true';
 
  * -- alter table public.players
 
@@ -69,5 +85,4 @@
  * alter table public.players enable row level security;
 
  */
-
 

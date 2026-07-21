@@ -42,6 +42,220 @@
         "Tales From the Crypt",
         "Les Contes de la Crypte"
       ]
+    },
+    {
+      "id": "C005",
+      "title": "Buffy the Vampire Slayer",
+      "subTitle": "",
+      "year": "1997 - 2003",
+      "acceptedAnswers": [
+        "Buffy the Vampire Slayer",
+        "Buffy contre les vampires",
+        "Buffy"
+      ]
+    },
+    {
+      "id": "C006",
+      "title": "Mr. Bean",
+      "subTitle": "",
+      "year": "1990 - 1995",
+      "acceptedAnswers": [
+        "Mr. Bean",
+        "Mister Bean"
+      ]
+    },
+    {
+      "id": "C007",
+      "title": "The Fresh Prince of Bel-Air",
+      "subTitle": "",
+      "year": "1990 - 1996",
+      "acceptedAnswers": [
+        "The Fresh Prince of Bel-Air",
+        "Fresh Prince of Bel-Air",
+        "The Prince of Bel-Air",
+        "Prince of Bel-Air",
+        "Le Prince de Bel-Air",
+        "Prince de Bel-Air"
+      ]
+    },
+    {
+      "id": "C008",
+      "title": "Beverly Hills, 90210",
+      "subTitle": "",
+      "year": "1990 - 2000",
+      "acceptedAnswers": [
+        "Beverly Hills, 90210",
+        "Beverly Hills",
+        "90210"
+      ]
+    },
+    {
+      "id": "C009",
+      "title": "Step by Step",
+      "subTitle": "",
+      "year": "1991 - 1998",
+      "acceptedAnswers": [
+        "Step by Step",
+        "Notre belle famille"
+      ]
+    },
+    {
+      "id": "C010",
+      "title": "The Nanny",
+      "subTitle": "",
+      "year": "1993 - 1999",
+      "acceptedAnswers": [
+        "The Nanny",
+        "Nanny",
+        "Une nounou d'enfer",
+        "Nounou d'enfer"
+      ]
+    },
+    {
+      "id": "C011",
+      "title": "Dr. Quinn, Medicine Woman",
+      "subTitle": "",
+      "year": "1993 - 1998",
+      "acceptedAnswers": [
+        "Dr. Quinn, Medicine Woman",
+        "Dr. Quinn",
+        "Doctor Quinn",
+        "Docteur Quinn",
+        "Docteur Quinn, feme médecin"
+      ]
+    },
+    {
+      "id": "C012",
+      "title": "Lois & Clark: The New Adventures of Superman",
+      "subTitle": "",
+      "year": "1993 - 1997",
+      "acceptedAnswers": [
+        "Lois & Clark: The New Adventures of Superman",
+        "Loïs et Clark, les nouvelles aventures de Superman",
+        "Lois & Clark",
+        "Loïs et Clark"
+      ]
+    },
+    {
+      "id": "C013",
+      "title": "ER",
+      "subTitle": "",
+      "year": "1994 - 2009",
+      "acceptedAnswers": [
+        "ER",
+        "Urgences"
+      ]
+    },
+    {
+      "id": "C014",
+      "title": "Heartbreak High",
+      "subTitle": "",
+      "year": "1994 - 1999",
+      "acceptedAnswers": [
+        "Heartbreak High",
+        "Hartley, cœurs à vif",
+        "Hartley, coeurs à vif",
+        "Hartley"
+      ]
+    },
+    {
+      "id": "C015",
+      "title": "Xena: Warrior Princess",
+      "subTitle": "",
+      "year": "1995 - 2001",
+      "acceptedAnswers": [
+        "Xena: Warrior Princess",
+        "Xena, la guerrière",
+        "Xena"
+      ]
+    },
+    {
+      "id": "C016",
+      "title": "Sliders",
+      "subTitle": "",
+      "year": "1995 - 2000",
+      "acceptedAnswers": [
+        "Sliders",
+        "Sliders : Les mondes parallèles"
+      ]
+    },
+    {
+      "id": "C017",
+      "title": "The Pretender",
+      "subTitle": "",
+      "year": "1996 - 2001",
+      "acceptedAnswers": [
+        "The Pretender",
+        "Pretender",
+        "Le Caméléon",
+        "Caméléon"
+      ]
+    },
+    {
+      "id": "C018",
+      "title": "Sabrina, the Teenage Witch",
+      "subTitle": "",
+      "year": "1996 - 2003",
+      "acceptedAnswers": [
+        "Sabrina, the Teenage Witch",
+        "Sabrina, l'apprentie sorcière",
+        "Sabrina"
+      ]
+    },
+    {
+      "id": "C019",
+      "title": "OZ",
+      "subTitle": "",
+      "year": "1997 - 2003",
+      "acceptedAnswers": [
+        "OZ"
+      ]
+    },
+    {
+      "id": "C020",
+      "title": "Ally McBeal",
+      "subTitle": "",
+      "year": "1997 - 2002",
+      "acceptedAnswers": [
+        "Ally McBeal"
+      ]
+    },
+    {
+      "id": "C021",
+      "title": "Sex and the City",
+      "subTitle": "",
+      "year": "1998 - 2004",
+      "acceptedAnswers": [
+        "Sex and the City"
+      ]
+    },
+    {
+      "id": "C022",
+      "title": "Dawnson's Creek",
+      "subTitle": "",
+      "year": "1998 - 2003",
+      "acceptedAnswers": [
+        "Dawnson's Creek",
+        "Dawnson"
+      ]
+    },
+    {
+      "id": "C023",
+      "title": "Roswell",
+      "subTitle": "",
+      "year": "1999 - 2002",
+      "acceptedAnswers": [
+        "Roswell"
+      ]
+    },
+    {
+      "id": "C024",
+      "title": "Quantum Leap",
+      "subTitle": "",
+      "year": "1989 - 1993",
+      "acceptedAnswers": [
+        "Code Quantum"
+      ]
     }
   ]
 }

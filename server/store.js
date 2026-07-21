@@ -19,10 +19,28 @@ export function createDefaultProfile(username) {
         wrong_answers: emptyScoreMap(),
         scores: [],
         foundTracksIds: [],
-        hasSeenVignettesMode: false,
+        seenUnlocks: {},
         unlockedAchievements: [],
         lastHeldGlobalTrophies: [],
     };
+}
+
+/**
+ * Normalize seen-unlock map. Migrates legacy hasSeenVignettesMode / has_seen_vignettes_mode into { vignettes: true }.
+ */
+export function normalizeSeenUnlocks(seenUnlocks, legacyHasSeenVignettes) {
+    const map = {};
+    if (seenUnlocks && typeof seenUnlocks === 'object' && !Array.isArray(seenUnlocks)) {
+        for (const key of Object.keys(seenUnlocks)) {
+            if (seenUnlocks[key]) {
+                map[key] = true;
+            }
+        }
+    }
+    if (legacyHasSeenVignettes && !map.vignettes) {
+        map.vignettes = true;
+    }
+    return map;
 }
 
 function normalizeUnlockedAchievements(list) {
@@ -57,9 +75,8 @@ export function normalizeProfile(profile) {
     if (!profile.foundTracksIds) {
         profile.foundTracksIds = [];
     }
-    if (profile.hasSeenVignettesMode == null) {
-        profile.hasSeenVignettesMode = false;
-    }
+    profile.seenUnlocks = normalizeSeenUnlocks(profile.seenUnlocks, profile.hasSeenVignettesMode);
+    delete profile.hasSeenVignettesMode;
     profile.unlockedAchievements = normalizeUnlockedAchievements(profile.unlockedAchievements);
     profile.lastHeldGlobalTrophies = normalizeHeldGlobalTrophies(profile.lastHeldGlobalTrophies);
 
@@ -138,7 +155,7 @@ function rowToProfile(row) {
         wrong_answers: row.wrong_answers,
         scores: row.scores,
         foundTracksIds: row.found_tracks_ids,
-        hasSeenVignettesMode: row.has_seen_vignettes_mode,
+        seenUnlocks: normalizeSeenUnlocks(row.seen_unlocks, row.has_seen_vignettes_mode),
         unlockedAchievements: row.unlocked_achievements,
         lastHeldGlobalTrophies: row.last_held_global_trophies,
         keyword: row.keyword,
@@ -162,7 +179,9 @@ function profileToRow(username, profile, keyword) {
         wrong_answers: normalized.wrong_answers,
         scores: normalized.scores,
         found_tracks_ids: normalized.foundTracksIds,
-        has_seen_vignettes_mode: Boolean(normalized.hasSeenVignettesMode),
+        seen_unlocks: normalized.seenUnlocks || {},
+        // Keep legacy column in sync while it still exists in the DB.
+        has_seen_vignettes_mode: Boolean(normalized.seenUnlocks && normalized.seenUnlocks.vignettes),
         unlocked_achievements: normalized.unlockedAchievements,
         last_held_global_trophies: normalized.lastHeldGlobalTrophies,
         updated_at: new Date().toISOString(),
