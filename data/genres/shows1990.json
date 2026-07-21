@@ -35,16 +35,6 @@
     },
     {
       "id": "C004",
-      "title": "Tales From the Crypt",
-      "subTitle": "",
-      "year": "1989 - 1996",
-      "acceptedAnswers": [
-        "Tales From the Crypt",
-        "Les Contes de la Crypte"
-      ]
-    },
-    {
-      "id": "C005",
       "title": "Buffy the Vampire Slayer",
       "subTitle": "",
       "year": "1997 - 2003",
@@ -55,7 +45,7 @@
       ]
     },
     {
-      "id": "C006",
+      "id": "C005",
       "title": "Mr. Bean",
       "subTitle": "",
       "year": "1990 - 1995",
@@ -65,7 +55,7 @@
       ]
     },
     {
-      "id": "C007",
+      "id": "C006",
       "title": "The Fresh Prince of Bel-Air",
       "subTitle": "",
       "year": "1990 - 1996",
@@ -79,7 +69,7 @@
       ]
     },
     {
-      "id": "C008",
+      "id": "C007",
       "title": "Beverly Hills, 90210",
       "subTitle": "",
       "year": "1990 - 2000",
@@ -90,7 +80,7 @@
       ]
     },
     {
-      "id": "C009",
+      "id": "C008",
       "title": "Step by Step",
       "subTitle": "",
       "year": "1991 - 1998",
@@ -100,7 +90,7 @@
       ]
     },
     {
-      "id": "C010",
+      "id": "C009",
       "title": "The Nanny",
       "subTitle": "",
       "year": "1993 - 1999",
@@ -112,7 +102,7 @@
       ]
     },
     {
-      "id": "C011",
+      "id": "C010",
       "title": "Dr. Quinn, Medicine Woman",
       "subTitle": "",
       "year": "1993 - 1998",
@@ -125,7 +115,7 @@
       ]
     },
     {
-      "id": "C012",
+      "id": "C011",
       "title": "Lois & Clark: The New Adventures of Superman",
       "subTitle": "",
       "year": "1993 - 1997",
@@ -137,7 +127,7 @@
       ]
     },
     {
-      "id": "C013",
+      "id": "C012",
       "title": "ER",
       "subTitle": "",
       "year": "1994 - 2009",
@@ -147,7 +137,7 @@
       ]
     },
     {
-      "id": "C014",
+      "id": "C013",
       "title": "Heartbreak High",
       "subTitle": "",
       "year": "1994 - 1999",
@@ -250,11 +240,43 @@
     },
     {
       "id": "C024",
-      "title": "Quantum Leap",
+      "title": "Charmed",
       "subTitle": "",
-      "year": "1989 - 1993",
+      "year": "1998 - 2006",
       "acceptedAnswers": [
-        "Code Quantum"
+        "Charmed"
+      ]
+    },
+    {
+      "id": "C025",
+      "title": "The Sopranos",
+      "subTitle": "",
+      "year": "1999 - 2007",
+      "acceptedAnswers": [
+        "The Sopranos",
+        "The Soprano",
+        "Les Sopranos",
+        "Les Soprano",
+        "Sopranos"
+      ]
+    },
+    {
+      "id": "C026",
+      "title": "Angel",
+      "subTitle": "",
+      "year": "1999 - 2004",
+      "acceptedAnswers": [
+        "Angel"
+      ]
+    },
+    {
+      "id": "C027",
+      "title": "Stargate SG-1",
+      "subTitle": "",
+      "year": "1997 - 2007",
+      "acceptedAnswers": [
+        "Stargate SG-1",
+        "Stargate"
       ]
     }
   ]

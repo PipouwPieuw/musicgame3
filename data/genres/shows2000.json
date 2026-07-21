@@ -177,15 +177,6 @@
       ]
     },
     {
-      "id": "A019",
-      "title": "Charmed",
-      "subTitle": "",
-      "year": "1998 - 2006",
-      "acceptedAnswers": [
-        "Charmed"
-      ]
-    },
-    {
       "id": "A020",
       "title": "Dollhouse",
       "subTitle": "",
@@ -201,6 +192,7 @@
       "year": "2005 - 2022",
       "acceptedAnswers": [
         "Doctor Who",
+        "Docteur Who",
         "Dr Who"
       ]
     },
@@ -251,19 +243,6 @@
       "year": "2003 - 2006 / 2013 / 2019",
       "acceptedAnswers": [
         "Arrested Development"
-      ]
-    },
-    {
-      "id": "A027",
-      "title": "The Sopranos",
-      "subTitle": "",
-      "year": "1999 - 2007",
-      "acceptedAnswers": [
-        "The Sopranos",
-        "The Soprano",
-        "Les Sopranos",
-        "Les Soprano",
-        "Sopranos"
       ]
     },
     {
@@ -387,15 +366,6 @@
       "year": "2005 - 2017",
       "acceptedAnswers": [
         "Bones"
-      ]
-    },
-    {
-      "id": "A041",
-      "title": "Angel",
-      "subTitle": "",
-      "year": "1999 - 2004",
-      "acceptedAnswers": [
-        "Angel"
       ]
     },
     {
@@ -527,16 +497,6 @@
       ]
     },
     {
-      "id": "A055",
-      "title": "Stargate SG-1",
-      "subTitle": "",
-      "year": "1997 - 2007",
-      "acceptedAnswers": [
-        "Stargate SG-1",
-        "Stargate"
-      ]
-    },
-    {
       "id": "A056",
       "title": "Gossip Girl",
       "subTitle": "",
@@ -547,17 +507,6 @@
     },
     {
       "id": "A057",
-      "title": "The Mentalist",
-      "subTitle": "",
-      "year": "2008 - 2015",
-      "acceptedAnswers": [
-        "The Mentalist",
-        "Le Mentalist",
-        "Mentalist"
-      ]
-    },
-    {
-      "id": "A058",
       "title": "Ugly Betty",
       "subTitle": "",
       "year": "2006 - 2010",
@@ -566,7 +515,7 @@
       ]
     },
     {
-      "id": "A059",
+      "id": "A058",
       "title": "Without a Trace",
       "subTitle": "",
       "year": "2002 - 2009",
@@ -577,13 +526,61 @@
       ]
     },
     {
-      "id": "A060",
+      "id": "A059",
       "title": "Joan of Arcadia",
       "subTitle": "",
       "year": "2003 - 2005",
       "acceptedAnswers": [
         "Joan of Arcadia",
         "Le monde de Joan"
+      ]
+    },
+    {
+      "id": "A060",
+      "title": "Misfits",
+      "subTitle": "",
+      "year": "2009 - 2013",
+      "acceptedAnswers": [
+        "Misfits"
+      ]
+    },
+    {
+      "id": "A061",
+      "title": "The Vampire Diaries",
+      "subTitle": "",
+      "year": "2009 - 2017",
+      "acceptedAnswers": [
+        "The Vampire Diaries",
+        "Vampire Diaries"
+      ]
+    },
+    {
+      "id": "A062",
+      "title": "Community",
+      "subTitle": "",
+      "year": "2009 - 2015",
+      "acceptedAnswers": [
+        "Community"
+      ]
+    },
+    {
+      "id": "A063",
+      "title": "The Big Bang Theory",
+      "subTitle": "",
+      "year": "2007 - 2019",
+      "acceptedAnswers": [
+        "The Big Bang Theory",
+        "Big Bang Theory",
+        "TBBT"
+      ]
+    },
+    {
+      "id": "A064",
+      "title": "Modern Family",
+      "subTitle": "",
+      "year": "2009 - 2020",
+      "acceptedAnswers": [
+        "Modern Family"
       ]
     }
   ]

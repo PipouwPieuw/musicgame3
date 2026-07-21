@@ -1,0 +1,23 @@
+{
+  "shows": [
+    {
+      "id": "I001",
+      "title": "Tales From the Crypt",
+      "subTitle": "",
+      "year": "1989 - 1996",
+      "acceptedAnswers": [
+        "Tales From the Crypt",
+        "Les Contes de la Crypte"
+      ]
+    },
+    {
+      "id": "I002",
+      "title": "Quantum Leap",
+      "subTitle": "",
+      "year": "1989 - 1993",
+      "acceptedAnswers": [
+        "Code Quantum"
+      ]
+    }
+  ]
+}

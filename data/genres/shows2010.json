@@ -39,15 +39,6 @@
       ]
     },
     {
-      "id": "B005",
-      "title": "Misfits",
-      "subTitle": "",
-      "year": "2009 - 2013",
-      "acceptedAnswers": [
-        "Misfits"
-      ]
-    },
-    {
       "id": "B006",
       "title": "Orphan Black",
       "subTitle": "",
@@ -140,16 +131,6 @@
       ]
     },
     {
-      "id": "B016",
-      "title": "The Vampire Diaries",
-      "subTitle": "",
-      "year": "2009 - 2017",
-      "acceptedAnswers": [
-        "The Vampire Diaries",
-        "Vampire Diaries"
-      ]
-    },
-    {
       "id": "B017",
       "title": "American Vandal",
       "subTitle": "",
@@ -205,16 +186,8 @@
       "acceptedAnswers": [
         "A Series of Unfortunate Events",
         "Les Désastreuses Aventures des Orphelins Baudelaire",
-        "Les Orphelins Baudelaire"
-      ]
-    },
-    {
-      "id": "B023",
-      "title": "Community",
-      "subTitle": "",
-      "year": "2009 - 2015",
-      "acceptedAnswers": [
-        "Community"
+        "Les Orphelins Baudelaire",
+        "Orphelins Baudelaire"
       ]
     },
     {
@@ -224,17 +197,6 @@
       "year": "2016 - 2022",
       "acceptedAnswers": [
         "Westworld"
-      ]
-    },
-    {
-      "id": "B025",
-      "title": "The Big Bang Theory",
-      "subTitle": "",
-      "year": "2007 - 2019",
-      "acceptedAnswers": [
-        "The Big Bang Theory",
-        "Big Bang Theory",
-        "TBBT"
       ]
     },
     {
@@ -284,12 +246,12 @@
       ]
     },
     {
-      "id": "B031",
-      "title": "Modern Family",
+      "id": "B032",
+      "title": "Elementary",
       "subTitle": "",
-      "year": "2009 - 2020",
+      "year": "2012 - 2017",
       "acceptedAnswers": [
-        "Modern Family"
+        "Elementary"
       ]
     }
   ]
