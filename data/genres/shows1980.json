@@ -16,7 +16,20 @@
       "subTitle": "",
       "year": "1989 - 1993",
       "acceptedAnswers": [
+        "Quantum Leap",
         "Code Quantum"
+      ]
+    },
+    {
+      "id": "I003",
+      "title": "MacGyver",
+      "subTitle": "",
+      "year": "1985 - 1992",
+      "acceptedAnswers": [
+        "MacGyver",
+        "McGyver",
+        "MacGuyver",
+        "McGuyver"
       ]
     }
   ]

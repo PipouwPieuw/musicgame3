@@ -266,6 +266,7 @@ export async function buildFoundTracks($) {
                     .addClass('found_tracks__item--found js-found-track')
                     .attr('data-track-id', track.id)
                     .attr('data-track-title', track.title)
+                    .attr('data-track-year', track.year || '')
                     .attr('role', 'button')
                     .attr('tabindex', '0')
                     .attr('aria-label', track.title)
@@ -306,10 +307,12 @@ export function initFoundTracksReveal($) {
         const $item = $(this);
         const trackId = $item.attr('data-track-id');
         const title = $item.attr('data-track-title') || '';
+        const year = $item.attr('data-track-year') || '';
 
         setAnswerRevealContent($, {
             title: title,
             imagePath: getCoverPath(trackId),
+            year: year,
         }).then(function () {
             playAnswerRevealAppear($, { effect: 'none' });
 

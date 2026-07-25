@@ -38,8 +38,21 @@ function setRevealMode($, mode) {
     $flip.toggleClass('is-active', mode === 'flip').removeClass('visible is-flipped');
 }
 
-export async function setAnswerRevealContent($, { title, imagePath, discovery = false, tag }) {
+function setAnswerRevealMeta(year) {
+    const $meta = $('.js-answer-reveal-meta');
+    const value = typeof year === 'string' ? year.trim() : '';
+
+    if (value) {
+        $meta.text(value).prop('hidden', false);
+        return;
+    }
+
+    $meta.text('').prop('hidden', true);
+}
+
+export async function setAnswerRevealContent($, { title, imagePath, discovery = false, tag, year }) {
     $('.js-answer-reveal-text').text(title || '');
+    setAnswerRevealMeta(year);
     if (typeof tag === 'string') {
         $('.js-answer-reveal-tag').text(tag);
     }
@@ -115,6 +128,7 @@ export function playAnswerRevealDismiss($) {
         $('.js-answer-reveal-flip').removeClass('is-flipped is-active');
         $('.js-answer-reveal-star').removeClass('active');
         $('.js-answer-reveal-tag').text('Morceau débloqué');
+        setAnswerRevealMeta('');
     }, 300);
 }
 

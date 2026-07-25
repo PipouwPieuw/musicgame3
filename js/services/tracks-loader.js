@@ -2,7 +2,9 @@ export const DEFAULT_GENRE = 'shows2000';
 const GENRE_FILES = {
     shows2000: 'data/genres/shows2000.json',
     shows2010: 'data/genres/shows2010.json',
-    // shows1990: 'data/genres/shows1990.json',
+    shows1990: 'data/genres/shows1990.json',
+    // shows1980: 'data/genres/shows1980.json',
+    animes: 'data/genres/animes.json',
     // cartoons: 'data/genres/cartoons.json',
 };
 
@@ -206,19 +208,37 @@ export async function getAvailableGenres() {
     });
 }
 
+function getStartYear(year) {
+    if (typeof year !== 'string') {
+        return Number.POSITIVE_INFINITY;
+    }
+
+    const match = year.match(/\d{4}/);
+    return match ? Number(match[0]) : Number.POSITIVE_INFINITY;
+}
+
 export async function groupTrackIdsByGenre(trackIds) {
     const catalog = await fetchCatalog();
     const foundIds = new Set(trackIds || []);
 
     return Object.entries(catalog)
         .map(function ([id, genre]) {
-            const tracks = genre.tracks.map(function (track) {
-                return {
-                    id: track.id,
-                    title: track.title,
-                    found: foundIds.has(track.id),
-                };
-            });
+            const tracks = genre.tracks
+                .map(function (track) {
+                    return {
+                        id: track.id,
+                        title: track.title,
+                        year: track.year,
+                        found: foundIds.has(track.id),
+                    };
+                })
+                .sort(function (a, b) {
+                    const yearDiff = getStartYear(a.year) - getStartYear(b.year);
+                    if (yearDiff !== 0) {
+                        return yearDiff;
+                    }
+                    return a.title.localeCompare(b.title);
+                });
 
             return {
                 id: id,

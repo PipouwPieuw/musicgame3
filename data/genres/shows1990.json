@@ -51,6 +51,7 @@
       "year": "1990 - 1995",
       "acceptedAnswers": [
         "Mr. Bean",
+        "M Bean",
         "Mister Bean"
       ]
     },
@@ -133,7 +134,8 @@
       "year": "1994 - 2009",
       "acceptedAnswers": [
         "ER",
-        "Urgences"
+        "Urgences",
+        "Urgence"
       ]
     },
     {
@@ -146,6 +148,17 @@
         "Hartley, cœurs à vif",
         "Hartley, coeurs à vif",
         "Hartley"
+      ]
+    },
+    {
+      "id": "C014",
+      "title": "Parker Lewis Can't Lose",
+      "subTitle": "",
+      "year": "1990 - 1993",
+      "acceptedAnswers": [
+        "Parker Lewis Can't Lose",
+        "Parker Lewis ne perd jamais",
+        "Parker Lewis"
       ]
     },
     {
@@ -207,7 +220,8 @@
       "subTitle": "",
       "year": "1997 - 2002",
       "acceptedAnswers": [
-        "Ally McBeal"
+        "Ally McBeal",
+        "Ally MacBeal"
       ]
     },
     {
@@ -226,7 +240,7 @@
       "year": "1998 - 2003",
       "acceptedAnswers": [
         "Dawnson's Creek",
-        "Dawnson"
+        "Dawson"
       ]
     },
     {

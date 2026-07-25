@@ -118,7 +118,7 @@ export const KEYWORD_MIN_LENGTH = 4;
 export const KEYWORD_MAX_LENGTH = 128;
 
 export const MINSTREAK = 3;
-export const DEFAULT_ACTIVE_GENRES = ['shows2000', 'shows2010'];
+export const DEFAULT_ACTIVE_GENRES = ['shows1990', 'shows2000', 'shows2010'];
 export const DEFAULTTRACKSBYGAME = 20;
 export const DEFAULTTRACKDURATION = 30;
 export const DIFFICILETRACKDURATION = 10;

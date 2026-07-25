@@ -36,7 +36,8 @@
         "subTitle": "",
         "year": "1999 - 2000",
         "acceptedAnswers": [
-          "Excel Saga"
+          "Excel Saga",
+          "Heppoko Jikken Animation Excel Saga"
         ]
       },
       {
@@ -46,7 +47,79 @@
         "year": "2006 - 2009",
         "acceptedAnswers": [
           "La Mélancolie de Haruhi Suzumiya",
-          "Haruhi Suzumiya"
+          "Haruhi Suzumiya",
+          "Suzumiya Haruhi no Yûutsu"
+        ]
+      },
+      {
+        "id": "E006",
+        "title": "Basilisk",
+        "subTitle": "",
+        "year": "2006 - 2007",
+        "acceptedAnswers": [
+          "Basilisk",
+          "Basilisk: Kôga Ninpô Chô"
+        ]
+      },
+      {
+        "id": "E007",
+        "title": "Dandadan",
+        "subTitle": "",
+        "year": "2024 - En cours",
+        "acceptedAnswers": [
+          "Dandadan"
+        ]
+      },
+      {
+        "id": "E008",
+        "title": "Attack on Titan",
+        "subTitle": "",
+        "year": "2013 - 2023",
+        "acceptedAnswers": [
+          "Attack on Titan",
+          "L'attaque des Titans",
+          "Shingeki no Kyojin"
+        ]
+      },
+      {
+        "id": "E009",
+        "title": "Assassination Classroom",
+        "subTitle": "",
+        "year": "2015 - 2016",
+        "acceptedAnswers": [
+          "Assassination Classroom",
+          "Ansatsu Kyôshitsu"
+        ]
+      },
+      {
+        "id": "E010",
+        "title": "Food Wars!",
+        "subTitle": "",
+        "year": "2015 - 2020",
+        "acceptedAnswers": [
+          "Food Wars!",
+          "Shokugeki no Sôma"
+        ]
+      },
+      {
+        "id": "E011",
+        "title": "Re:Zero - Starting Life in Another World",
+        "subTitle": "",
+        "year": "2016 - En cours",
+        "acceptedAnswers": [
+          "Re:Zero",
+          "Re:Zero - Starting Life in Another World",
+          "Re:Zero Kara Hajimeru Isekai Seikatsu"
+        ]
+      },
+      {
+        "id": "E012",
+        "title": "Ajin",
+        "subTitle": "",
+        "year": "2016 - 2017",
+        "acceptedAnswers": [
+          "Ajin",
+          "Ajin: Demi-Human"
         ]
       }
     ]

@@ -238,6 +238,14 @@ $answer-reveal-flip-easing: ease-in-out;
 		}
 	}
 
+	&__meta {
+		// margin-top: 8px;
+		font-size: 18px;
+		font-weight: 400;
+		text-transform: none;
+		opacity: 0.85;
+	}
+
 	&__text_wrapper.appear &__text {
 		width: 100vw;
 	}
