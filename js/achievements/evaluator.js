@@ -1,3 +1,4 @@
+import { migrateScoreKey } from '../config.js';
 import { getCumulativeBestScoresByInitials } from '../lib/leaderboard-scores.js';
 
 const COMPARE_OPS = {

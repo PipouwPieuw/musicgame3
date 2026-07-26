@@ -23,6 +23,11 @@ export const SCORE_KEYS = [
     'Vignettes_Glitched',
 ];
 
+/** Score keys that appear on Classement (points boards). Codex is discovery-only. */
+export const LEADERBOARD_SCORE_KEYS = SCORE_KEYS.filter(function (key) {
+    return key !== 'Codex';
+});
+
 /** French display labels for SCORE_KEYS. */
 export const SCORE_KEY_LABELS = {
     Codex: 'Codex',
@@ -33,14 +38,10 @@ export const SCORE_KEY_LABELS = {
 };
 
 /**
- * UI grouping for Classement / Statistiques: mode label, then optional difficulty labels.
- * Persistence still uses flat SCORE_KEYS; difficultyLabel null = no ladder (Codex).
+ * UI grouping for Classement: mode label, then optional difficulty labels.
+ * Persistence still uses flat SCORE_KEYS; Codex is omitted (no points board).
  */
 export const SCORE_KEY_GROUPS = [
-    {
-        modeLabel: 'Codex',
-        keys: [{ key: 'Codex', difficultyLabel: null }],
-    },
     {
         modeLabel: 'Vignettes',
         keys: [
@@ -67,6 +68,12 @@ const DROPPED_SCORE_KEYS = {
     Vignettes_Infernal: true,
     Vignettes_Extrême: true,
 };
+
+/**
+ * Marker in seenUnlocks: legacy Codex/Classique point score tuples were purged.
+ * After this flag, new Codex score rows store identified-track counts (not points).
+ */
+export const SEEN_UNLOCK_CODEX_NO_POINTS = '__codex_no_points';
 
 /**
  * Marker in seenUnlocks: Facile/Moyen/Difficile/Glitched ladder migration applied.
@@ -180,7 +187,7 @@ export function migrateStatMap(map, options) {
 
 /**
  * @param {Array} scores
- * @param {{ remapOldDifficile?: boolean }} [options]
+ * @param {{ remapOldDifficile?: boolean, purgeCodexPointScores?: boolean }} [options]
  */
 export function migrateScoresList(scores, options) {
     if (!scores || !scores.length) {
@@ -188,6 +195,7 @@ export function migrateScoresList(scores, options) {
     }
 
     const remapOldDifficile = Boolean(options && options.remapOldDifficile);
+    const purgeCodexPointScores = Boolean(options && options.purgeCodexPointScores);
 
     const migrated = [];
     for (let i = 0; i < scores.length; i++) {
@@ -203,6 +211,10 @@ export function migrateScoresList(scores, options) {
             key = migrateScoreKey(key);
         }
         if (!key || SCORE_KEYS.indexOf(key) === -1) {
+            continue;
+        }
+        // One-shot: drop legacy Codex/Classique/Normal point rows before identified-count era.
+        if (purgeCodexPointScores && key === 'Codex') {
             continue;
         }
         next[0] = key;
@@ -273,7 +285,7 @@ export const VIGNETTES_DIFFICULTY_ENABLED = {
     1: true,
     2: true,
     3: true,
-    4: true,
+    4: false,
 };
 
 /**

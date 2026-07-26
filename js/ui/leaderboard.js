@@ -356,6 +356,13 @@ export function updateStatsGamesPlayed($) {
     });
 }
 
+export function updateStatsCodexIdentified($) {
+    const count = Array.isArray(gameState.playerData?.foundTracksIds)
+        ? gameState.playerData.foundTracksIds.length
+        : 0;
+    $('.js-codex-identified-count').text(count);
+}
+
 export function updateStatsAnswers($) {
     $('.js-good-answers').each(function () {
         const level = $(this).attr('rel');

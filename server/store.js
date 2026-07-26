@@ -6,6 +6,7 @@ import {
     migrateSeenUnlocksMap,
     migrateStatMap,
     SCORE_KEYS,
+    SEEN_UNLOCK_CODEX_NO_POINTS,
     SEEN_UNLOCK_LADDER_V2,
     shouldRemapOldDifficileToMoyen,
 } from '../js/config.js';
@@ -22,7 +23,10 @@ export function createDefaultProfile(username) {
         wrong_answers: emptyScoreMap(),
         scores: [],
         foundTracksIds: [],
-        seenUnlocks: { [SEEN_UNLOCK_LADDER_V2]: true },
+        seenUnlocks: {
+            [SEEN_UNLOCK_LADDER_V2]: true,
+            [SEEN_UNLOCK_CODEX_NO_POINTS]: true,
+        },
         unlockedAchievements: [],
         lastHeldGlobalTrophies: [],
     };
@@ -73,7 +77,11 @@ export function normalizeProfile(profile) {
     profile.lastHeldGlobalTrophies = normalizeHeldGlobalTrophies(profile.lastHeldGlobalTrophies);
 
     const remapOldDifficile = shouldRemapOldDifficileToMoyen(profile);
-    const migrateOptions = { remapOldDifficile: remapOldDifficile };
+    const purgeCodexPointScores = !profile.seenUnlocks[SEEN_UNLOCK_CODEX_NO_POINTS];
+    const migrateOptions = {
+        remapOldDifficile: remapOldDifficile,
+        purgeCodexPointScores: purgeCodexPointScores,
+    };
 
     profile.games_played = migrateStatMap(profile.games_played, migrateOptions);
     profile.good_answers = migrateStatMap(profile.good_answers, migrateOptions);
@@ -84,6 +92,7 @@ export function normalizeProfile(profile) {
         profile.seenUnlocks = {};
     }
     profile.seenUnlocks[SEEN_UNLOCK_LADDER_V2] = true;
+    profile.seenUnlocks[SEEN_UNLOCK_CODEX_NO_POINTS] = true;
 
     for (const name of SCORE_KEYS) {
         if (profile.games_played[name] == null) {

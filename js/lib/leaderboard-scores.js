@@ -1,4 +1,4 @@
-import { DEFAULTTRACKSBYGAME, migrateScoresList, SCORE_KEYS } from '../config.js';
+import { LEADERBOARD_SCORE_KEYS, DEFAULTTRACKSBYGAME, migrateScoresList } from '../config.js';
 
 export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
     for (const element in allScores) {
@@ -31,8 +31,8 @@ export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
         }
     }
 
-    for (const difficulty in SCORE_KEYS) {
-        const key = SCORE_KEYS[difficulty];
+    for (let i = 0; i < LEADERBOARD_SCORE_KEYS.length; i++) {
+        const key = LEADERBOARD_SCORE_KEYS[i];
         const difficultyTableCustom = [];
         for (const playerName in leaderboardCustom[key]) {
             difficultyTableCustom.push(leaderboardCustom[key][playerName]);
@@ -54,9 +54,9 @@ export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
 export function getCumulativeBestScoresByInitials(allScores) {
     const leaderboard = {};
     const leaderboardCustom = {};
-    for (const i in SCORE_KEYS) {
-        leaderboard[SCORE_KEYS[i]] = {};
-        leaderboardCustom[SCORE_KEYS[i]] = {};
+    for (let i = 0; i < LEADERBOARD_SCORE_KEYS.length; i++) {
+        leaderboard[LEADERBOARD_SCORE_KEYS[i]] = {};
+        leaderboardCustom[LEADERBOARD_SCORE_KEYS[i]] = {};
     }
 
     const [leaderboardResult] = returnBestScores(allScores, leaderboard, leaderboardCustom);

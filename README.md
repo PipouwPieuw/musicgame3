@@ -188,9 +188,9 @@ Heart button on track display (hidden on difficulty > 2). Toggles track index in
 
 ### 7. End game
 
-- Push score tuple `[difficultyName, trackCount, score]` to `playerData.scores`
-- Update local profile: scores, games played, good/wrong answers
-- Show end screen with difficulty label and final score
+- **Vignettes:** push score tuple `[scoreKey, trackCount, points]` to `playerData.scores`; show Score on end screen
+- **Codex:** push `[Codex, trackCount, identifiedCount]`; merge session finds into `foundTracksIds`; show Identifiés on end screen (no points leaderboard)
+- Update games played (and Vignettes good/wrong answers)
 - Options: **Rejouer** or **Retour au menu**
 
 ---
@@ -240,15 +240,12 @@ Opened via the trophy button in the top bar. Four tabs:
 
 ### Classement
 
-Leaderboards built from all rows in `scores`, split standard vs custom games, sorted by points per difficulty.
+Leaderboards for **Vignettes** difficulties only (Codex has no points board), split standard vs custom games, sorted by points.
 
 ### Statistiques
 
-Per-difficulty grid for the logged-in user:
-
-- Games played
-- Correct / incorrect answers
-- Best scores
+- **Codex:** games played + identified tracks (lifetime unique finds)
+- **Vignettes:** games played, correct / incorrect answers, best scores per difficulty
 
 ### Favoris
 

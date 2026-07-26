@@ -65,14 +65,14 @@ export function recordWrongAnswer() {
 }
 
 export function applyCorrectAnswer($) {
-    recordGoodAnswer();
     animateCorrectAnswer($);
 
-    // Codex is discovery-only: no points, streak, or score HUD updates.
+    // Codex is discovery-only: no answer stats, points, streak, or score HUD.
     if (isCodexMode()) {
         return;
     }
 
+    recordGoodAnswer();
     incrementStreak();
     const scoreIncrement = (POINTSBYANSWER + gameState.streakBonus) * gameState.pointsMultiplier;
     gameState.score += scoreIncrement;
@@ -86,6 +86,11 @@ export function applyCorrectAnswer($) {
 
 export function applyWrongAnswer($) {
     playWrongSound();
+
+    if (isCodexMode()) {
+        return;
+    }
+
     recordWrongAnswer();
     resetStreak($);
 }

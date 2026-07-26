@@ -1,6 +1,6 @@
 import {
     DEFAULTTRACKSBYGAME,
-    SCORE_KEYS,
+    LEADERBOARD_SCORE_KEYS,
     DEVMODE,
     GAME_MODE_VIGNETTES,
     KEYWORD_MIN_LENGTH,
@@ -50,6 +50,7 @@ import {
     syncStatsDifficultyColumns,
     updateStatsAnswers,
     updateStatsBestScore,
+    updateStatsCodexIdentified,
     updateStatsGamesPlayed,
 } from './ui/leaderboard.js';
 import {
@@ -133,17 +134,19 @@ async function loadPlayerSession(username) {
 }
 
 async function endGame() {
-    if (!isCodexMode()) {
-        gameState.playerData.scores.push([getScoreKey(), gameState.tracksByGame, gameState.score]);
-    }
+    const identifiedCount = isCodexMode() ? gameState.foundTracksIds.length : 0;
 
     if (isCodexMode()) {
+        gameState.playerData.scores.push([getScoreKey(), gameState.tracksByGame, identifiedCount]);
+
         for (let id of gameState.foundTracksIds) {
             if (!gameState.playerData.foundTracksIds.includes(id)) {
                 gameState.playerData.foundTracksIds.push(id);
             }
         }
         gameState.foundTracksIds = [];
+    } else {
+        gameState.playerData.scores.push([getScoreKey(), gameState.tracksByGame, gameState.score]);
     }
 
     markVignettesUnlockIfNeeded();
@@ -155,6 +158,7 @@ async function endGame() {
     gameState.playerData.games_played[scoreKey] += 1;
     updateStatsGamesPlayed($);
     updateStatsAnswers($);
+    updateStatsCodexIdentified($);
 
     try {
         await savePlayerProfile(gameState.username, gameState.playerData);
@@ -166,7 +170,16 @@ async function endGame() {
     $('.js-wrapper').removeClass('game_started');
     $('.js-wrapper').addClass('game_ended');
     $('.js-score-wrapper').removeClass('visible');
-    $('.js-end-game-score').toggleClass('is-hidden', isCodexMode());
+
+    if (isCodexMode()) {
+        $('.js-end-game-score-label').text('Identifiés');
+        $('.js-score').text(identifiedCount);
+    } else {
+        $('.js-end-game-score-label').text('Score');
+        $('.js-score').text(gameState.score);
+    }
+    $('.js-end-game-score').removeClass('is-hidden');
+
     if (gameState.difficultyLevel == 4) {
         document.body.style.setProperty('--glitchedOpacity', 0);
         $('body').removeClass('glitched_halfgame');
@@ -524,15 +537,16 @@ function bindEvents() {
         updateStatsGamesPlayed($);
         updateStatsAnswers($);
         updateStatsBestScore($);
+        updateStatsCodexIdentified($);
         syncStatsDifficultyColumns($);
 
         getAllScores().then(function (result) {
             $('.js-leaderboard-content').empty();
             const leaderboard = {};
             const leaderboardCustom = {};
-            for (const i in SCORE_KEYS) {
-                leaderboard[SCORE_KEYS[i]] = {};
-                leaderboardCustom[SCORE_KEYS[i]] = {};
+            for (let i = 0; i < LEADERBOARD_SCORE_KEYS.length; i++) {
+                leaderboard[LEADERBOARD_SCORE_KEYS[i]] = {};
+                leaderboardCustom[LEADERBOARD_SCORE_KEYS[i]] = {};
             }
             const [classic, custom] = returnBestScores(result, leaderboard, leaderboardCustom);
             buildLeaderboard($, classic, 'Classement parties standards');
