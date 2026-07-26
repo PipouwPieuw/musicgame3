@@ -97,7 +97,9 @@ async function fetchGenre(genreId, genreUrl) {
 
     return {
         label: payload.label.trim(),
-        tracks: payload.tracks,
+        tracks: payload.tracks.map(function (track) {
+            return Object.assign({}, track, { genreId: genreId });
+        }),
     };
 }
 

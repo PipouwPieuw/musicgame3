@@ -81,6 +81,12 @@ export const SEEN_UNLOCK_CODEX_NO_POINTS = '__codex_no_points';
  */
 export const SEEN_UNLOCK_LADDER_V2 = '__ladder_v2';
 
+/**
+ * Marker in seenUnlocks: scoring v2 applied (base + streak cap + speed; Vignettes scores purged).
+ * After this flag, unlocks use perfectClears (20/20) instead of numeric perfect scores.
+ */
+export const SEEN_UNLOCK_SCORING_V2 = '__scoring_v2';
+
 /** Map legacy single-axis keys to SCORE_KEYS. */
 export const LEGACY_SCORE_KEY_MAP = {
     Normal: 'Codex',
@@ -187,7 +193,7 @@ export function migrateStatMap(map, options) {
 
 /**
  * @param {Array} scores
- * @param {{ remapOldDifficile?: boolean, purgeCodexPointScores?: boolean }} [options]
+ * @param {{ remapOldDifficile?: boolean, purgeCodexPointScores?: boolean, purgeVignettesScores?: boolean }} [options]
  */
 export function migrateScoresList(scores, options) {
     if (!scores || !scores.length) {
@@ -196,6 +202,7 @@ export function migrateScoresList(scores, options) {
 
     const remapOldDifficile = Boolean(options && options.remapOldDifficile);
     const purgeCodexPointScores = Boolean(options && options.purgeCodexPointScores);
+    const purgeVignettesScores = Boolean(options && options.purgeVignettesScores);
 
     const migrated = [];
     for (let i = 0; i < scores.length; i++) {
@@ -217,10 +224,85 @@ export function migrateScoresList(scores, options) {
         if (purgeCodexPointScores && key === 'Codex') {
             continue;
         }
+        // One-shot scoring v2: drop Vignettes point rows (incomparable under new formula).
+        if (purgeVignettesScores && key !== 'Codex') {
+            continue;
+        }
         next[0] = key;
         migrated.push(next);
     }
     return migrated;
+}
+
+/**
+ * Legacy perfect score (pre-scoring-v2): base 1, uncapped streak, × difficulty level.
+ * Used only to seed perfectClears during the scoring-v2 migration.
+ */
+export function computeLegacyPerfectScore(tracksByGame, pointsMultiplier = 1) {
+    let score = 0;
+    let streak = 0;
+    for (let i = 0; i < tracksByGame; i++) {
+        streak += 1;
+        const streakBonus = streak - MINSTREAK >= 0 ? streak - MINSTREAK + 1 : 0;
+        score += (1 + streakBonus) * pointsMultiplier;
+    }
+    return score;
+}
+
+/**
+ * From legacy Vignettes score tuples, mark keys that had a full-length perfect run.
+ * @param {Array} scores - already key-migrated list
+ * @param {object} [existing]
+ * @returns {object} perfectClears map (true flags only matter)
+ */
+export function seedPerfectClearsFromLegacyScores(scores, existing) {
+    const perfectClears = {};
+    if (existing && typeof existing === 'object' && !Array.isArray(existing)) {
+        for (const key of Object.keys(existing)) {
+            if (existing[key]) {
+                perfectClears[key] = true;
+            }
+        }
+    }
+
+    if (!scores || !scores.length) {
+        return perfectClears;
+    }
+
+    for (let i = 0; i < scores.length; i++) {
+        const entry = scores[i];
+        if (!entry || entry.length < 3) {
+            continue;
+        }
+        const key = entry[0];
+        const level = SCORE_KEY_DIFFICULTY_LEVEL[key];
+        if (level == null) {
+            continue;
+        }
+        if (entry[1] === DEFAULTTRACKSBYGAME && entry[2] === computeLegacyPerfectScore(DEFAULTTRACKSBYGAME, level)) {
+            perfectClears[key] = true;
+        }
+    }
+
+    return perfectClears;
+}
+
+/**
+ * Normalize perfectClears to a plain object of truthy flags.
+ * @param {object} [map]
+ * @returns {object}
+ */
+export function migratePerfectClearsMap(map) {
+    const result = {};
+    if (!map || typeof map !== 'object' || Array.isArray(map)) {
+        return result;
+    }
+    for (const key of Object.keys(map)) {
+        if (map[key] && SCORE_KEYS.indexOf(key) !== -1 && key !== 'Codex') {
+            result[key] = true;
+        }
+    }
+    return result;
 }
 
 /**
@@ -266,14 +348,32 @@ export const KEYWORD_MIN_LENGTH = 4;
 export const KEYWORD_MAX_LENGTH = 128;
 
 export const MINSTREAK = 3;
+/** Max additive streak bonus; at cap, base points are doubled (hot streak). */
+export const MAX_STREAK_BONUS = 5;
 export const DEFAULT_ACTIVE_GENRES = ['shows2000'];
 export const DEFAULTTRACKSBYGAME = 20;
 export const DEFAULTTRACKDURATION = 30;
+export const MOYENTRACKDURATION = 20;
 export const DIFFICILETRACKDURATION = 10;
 // export const HARDCOREMODETRACKDURATION = 5;
 export const HARDCOREMODETRACKDURATION = 10;
 export const IMAGE_ANSWER_COUNT = 8;
-export const POINTSBYANSWER = 1;
+/** Base points per correct answer by Vignettes difficulty level (1-indexed). */
+export const POINTS_BASE_BY_DIFFICULTY = {
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+};
+/**
+ * Speed bonus from remaining time fraction of the round limit.
+ * First matching threshold (highest first) wins; otherwise 0.
+ */
+export const SPEED_BONUS_THRESHOLDS = [
+    { minRemainingRatio: 0.75, bonus: 3 },
+    { minRemainingRatio: 0.5, bonus: 2 },
+    { minRemainingRatio: 0.25, bonus: 1 },
+];
 export const VIGNETTES_UNLOCK_THRESHOLD = 20;
 export const VIGNETTES_MIN_TRACKS_BY_GAME = 20;
 
@@ -291,13 +391,13 @@ export const VIGNETTES_DIFFICULTY_ENABLED = {
 /**
  * Unlock conditions per Vignettes difficulty level (1-indexed).
  * null = unlocked once the mode is unlocked (and ENABLED).
- * perfectScoreOnPrevious = perfect DEFAULTTRACKSBYGAME run on the previous difficulty.
+ * perfectClearOnPrevious = 20/20 (DEFAULTTRACKSBYGAME, zero wrongs) on the previous difficulty.
  */
 export const VIGNETTES_DIFFICULTY_UNLOCK = {
     1: null,
-    2: { type: 'perfectScoreOnPrevious' },
-    3: { type: 'perfectScoreOnPrevious' },
-    4: { type: 'perfectScoreOnPrevious' },
+    2: { type: 'perfectClearOnPrevious' },
+    3: { type: 'perfectClearOnPrevious' },
+    4: { type: 'perfectClearOnPrevious' },
 };
 
 /** Maps SCORE_KEYS to Vignettes difficulty level (null = Codex / no ladder). */

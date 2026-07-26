@@ -1,4 +1,9 @@
-import { DEFAULTTRACKDURATION, DIFFICILETRACKDURATION, HARDCOREMODETRACKDURATION } from '../config.js';
+import {
+    DEFAULTTRACKDURATION,
+    DIFFICILETRACKDURATION,
+    HARDCOREMODETRACKDURATION,
+    MOYENTRACKDURATION,
+} from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { gameState, usesRandomTrackStart } from './state.js';
 import { setPlaybackRate } from './scoring.js';
@@ -38,6 +43,9 @@ export function getRoundDuration() {
         return DEFAULTTRACKDURATION;
     }
     if (gameState.difficultyLevel === 2) {
+        return MOYENTRACKDURATION;
+    }
+    if (gameState.difficultyLevel === 3) {
         return DIFFICILETRACKDURATION;
     }
     return HARDCOREMODETRACKDURATION;
@@ -53,6 +61,16 @@ function getElapsedSeconds() {
 
 function getRemainingTime() {
     return Math.max(0, getRoundDuration() - getElapsedSeconds());
+}
+
+/** Remaining time as a fraction of the round limit (1 = full time left, 0 = timed out). */
+export function getRoundRemainingRatio() {
+    const totalDuration = getRoundDuration();
+    if (!(totalDuration > 0)) {
+        return 0;
+    }
+
+    return Math.max(0, Math.min(1, getRemainingTime() / totalDuration));
 }
 
 function isRoundTimeUp() {

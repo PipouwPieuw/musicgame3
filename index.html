@@ -103,16 +103,16 @@
                                 <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
                                         <li><span>Les extraits durent <b><u style="color: green">30 secondes</u></b></span></li>
-                                        <li><span>Multiplicateur de points : <b><u style="color: green">x1</u></b></span></li>
+                                        <li><span>Points de base : <b><u style="color: green">1</u></b></span></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-2">
                                 <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
-                                        <li><span>Les extraits durent <b><u style="color: #0000FF">10 secondes</u></b></span></li>
+                                        <li><span>Les extraits durent <b><u style="color: #0000FF">20 secondes</u></b></span></li>
                                         <li><span>La portion jouée de chaque extrait est <b><u style="color: #0000FF">aléatoire</u></b></span></li>
-                                        <li><span>Multiplicateur de points : <b><u style="color: #0000FF">x2</u></b></span></li>
+                                        <li><span>Points de base : <b><u style="color: #0000FF">2</u></b></span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                                         <li><span>Les extraits durent <b><u style="color: #FF0000">10 secondes</u></b></span></li>
                                         <li><span>La portion jouée de chaque extrait est <b><u style="color: #FF0000">aléatoire</u></b></span></li>
                                         <li><span>Des <b><u style="color: #FF0000">images alternatives</u></b></span> peuvent être affichées</li>
-                                        <li><span>Multiplicateur de points : <b><u style="color: #FF0000">x3</u></b></span></li>
+                                        <li><span>Points de base : <b><u style="color: #FF0000">3</u></b></span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
                                         <li><span>Les extraits durent <b><u>10 secondes</u></b></span></li>
                                         <li><span>Extraits de plus en plus <b><u style="color: #000000">glitchés</u></b> et portions aléatoires</span></li>
                                         <li><span>Les images deviennent progresivement <b><u style="color: #000000">corrompues</u></b></span></li>
-                                        <li><span>Multiplicateur de points : <b><u style="color: #000000">x4</u></b></span></li>
+                                        <li><span>Points de base : <b><u style="color: #000000">4</u></b></span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@
                             <label class="settings_panel__label panel_label" for="tracksAmount">Nombre de morceaux par partie</label>
                             <span class="settings_panel__description">Pour une partie standard : 20</span>
                         </div>
-                        <input class="settings_panel__number panel_input text_symbol js-nb-tracks" type="number" id="tracksAmount" min="1" max="1000" value="40"/>
+                        <input class="settings_panel__number panel_input js-nb-tracks" type="number" id="tracksAmount" min="1" max="1000" value="40"/>
                     </div>
                 </div>
                 <p class="settings_panel__vignettes_notice js-vignettes-pool-notice is-hidden">Trouvez au moins 20 morceaux en mode Codex pour jouer en Vignettes.</p>
@@ -192,34 +192,38 @@
         <audio id="audio_player" class="audio_player js-audio-player" src=""></audio>
         <audio id="audio_player_hardcore" class="audio_player js-audio-player-hardcore" loop="true" src=""></audio>
         <div class="game_display">    
-            <div class="game_display__top">       
-                <div class="track_display__wrapper text_symbol">
+            <div class="game_display__top">    
+                <div class="track_display__wrapper">
                     <span class="game_top_bar">
                         <div class="game_top_bar__tracks">
-                            <span class="js-track-number">0</span>/<span class="js-track-total">40</span>
+                            <span class="js-track-number">0</span>/<span class="js-track-total">20</span>
                         </div>
                     </span>
-                    <!-- <div class="track_display">
-                        <div class="track_display__half track_display__half--cover js-track-cover">
-                            <img class="track_display__cover js-cover" src="assets/images/default.png" alt=""/>
-                        </div>
-                        <div class="track_display__details track_display__half track_display__half--details">
-                            <div class="track_display__content">
-                                <div class="track_display__name js-name"></div>
-                                <div class="track_display__description js-description"></div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div> 
-                <span class="score_wrapper text_symbol_halfgame js-score-wrapper">
+                <div class="bar_countdown__wrapper">
+                    <span class="track_display__countdown_wrapper js-countdown-wrapper">
+                        <span class="track_display__countdown js-countdown"></span>
+                    </span>
+                    <div class="bar_countdown__inner">
+                        <span class="bar_countdown__lines">
+                            <span class="bar_countdown__line bar_countdown__line--quarter js-countdown-quarter"></span>
+                            <span class="bar_countdown__line bar_countdown__line--half js-countdown-half"></span>
+                            <span class="bar_countdown__line bar_countdown__line--three-quarters js-countdown-three-quarters"></span>
+                        </span>
+                        <div class="bar_countdown">
+                            <div class="bar_countdown__inner js-countdown-bar"></div>
+                        </div>
+                    </div>
+                </div>   
+                <span class="score_wrapper js-score-wrapper">
                     <div class="score_wrapper__col">
                         <div class="score_wrapper__box">
-                            <span class="score_multiplicator default_tooltip__wrapper js-multiplicator-wrapper" data-value="1">
-                                <span class="score_multiplicator__prefix">x</span>
-                                <span class="js-multiplicator">1</span>                        
-                                <span class="default_tooltip default_transition">Le multiplicateur de points</span>
+                            <span class="score_base default_tooltip__wrapper js-base-wrapper" data-value="1">
+                                <span class="score_base__prefix">+</span>
+                                <span class="js-base">1</span>                        
+                                <span class="default_tooltip default_transition">Points de base par bonne réponse</span>
                             </span>
-                            <span class="score_main default_tooltip__wrapper">
+                            <span class="score_main default_tooltip__wrapper js-score-main">
                                 <span class="js-score">0</span>
                                 <span class="default_tooltip default_transition">Le score</span>
                             </span>
@@ -252,13 +256,7 @@
                 </div>
                 <!-- <p class="answer_form__feedback js-answer-feedback" aria-live="polite"></p> -->
             </form>
-            <ul class="list_answers js-answers visually_hidden" aria-label="Choix de pochettes"></ul>
-            <div class="bar_countdown__wrapper text_symbol">
-                <div class="bar_countdown">
-                    <div class="bar_countdown__inner js-countdown-bar"></div>
-                </div>
-                <span class="track_display__countdown js-countdown"></span>
-            </div>
+            <ul class="list_answers js-answers visually_hidden" aria-label="Choix de vignettes"></ul>
         </div>
         <div class="leaderboard panel_box js-leaderboard">
             <div class="panel_tabs__tabs js-tabs-wrapper">

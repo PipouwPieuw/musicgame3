@@ -4,6 +4,7 @@ import { findTrackById, getPreviewPath, getTrackMetadata } from '../lib/track-ut
 import { isTrackDiscovery, setAnswerRevealContent } from '../ui/answer-reveal.js';
 import {
     getCountdownPercentage,
+    getRoundRemainingRatio,
     pauseAudio,
     prepareRoundAudio,
     resetRoundTimer,
@@ -130,6 +131,9 @@ function handleWrongAttempt($) {
 }
 
 async function finishRound($, audioPlayer) {
+    const remainingRatio = getRoundRemainingRatio();
+    const countdownPercentage = getCountdownPercentage($, audioPlayer);
+
     gameState.isPlaying = false;
     resetRoundTimer();
     pauseAudio($);
@@ -142,7 +146,6 @@ async function finishRound($, audioPlayer) {
         $form.addClass('answer_form--correct');
     }
 
-    const countdownPercentage = getCountdownPercentage($, audioPlayer);
     resetCountdownBar($, countdownPercentage + '%');
 
     playCorrectSound();
@@ -158,7 +161,7 @@ async function finishRound($, audioPlayer) {
         discovery,
     });
 
-    applyCorrectAnswer($);
+    applyCorrectAnswer($, remainingRatio);
 
     enableNextRoundInput($);
     scheduleNextRound();

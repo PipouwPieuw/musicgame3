@@ -4,17 +4,34 @@ import { shuffleArray } from '../lib/shuffle.js';
 import { getCoverPath, pickCoverStem } from '../lib/track-utils.js';
 import { usesAlternateCovers } from './state.js';
 
+/**
+ * Build IMAGE_ANSWER_COUNT vignette choices for the playing track.
+ * Prefers unlocked covers from the same genre; fills remaining slots from other genres.
+ */
 export function buildImageChoices(correctTrackId, tracks) {
     const choices = [{ trackId: correctTrackId, isCorrect: true }];
-    const distractorIds = shuffleArray(
-        tracks
-            .map(function (track) {
-                return track.id;
-            })
-            .filter(function (trackId) {
-                return trackId !== correctTrackId;
-            })
-    );
+    const correctTrack = tracks.find(function (track) {
+        return track.id === correctTrackId;
+    });
+    const correctGenreId = correctTrack && correctTrack.genreId;
+
+    const distractors = tracks.filter(function (track) {
+        return track.id !== correctTrackId;
+    });
+
+    const sameGenre = [];
+    const otherGenre = [];
+
+    distractors.forEach(function (track) {
+        if (correctGenreId && track.genreId === correctGenreId) {
+            sameGenre.push(track.id);
+        } else {
+            otherGenre.push(track.id);
+        }
+    });
+
+    // Same-genre distractors first (shuffled), then other genres as fallback.
+    const distractorIds = shuffleArray(sameGenre).concat(shuffleArray(otherGenre));
 
     for (const trackId of distractorIds) {
         if (choices.length >= IMAGE_ANSWER_COUNT) {

@@ -4,7 +4,8 @@
 	// justify-content: center;
 	flex-direction: column;
 	min-height: 100vh;
-	max-width: 610px;
+	// max-width: 610px;
+	max-width: 800px;
 	margin: auto;
 	padding: 120px 10px 10px 10px;
 	-webkit-transition: opacity ease .4s;
@@ -37,10 +38,7 @@
 #wrapper.game_started .start_game,
 #wrapper.game_ended .start_game,
 #wrapper:not(.game_ended) .end_game,
-.visually_hidden.visually_hidden,
-body.glitched:not(.no_glitch) .text_no_glitch,
-body:not(.glitched) .text_glitch,
-body.no_glitch .text_glitch {
+.visually_hidden.visually_hidden {
 	display: none;
 }
 

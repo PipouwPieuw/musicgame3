@@ -2,18 +2,13 @@ import { GAME_MODE_CODEX, GAME_MODE_VIGNETTES, SEGMENT_DURATIONS_1 } from '../co
 import { gameState, getDisplayLabel, isCodexMode, isImageAnswerMode } from './state.js';
 
 /**
- * Apply difficulty ladder (audio, multiplier, glitch).
+ * Apply difficulty ladder (audio, glitch).
  * Answer UI (typed vs vignettes) is driven by gameMode via updateAnswerModeUI.
+ * Scoring base is looked up from POINTS_BASE_BY_DIFFICULTY (no flat multiplier).
  */
 export function applyDifficulty(level) {
     const difficultyLevel = parseInt(level, 10);
     gameState.difficultyLevel = difficultyLevel;
-
-    if (isCodexMode()) {
-        gameState.pointsMultiplier = 1;
-    } else {
-        gameState.pointsMultiplier = difficultyLevel;
-    }
 
     const audioPlayer = document.getElementById('audio_player');
     const audioPlayerHardcore = document.getElementById('audio_player_hardcore');
@@ -69,8 +64,6 @@ export function updateDifficultyUI($, displayLabel) {
         $('.js-difficulty-details').removeClass('visible');
     }
 
-    $('.js-multiplicator').text(gameState.pointsMultiplier);
-    $('.js-multiplicator-wrapper').attr('data-value', gameState.pointsMultiplier);
     $('.js-track-cover').removeClass('hidden');
 
     $('.js-like-button').toggleClass('visually_hidden', gameState.difficultyLevel > 2);

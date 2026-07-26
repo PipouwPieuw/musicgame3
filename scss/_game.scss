@@ -1,8 +1,9 @@
 .game_display {
+	width: 100%;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	width: 620px;
-	max-width: 100%;
+	// width: 620px;
+	// max-width: 100%;
 	display: flex;
     flex-direction: column;
     gap: 30px;
@@ -12,10 +13,15 @@
 		gap: 20px;
 		justify-content: space-between;
 	}
+
+	@media only screen and (min-width: 641px) {
+		padding-top: 100px;
+	}
 }
 .track_display__wrapper {
-	width: 100%;
-	flex: 1;
+	// width: 100%;
+	min-width: 75px;
+	flex: 0;
 }
 .track_display {
 	width: 100%;
@@ -79,57 +85,62 @@
 	justify-content: space-between;
 	align-items: center;
 }
-.track_display__countdown {
-	/*width: 60px;
-	height: 60px;*/
-	flex: 0 0 30px;
-/*	background: black;*/
-/*	color: white;*/
-/*	border-left: 4px solid black;*/
-/*	border-bottom: 4px solid black;*/
-/*	border-radius: 0 0 0 var(--radius);*/
-/*	font-size: 30px;*/
-	font-size: 24px;
-	font-weight: 700;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-.track_display__like {
-/*	width: 60px;*/
-	width: 40px;
-	height: 45px;
-	background-size: 40px auto;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-color: unset;
-	border: 0;
-	padding: 0;
-	position: relative;
-	/*position: absolute;
-	right: 0;
-	bottom: 0;*/
-}
-@media only screen and (max-width: 640px) {
-	.track_display__countdown {
-		font-size: 26px;
+.track_display {
+
+	&__countdown_wrapper {
+		position: relative;
+		border-top: 2px solid transparent;
+		border-bottom: 2px solid transparent;
 	}
-	.track_display__countdown,
-	.track_display__like {
-		width: 50px;
-		height: 50px;
+	
+	&__countdown {
+		height: 100%;
+		flex: 0 0 30px;
+		min-width: 30px;
+		font-size: 24px;
+		font-weight: 700;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		
+		@media only screen and (max-width: 640px) {
+			font-size: 26px;
+			width: 50px;
+			height: 50px;
+		}
+	}
+	
+	&__like {
+		width: 40px;
+		height: 45px;
+		background-size: 40px auto;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-color: unset;
+		border: 0;
+		padding: 0;
+		position: relative;
+		
+		@media only screen and (max-width: 640px) {
+			width: 50px;
+			height: 50px;
+		}
+		
+		&[data-liked="false"] {
+			background-image: url(assets/icons/heart-empty.svg);
+		}
+		
+		&[data-liked="true"] {
+			background-image: url(assets/icons/heart-full.svg);
+		}
+		
+		&[data-liked="false"] [data-liked="true"],
+		&[data-liked="true"] [data-liked="false"] {
+			display: none;
+		}
 	}
 }
-.track_display__like[data-liked="false"] {
-	background-image: url(assets/icons/heart-empty.svg);
-}
-.track_display__like[data-liked="true"] {
-	background-image: url(assets/icons/heart-full.svg);
-}
-.track_display__like[data-liked="false"] [data-liked="true"],
-.track_display__like[data-liked="true"] [data-liked="false"] {
-	display: none;
-}
+
 .default_tooltip {
 	position: absolute;
 	bottom: calc(100% + 5px);

@@ -8,7 +8,7 @@ import {
     GAME_MODE_VIGNETTES,
     HARDCOREMODETRACKDURATION,
     MODIFIER_RATES,
-    POINTSBYANSWER,
+    MOYENTRACKDURATION,
     SCORE_KEY_LABELS,
     SEGMENT_DURATIONS_1,
     SEGMENT_DURATIONS_2,
@@ -24,7 +24,6 @@ export const gameState = {
     difficultyLevel: 1,
     trackStart: 0,
     roundStartTime: 0,
-    pointsMultiplier: 1,
     streak: 0,
     streakBonus: 0,
     isPlaying: false,
@@ -42,6 +41,8 @@ export const gameState = {
     foundTracksIds: [],
     /** Track IDs already used this game (including the current round). */
     sessionTrackIds: [],
+    /** Wrongs + timeouts this Vignettes session (for 20/20 perfect clears). */
+    sessionWrongCount: 0,
     activeGenres: [...DEFAULT_ACTIVE_GENRES],
 };
 
@@ -90,6 +91,9 @@ export function getClipDuration() {
         return DEFAULTTRACKDURATION;
     }
     if (gameState.difficultyLevel === 2) {
+        return MOYENTRACKDURATION;
+    }
+    if (gameState.difficultyLevel === 3) {
         return DIFFICILETRACKDURATION;
     }
     return HARDCOREMODETRACKDURATION;
@@ -110,8 +114,5 @@ export function resetGameState() {
     gameState.roundStartTime = 0;
     gameState.foundTracksIds = [];
     gameState.sessionTrackIds = [];
-}
-
-export function computeScoreIncrement() {
-    return (POINTSBYANSWER + gameState.streakBonus) * gameState.pointsMultiplier;
+    gameState.sessionWrongCount = 0;
 }

@@ -74,6 +74,12 @@
 
  *
 
+ * -- alter table public.players
+
+ * --   add column if not exists perfect_clears jsonb not null default '{}'::jsonb;
+
+ *
+
  * -- Case-insensitive uniqueness: Pipow and pipow cannot both exist.
 
  * create unique index if not exists players_username_lower_idx

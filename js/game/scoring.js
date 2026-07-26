@@ -1,26 +1,74 @@
-import { MINSTREAK, POINTSBYANSWER } from '../config.js';
+import {
+    MAX_STREAK_BONUS,
+    MINSTREAK,
+    POINTS_BASE_BY_DIFFICULTY,
+    SPEED_BONUS_THRESHOLDS,
+} from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { animateCorrectAnswer } from '../ui/answer-reveal.js';
-import { getRoundDuration } from './audio-player.js';
+import { getRoundDuration, getRoundRemainingRatio } from './audio-player.js';
 import { gameState, getScoreKey, isCodexMode } from './state.js';
 
 const soundRight = new Audio('assets/sounds/right.m4a');
 soundRight.volume = 0.5;
 const soundWrong = new Audio('assets/sounds/wrong.m4a');
 
-/**
- * Max score for an unbroken correct run of `tracksByGame` answers.
- * Matches incrementStreak / applyCorrectAnswer (20 tracks at ×1 → 191).
- */
-export function computePerfectScore(tracksByGame, pointsMultiplier = 1) {
-    let score = 0;
-    let streak = 0;
-    for (let i = 0; i < tracksByGame; i++) {
-        streak += 1;
-        const streakBonus = streak - MINSTREAK >= 0 ? streak - MINSTREAK + 1 : 0;
-        score += (POINTSBYANSWER + streakBonus) * pointsMultiplier;
+export function getStreakBonus(streak) {
+    if (streak < MINSTREAK) {
+        return 0;
     }
-    return score;
+
+    return Math.min(streak - MINSTREAK + 1, MAX_STREAK_BONUS);
+}
+
+export function getSpeedBonus(remainingRatio) {
+    for (let i = 0; i < SPEED_BONUS_THRESHOLDS.length; i++) {
+        const tier = SPEED_BONUS_THRESHOLDS[i];
+        if (remainingRatio > tier.minRemainingRatio) {
+            return tier.bonus;
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Integer points for one correct answer.
+ * @param {{ difficultyLevel: number, streak: number, remainingRatio: number }} params
+ */
+export function computeAnswerPoints({ difficultyLevel, streak, remainingRatio }) {
+    const base = POINTS_BASE_BY_DIFFICULTY[difficultyLevel] || POINTS_BASE_BY_DIFFICULTY[1];
+    const streakBonus = getStreakBonus(streak);
+    const isHotStreak = streakBonus >= MAX_STREAK_BONUS;
+    const effectiveBase = isHotStreak ? base * 2 : base;
+    const speedBonus = getSpeedBonus(remainingRatio);
+
+    return {
+        points: effectiveBase + streakBonus + speedBonus,
+        base: base,
+        effectiveBase: effectiveBase,
+        streakBonus: streakBonus,
+        speedBonus: speedBonus,
+        isHotStreak: isHotStreak,
+        remainingRatio: remainingRatio,
+    };
+}
+
+/** DOM host for the speed bonus tooltip, aligned with the matching countdown marker. */
+function getSpeedIncrementHost(remainingRatio) {
+    const hostsByTier = [
+        '.js-countdown-three-quarters',
+        '.js-countdown-half',
+        '.js-countdown-quarter',
+    ];
+
+    for (let i = 0; i < SPEED_BONUS_THRESHOLDS.length; i++) {
+        if (remainingRatio > SPEED_BONUS_THRESHOLDS[i].minRemainingRatio) {
+            return $(hostsByTier[i]);
+        }
+    }
+
+    return $();
 }
 
 export function playSound(soundElem) {
@@ -41,11 +89,32 @@ export function resetStreak($) {
     gameState.streakBonus = 0;
     $('.js-streak-wrapper').removeClass('active');
     $('.js-streak').text('');
+    syncBaseAndStreakCapUI($);
 }
 
 export function incrementStreak() {
     gameState.streak += 1;
-    gameState.streakBonus = gameState.streak - MINSTREAK >= 0 ? gameState.streak - MINSTREAK + 1 : 0;
+    gameState.streakBonus = getStreakBonus(gameState.streak);
+}
+
+/** Current difficulty base (not doubled). */
+export function getDifficultyBase() {
+    return POINTS_BASE_BY_DIFFICULTY[gameState.difficultyLevel] || POINTS_BASE_BY_DIFFICULTY[1];
+}
+
+/**
+ * Sync .js-base value and streak-cap classes on .js-base / .js-streak-wrapper.
+ * Call on game start, when streak hits the cap, and when streak resets.
+ */
+export function syncBaseAndStreakCapUI($) {
+    const base = getDifficultyBase();
+    const isHotStreak = gameState.streakBonus >= MAX_STREAK_BONUS;
+    const displayBase = isHotStreak ? base * 2 : base;
+
+    $('.js-base').text(displayBase);
+    $('.js-base-wrapper').attr('data-value', displayBase);
+    $('.js-base-wrapper').toggleClass('is-capped', isHotStreak);
+    $('.js-streak-wrapper').toggleClass('is-capped', isHotStreak);
 }
 
 export function recordGoodAnswer() {
@@ -64,7 +133,7 @@ export function recordWrongAnswer() {
     gameState.playerData.wrong_answers[scoreKey] += 1;
 }
 
-export function applyCorrectAnswer($) {
+export function applyCorrectAnswer($, remainingRatio) {
     animateCorrectAnswer($);
 
     // Codex is discovery-only: no answer stats, points, streak, or score HUD.
@@ -72,16 +141,25 @@ export function applyCorrectAnswer($) {
         return;
     }
 
+    const ratio = typeof remainingRatio === 'number' ? remainingRatio : getRoundRemainingRatio();
+
     recordGoodAnswer();
     incrementStreak();
-    const scoreIncrement = (POINTSBYANSWER + gameState.streakBonus) * gameState.pointsMultiplier;
-    gameState.score += scoreIncrement;
 
-    if (gameState.streakBonus > 0) {
+    const breakdown = computeAnswerPoints({
+        difficultyLevel: gameState.difficultyLevel,
+        streak: gameState.streak,
+        remainingRatio: ratio,
+    });
+
+    gameState.score += breakdown.points;
+
+    if (breakdown.streakBonus > 0) {
         $('.js-streak-wrapper').addClass('active');
     }
-    $('.js-streak').text(gameState.streakBonus > 0 ? gameState.streakBonus : '');
-    updateScoreUI($, POINTSBYANSWER * gameState.pointsMultiplier);
+    $('.js-streak').text(breakdown.streakBonus > 0 ? breakdown.streakBonus : '');
+    syncBaseAndStreakCapUI($);
+    updateScoreUI($, breakdown);
 }
 
 export function applyWrongAnswer($) {
@@ -91,30 +169,45 @@ export function applyWrongAnswer($) {
         return;
     }
 
+    gameState.sessionWrongCount += 1;
     recordWrongAnswer();
     resetStreak($);
 }
 
-export function updateScoreUI($, increment = 0) {
+export function updateScoreUI($, breakdown = null) {
     $('.js-score').text(gameState.score);
 
-    if (increment > 0) {
-        $('.js-multiplicator').parent().append($('<span class="score_increment score_increment--base">+' + increment + '</span>'));
-        if (gameState.streakBonus > 0) {
-            $('.js-streak-wrapper').append(
-                $('<span class="score_increment score_increment--streak">+' + gameState.streakBonus * gameState.pointsMultiplier + '</span>')
-            );
-        }
-        setTimeout(function () {
-            $('.score_increment').addClass('animate');
-        }, 10);
-        setTimeout(function () {
-            $('.score_increment').addClass('fade');
-        }, 910);
-        setTimeout(function () {
-            $('.score_increment').remove();
-        }, 1010);
+    if (!breakdown || !(breakdown.points > 0)) {
+        return;
     }
+
+    const $scoreMain = $('.js-base-wrapper');
+    if ($scoreMain.length) {
+        $scoreMain.append($('<span class="score_increment score_increment--base">+' + breakdown.effectiveBase + '</span>'));
+    }
+
+    if (breakdown.streakBonus > 0) {
+        $('.js-streak-wrapper').append(
+            $('<span class="score_increment score_increment--streak">+' + breakdown.streakBonus + '</span>')
+        );
+    }
+
+    if (breakdown.speedBonus > 0) {
+        const $speedHost = getSpeedIncrementHost(breakdown.remainingRatio);
+        if ($speedHost.length) {
+            $speedHost.append($('<span class="score_increment score_increment--speed">+' + breakdown.speedBonus + '</span>'));
+        }
+    }
+
+    setTimeout(function () {
+        $('.score_increment').addClass('animate');
+    }, 10);
+    setTimeout(function () {
+        $('.score_increment').addClass('fade');
+    }, 910);
+    setTimeout(function () {
+        $('.score_increment').remove();
+    }, 1010);
 }
 
 export function updateTrackNumberUI($) {

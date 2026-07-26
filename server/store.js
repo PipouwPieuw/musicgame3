@@ -2,12 +2,15 @@ import {
     emptyScoreMap,
     KEYWORD_MAX_LENGTH,
     KEYWORD_MIN_LENGTH,
+    migratePerfectClearsMap,
     migrateScoresList,
     migrateSeenUnlocksMap,
     migrateStatMap,
     SCORE_KEYS,
     SEEN_UNLOCK_CODEX_NO_POINTS,
     SEEN_UNLOCK_LADDER_V2,
+    SEEN_UNLOCK_SCORING_V2,
+    seedPerfectClearsFromLegacyScores,
     shouldRemapOldDifficileToMoyen,
 } from '../js/config.js';
 import { supabase } from './supabase.js';
@@ -22,10 +25,12 @@ export function createDefaultProfile(username) {
         good_answers: emptyScoreMap(),
         wrong_answers: emptyScoreMap(),
         scores: [],
+        perfectClears: {},
         foundTracksIds: [],
         seenUnlocks: {
             [SEEN_UNLOCK_LADDER_V2]: true,
             [SEEN_UNLOCK_CODEX_NO_POINTS]: true,
+            [SEEN_UNLOCK_SCORING_V2]: true,
         },
         unlockedAchievements: [],
         lastHeldGlobalTrophies: [],
@@ -78,9 +83,11 @@ export function normalizeProfile(profile) {
 
     const remapOldDifficile = shouldRemapOldDifficileToMoyen(profile);
     const purgeCodexPointScores = !profile.seenUnlocks[SEEN_UNLOCK_CODEX_NO_POINTS];
+    const purgeVignettesScores = !profile.seenUnlocks[SEEN_UNLOCK_SCORING_V2];
     const migrateOptions = {
         remapOldDifficile: remapOldDifficile,
         purgeCodexPointScores: purgeCodexPointScores,
+        purgeVignettesScores: false,
     };
 
     profile.games_played = migrateStatMap(profile.games_played, migrateOptions);
@@ -88,11 +95,23 @@ export function normalizeProfile(profile) {
     profile.wrong_answers = migrateStatMap(profile.wrong_answers, migrateOptions);
     profile.scores = migrateScoresList(profile.scores, migrateOptions);
 
+    if (purgeVignettesScores) {
+        profile.perfectClears = migratePerfectClearsMap(
+            seedPerfectClearsFromLegacyScores(profile.scores, profile.perfectClears)
+        );
+        profile.scores = migrateScoresList(profile.scores, {
+            purgeVignettesScores: true,
+        });
+    } else {
+        profile.perfectClears = migratePerfectClearsMap(profile.perfectClears);
+    }
+
     if (!profile.seenUnlocks) {
         profile.seenUnlocks = {};
     }
     profile.seenUnlocks[SEEN_UNLOCK_LADDER_V2] = true;
     profile.seenUnlocks[SEEN_UNLOCK_CODEX_NO_POINTS] = true;
+    profile.seenUnlocks[SEEN_UNLOCK_SCORING_V2] = true;
 
     for (const name of SCORE_KEYS) {
         if (profile.games_played[name] == null) {
@@ -163,6 +182,7 @@ function rowToProfile(row) {
         good_answers: row.good_answers,
         wrong_answers: row.wrong_answers,
         scores: row.scores,
+        perfectClears: row.perfect_clears,
         foundTracksIds: row.found_tracks_ids,
         seenUnlocks: normalizeSeenUnlocks(row.seen_unlocks, row.has_seen_vignettes_mode),
         unlockedAchievements: row.unlocked_achievements,
@@ -187,6 +207,7 @@ function profileToRow(username, profile, keyword) {
         good_answers: normalized.good_answers,
         wrong_answers: normalized.wrong_answers,
         scores: normalized.scores,
+        perfect_clears: normalized.perfectClears || {},
         found_tracks_ids: normalized.foundTracksIds,
         seen_unlocks: normalized.seenUnlocks || {},
         // Keep legacy column in sync while it still exists in the DB.

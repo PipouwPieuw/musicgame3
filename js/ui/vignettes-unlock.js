@@ -1,5 +1,4 @@
 import {
-    DEFAULTTRACKSBYGAME,
     DIFFICULTYNAMES,
     SCORE_KEY_DIFFICULTY_LEVEL,
     SEEN_UNLOCK_VIGNETTES,
@@ -8,7 +7,6 @@ import {
     VIGNETTES_UNLOCK_THRESHOLD,
 } from '../config.js';
 import { applyDifficulty, updateDifficultyUI } from '../game/difficulty.js';
-import { computePerfectScore } from '../game/scoring.js';
 import { gameState, isImageAnswerMode } from '../game/state.js';
 
 /** Set when unlock happens mid-session so the expand animation can play on return to settings. */
@@ -49,24 +47,14 @@ export function setUnlockSeen(playerData, unlockKey) {
 }
 
 /**
- * Whether the player has a full-length perfect run stored for this score key.
- * Uses DEFAULTTRACKSBYGAME and the Vignettes difficulty multiplier (level === multiplier).
+ * Whether the player has a full-length (DEFAULTTRACKSBYGAME) zero-wrong clear for this score key.
  */
-export function hasPerfectScoreForKey(playerData, scoreKey) {
-    const level = SCORE_KEY_DIFFICULTY_LEVEL[scoreKey];
-    if (level == null) {
+export function hasPerfectClearForKey(playerData, scoreKey) {
+    if (!scoreKey || SCORE_KEY_DIFFICULTY_LEVEL[scoreKey] == null) {
         return false;
     }
 
-    const perfect = computePerfectScore(DEFAULTTRACKSBYGAME, level);
-    const scores = playerData?.scores || [];
-    for (let i = 0; i < scores.length; i++) {
-        const entry = scores[i];
-        if (entry[0] === scoreKey && entry[1] === DEFAULTTRACKSBYGAME && entry[2] === perfect) {
-            return true;
-        }
-    }
-    return false;
+    return Boolean(playerData?.perfectClears && playerData.perfectClears[scoreKey]);
 }
 
 function meetsUnlockCondition(condition, level, playerData) {
@@ -74,12 +62,12 @@ function meetsUnlockCondition(condition, level, playerData) {
         return true;
     }
 
-    if (condition.type === 'perfectScoreOnPrevious') {
+    if (condition.type === 'perfectClearOnPrevious' || condition.type === 'perfectScoreOnPrevious') {
         const previousKey = getVignettesScoreKeyForLevel(level - 1);
         if (!previousKey) {
             return false;
         }
-        return hasPerfectScoreForKey(playerData, previousKey);
+        return hasPerfectClearForKey(playerData, previousKey);
     }
 
     return false;

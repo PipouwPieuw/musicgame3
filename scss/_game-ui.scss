@@ -1,13 +1,21 @@
 .bar_countdown {
+	position: relative;
+	align-self: center;
 	height: 16px;
 	background: #EAE8E8;
 	border-radius: 5px;
 	overflow: hidden;
-	flex: 1;
+
+	&__inner {
+		flex: 1;
+		position: relative;
+		align-self: center;
+	}
 	
 	&__wrapper {
+		flex: 1;
 		display: flex;
-		align-items: center;
+		align-items: stretch;
 		gap: 20px;
 	}
 	
@@ -17,11 +25,39 @@
 		border-radius: 5px;
 		width: 100%;
 	}
+
+	&__lines {
+		position: absolute;
+		z-index: 1;
+		inset: -5px 0;
+		pointer-events: none;
+	}
+
+	&__line {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		border-left: 1px solid black;
+		width: 25%;
+
+		&--quarter {
+			left: 25%;
+		}
+
+		&--half {
+			left: 50%;
+		}
+
+		&--three-quarters {
+			left: 75%;
+		}
+	}
 }
 
 .game_top_bar {
 	display: flex;
-	justify-content: space-between;
+	// justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	height: 45px;
 	color: white;

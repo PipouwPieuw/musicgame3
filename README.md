@@ -177,8 +177,10 @@ If time runs out without an answer → wrong answer, streak reset, next track.
 ### 5. Answering
 
 - Pause audio, freeze countdown
-- **Correct**: green input state, `right.m4a`, increment streak, score += `(1 + streakBonus) × multiplier`
-  - Streak bonus starts after **3** consecutive correct (`MINSTREAK = 3`)
+- **Correct**: green input state, `right.m4a`, increment streak, score += `effectiveBase + streakBonus + speedBonus`
+  - Streak bonus starts after **3** consecutive correct (`MINSTREAK = 3`), capped at **5**
+  - At max streak, base points are doubled (hot streak)
+  - Speed bonus from remaining time fraction: +3 / +2 / +1 / +0 by quarter
 - **Wrong / timeout**: red input state, `wrong.m4a`, reveal correct title + artist, increment wrong-answer stat
 - After 1 s delay → next track or end game
 
@@ -188,7 +190,7 @@ Heart button on track display (hidden on difficulty > 2). Toggles track index in
 
 ### 7. End game
 
-- **Vignettes:** push score tuple `[scoreKey, trackCount, points]` to `playerData.scores`; show Score on end screen
+- **Vignettes:** push score tuple `[scoreKey, trackCount, points]` to `playerData.scores`; on a 20/20 clear (zero wrongs), set `perfectClears[scoreKey]`; show Score on end screen
 - **Codex:** push `[Codex, trackCount, identifiedCount]`; merge session finds into `foundTracksIds`; show Identifiés on end screen (no points leaderboard)
 - Update games played (and Vignettes good/wrong answers)
 - Options: **Rejouer** or **Retour au menu**
@@ -197,37 +199,39 @@ Heart button on track display (hidden on difficulty > 2). Toggles track index in
 
 ## Difficulty levels
 
-Each level changes **audio**, **metadata visibility**, and **scoring multiplier** (`pointsMultiplier = difficultyLevel`):
+Each Vignettes level changes **audio**, **cover treatment**, and **base points** (`POINTS_BASE_BY_DIFFICULTY`):
 
-| # | Name | Clip | Metadata | Input | Multiplier |
-|---|------|------|----------|-------|------------|
-| 1 | Normal | 30 s, full | Visible | Type title | ×1 |
-| 2 | Difficile | 30 s, full | Hidden | Type title | ×2 |
-| 3 | Infernal | 5 s, random start | Hidden | Type title | ×3 |
-| 4 | Extrême | 5 s, random | Hidden | Type title | ×4 |
-| 5 | Glitched | 5 s, glitched playback | Hidden | Type title | ×5 |
+| # | Name | Clip | Notes | Base points |
+|---|------|------|-------|-------------|
+| 1 | Facile | 30 s | Image answers | 1 |
+| 2 | Moyen | 20 s, random start | Image answers | 2 |
+| 3 | Difficile | 10 s, random start | Alternate covers | 3 |
+| 4 | Glitched | 10 s, glitched playback | Segment jumps, rate mods | 4 |
 
-**Level 5 extras:**
+**Level 4 extras:**
 
 - `body.glitched` — Yarndings font, zalgo duplicate text, black overlay opacity tied to `--glitchedOpacity`
 - Progression increases glitch intensity (avatars, playback rate, random segment jumps)
 - Second half of game: `glitched_halfgame` class
+
+Difficulty unlocks (Moyen+) require a **20/20 perfect clear** on the previous level (`perfectClears`), not a numeric score.
 
 ---
 
 ## Scoring
 
 ```
-scoreIncrement = (POINTSBYANSWER + streakBonus) × POINTSMULTIPLICATOR
+points = effectiveBase + streakBonus + speedBonus
 ```
 
-- `POINTSBYANSWER = 1`
-- `streakBonus = max(0, streak - MINSTREAK + 1)` when streak ≥ 3
-- Animated `+N` popups on correct answers
+- `effectiveBase` = `POINTS_BASE_BY_DIFFICULTY[level]` (1–4), doubled while streak bonus is at cap (5)
+- `streakBonus` = `min(max(0, streak - MINSTREAK + 1), MAX_STREAK_BONUS)` with `MINSTREAK = 3`, `MAX_STREAK_BONUS = 5`
+- `speedBonus` from remaining time ratio: **>75% → +3**, **>50% → +2**, **>25% → +1**, else **+0**
+- Animated `+N` popups for base, streak, and speed on correct answers
 
 Leaderboards split:
 
-- **Parties standards** — exactly **40** tracks (default)
+- **Parties standards** — exactly **20** tracks (default)
 - **Parties personnalisées** — any other track count
 
 Best score per player per difficulty is kept via `returnBestScores()`.
@@ -266,7 +270,7 @@ Example trophies: Accro, Fantôme, Émérite, Godiche, Sagace, Modique, Groupie,
 | `ass_username` | Last logged-in username |
 | `ass_profiles` | JSON map of usernames → profile objects |
 
-Profile fields: `username`, `initials`, `likedTracks`, `games_played`, `good_answers`, `wrong_answers`, `scores` (objects keyed by difficulty name where applicable).
+Profile fields: `username`, `initials`, `likedTracks`, `games_played`, `good_answers`, `wrong_answers`, `scores`, `perfectClears` (objects keyed by difficulty / score key where applicable).
 
 Leaderboards and trophies compare all profiles stored on **this browser** only.
 

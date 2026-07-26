@@ -20,7 +20,7 @@ import {
     setRoundJquery,
 } from './game/round.js';
 import { buildSetlist, getTracksForCurrentMode } from './game/setlist.js';
-import { getAudioElements, resetStreak, updateScoreUI } from './game/scoring.js';
+import { getAudioElements, resetStreak, syncBaseAndStreakCapUI, updateScoreUI } from './game/scoring.js';
 import { gameState, resetGameState, getDisplayLabel, getScoreKey, isCodexMode, isImageAnswerMode } from './game/state.js';
 import { getAvailableGenreIds, loadTracksFromGenres } from './services/tracks-loader.js';
 import { filterPlayableTracks, getPreviewPath, loadCoversManifest, migrateLikedTracksToIds } from './lib/track-utils.js';
@@ -147,6 +147,16 @@ async function endGame() {
         gameState.foundTracksIds = [];
     } else {
         gameState.playerData.scores.push([getScoreKey(), gameState.tracksByGame, gameState.score]);
+
+        if (
+            gameState.tracksByGame === DEFAULTTRACKSBYGAME &&
+            gameState.sessionWrongCount === 0
+        ) {
+            if (!gameState.playerData.perfectClears) {
+                gameState.playerData.perfectClears = {};
+            }
+            gameState.playerData.perfectClears[getScoreKey()] = true;
+        }
     }
 
     markVignettesUnlockIfNeeded();
@@ -226,6 +236,7 @@ function startGame() {
     $('.js-wrapper').addClass('game_started');
     if (!isCodexMode()) {
         $('.js-score-wrapper').addClass('visible');
+        syncBaseAndStreakCapUI($);
     }
     playRound($);
 }
@@ -431,6 +442,7 @@ function bindEvents() {
         $('.js-wrapper').addClass('game_started');
         if (!isCodexMode()) {
             $('.js-score-wrapper').addClass('visible');
+            syncBaseAndStreakCapUI($);
         }
         playRound($);
     });
