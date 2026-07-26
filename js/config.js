@@ -5,7 +5,7 @@ export const COVERS_MANIFEST_PATH = 'assets/covers/manifest.json';
 export const DEVMODE = false;
 export const SHUFFLE = true;
 
-export const GAME_MODE_CLASSIQUE = 'classique';
+export const GAME_MODE_CODEX = 'codex';
 export const GAME_MODE_VIGNETTES = 'vignettes';
 
 /** Key in playerData.seenUnlocks for the Vignettes mode “débloqué” tooltip. */
@@ -16,7 +16,7 @@ export const DIFFICULTYNAMES = ['Facile', 'Moyen', 'Difficile', 'Glitched'];
 
 /** Persistence / stats / leaderboard keys (mode + optional difficulty). */
 export const SCORE_KEYS = [
-    'Classique',
+    'Codex',
     'Vignettes_Facile',
     'Vignettes_Moyen',
     'Vignettes_Difficile',
@@ -25,7 +25,7 @@ export const SCORE_KEYS = [
 
 /** French display labels for SCORE_KEYS. */
 export const SCORE_KEY_LABELS = {
-    Classique: 'Classique',
+    Codex: 'Codex',
     Vignettes_Facile: 'Vignettes — Facile',
     Vignettes_Moyen: 'Vignettes — Moyen',
     Vignettes_Difficile: 'Vignettes — Difficile',
@@ -34,12 +34,12 @@ export const SCORE_KEY_LABELS = {
 
 /**
  * UI grouping for Classement / Statistiques: mode label, then optional difficulty labels.
- * Persistence still uses flat SCORE_KEYS; difficultyLabel null = no ladder (Classique).
+ * Persistence still uses flat SCORE_KEYS; difficultyLabel null = no ladder (Codex).
  */
 export const SCORE_KEY_GROUPS = [
     {
-        modeLabel: 'Classique',
-        keys: [{ key: 'Classique', difficultyLabel: null }],
+        modeLabel: 'Codex',
+        keys: [{ key: 'Codex', difficultyLabel: null }],
     },
     {
         modeLabel: 'Vignettes',
@@ -58,6 +58,7 @@ export const SCORE_KEY_GROUPS = [
  * Old 10s Difficile → Moyen is a one-shot remap (see remapOldDifficile).
  */
 const SCORE_KEY_RENAMES = {
+    Classique: 'Codex',
     Vignettes_Normal: 'Vignettes_Facile',
 };
 
@@ -75,7 +76,7 @@ export const SEEN_UNLOCK_LADDER_V2 = '__ladder_v2';
 
 /** Map legacy single-axis keys to SCORE_KEYS. */
 export const LEGACY_SCORE_KEY_MAP = {
-    Normal: 'Classique',
+    Normal: 'Codex',
     Difficile: 'Vignettes_Facile',
     Infernal: 'Vignettes_Infernal',
     Extrême: 'Vignettes_Extrême',
@@ -253,11 +254,12 @@ export const KEYWORD_MIN_LENGTH = 4;
 export const KEYWORD_MAX_LENGTH = 128;
 
 export const MINSTREAK = 3;
-export const DEFAULT_ACTIVE_GENRES = ['shows1990', 'shows2000', 'shows2010'];
+export const DEFAULT_ACTIVE_GENRES = ['shows2000'];
 export const DEFAULTTRACKSBYGAME = 20;
 export const DEFAULTTRACKDURATION = 30;
 export const DIFFICILETRACKDURATION = 10;
-export const HARDCOREMODETRACKDURATION = 5;
+// export const HARDCOREMODETRACKDURATION = 5;
+export const HARDCOREMODETRACKDURATION = 10;
 export const IMAGE_ANSWER_COUNT = 8;
 export const POINTSBYANSWER = 1;
 export const VIGNETTES_UNLOCK_THRESHOLD = 20;
@@ -286,9 +288,9 @@ export const VIGNETTES_DIFFICULTY_UNLOCK = {
     4: { type: 'perfectScoreOnPrevious' },
 };
 
-/** Maps SCORE_KEYS to Vignettes difficulty level (null = Classique / no ladder). */
+/** Maps SCORE_KEYS to Vignettes difficulty level (null = Codex / no ladder). */
 export const SCORE_KEY_DIFFICULTY_LEVEL = {
-    Classique: null,
+    Codex: null,
     Vignettes_Facile: 1,
     Vignettes_Moyen: 2,
     Vignettes_Difficile: 3,

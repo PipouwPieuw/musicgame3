@@ -4,7 +4,7 @@ import {
     DEFAULTTRACKSBYGAME,
     DIFFICILETRACKDURATION,
     DIFFICULTYNAMES,
-    GAME_MODE_CLASSIQUE,
+    GAME_MODE_CODEX,
     GAME_MODE_VIGNETTES,
     HARDCOREMODETRACKDURATION,
     MODIFIER_RATES,
@@ -20,7 +20,7 @@ export const gameState = {
     setList: [],
     setListLength: 0,
     tracksByGame: DEFAULTTRACKSBYGAME,
-    gameMode: GAME_MODE_CLASSIQUE,
+    gameMode: GAME_MODE_CODEX,
     difficultyLevel: 1,
     trackStart: 0,
     roundStartTime: 0,
@@ -42,7 +42,6 @@ export const gameState = {
     foundTracksIds: [],
     /** Track IDs already used this game (including the current round). */
     sessionTrackIds: [],
-    onlyUnfoundTracks: false,
     activeGenres: [...DEFAULT_ACTIVE_GENRES],
 };
 
@@ -52,8 +51,8 @@ export function getDifficultyName() {
 
 /** Persistence key for scores / stats maps. */
 export function getScoreKey() {
-    if (isClassicMode()) {
-        return 'Classique';
+    if (isCodexMode()) {
+        return 'Codex';
     }
 
     return 'Vignettes_' + getDifficultyName();
@@ -82,8 +81,8 @@ export function isImageAnswerMode() {
     return gameState.gameMode === GAME_MODE_VIGNETTES;
 }
 
-export function isClassicMode() {
-    return gameState.gameMode === GAME_MODE_CLASSIQUE;
+export function isCodexMode() {
+    return gameState.gameMode === GAME_MODE_CODEX;
 }
 
 export function getClipDuration() {

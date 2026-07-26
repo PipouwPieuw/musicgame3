@@ -2,7 +2,7 @@ import { MINSTREAK, POINTSBYANSWER } from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { animateCorrectAnswer } from '../ui/answer-reveal.js';
 import { getRoundDuration } from './audio-player.js';
-import { gameState, getScoreKey } from './state.js';
+import { gameState, getScoreKey, isCodexMode } from './state.js';
 
 const soundRight = new Audio('assets/sounds/right.m4a');
 soundRight.volume = 0.5;
@@ -65,6 +65,14 @@ export function recordWrongAnswer() {
 }
 
 export function applyCorrectAnswer($) {
+    recordGoodAnswer();
+    animateCorrectAnswer($);
+
+    // Codex is discovery-only: no points, streak, or score HUD updates.
+    if (isCodexMode()) {
+        return;
+    }
+
     incrementStreak();
     const scoreIncrement = (POINTSBYANSWER + gameState.streakBonus) * gameState.pointsMultiplier;
     gameState.score += scoreIncrement;
@@ -74,8 +82,6 @@ export function applyCorrectAnswer($) {
     }
     $('.js-streak').text(gameState.streakBonus > 0 ? gameState.streakBonus : '');
     updateScoreUI($, POINTSBYANSWER * gameState.pointsMultiplier);
-    recordGoodAnswer();
-    animateCorrectAnswer($);
 }
 
 export function applyWrongAnswer($) {

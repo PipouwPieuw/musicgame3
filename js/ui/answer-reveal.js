@@ -1,6 +1,6 @@
 import { DEFAULT_COVER_PATH, NOT_FOUND_COVER_PATH } from '../config.js';
 import { preloadImage } from '../lib/preload-image.js';
-import { gameState, isClassicMode } from '../game/state.js';
+import { gameState, isCodexMode } from '../game/state.js';
 
 /** Delay before the cover scales in. */
 const REVEAL_IMAGE_VISIBLE_MS = 10;
@@ -134,7 +134,7 @@ export function playAnswerRevealDismiss($) {
 
 export function isTrackDiscovery(trackId) {
     return (
-        isClassicMode() &&
+        isCodexMode() &&
         !(gameState.playerData.foundTracksIds || []).includes(trackId)
     );
 }

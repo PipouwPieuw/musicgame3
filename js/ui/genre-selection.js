@@ -1,6 +1,5 @@
 import { filterPlayableTracks } from '../lib/track-utils.js';
-import { getTracksForCurrentMode } from '../game/setlist.js';
-import { gameState, isImageAnswerMode } from '../game/state.js';
+import { gameState, isCodexMode } from '../game/state.js';
 import { getCatalogGenres } from '../services/tracks-loader.js';
 
 /** @type {Array<{ id: string, label: string, trackCount: number, playableCount: number, playableTrackIds: string[] }>} */
@@ -10,76 +9,99 @@ function getFoundTrackIdsSet() {
     return new Set(gameState.playerData?.foundTracksIds || []);
 }
 
-function getGenreDisplayCount(genre) {
-    if (isImageAnswerMode()) {
-        const foundIds = getFoundTrackIdsSet();
+function getGenreUnfoundCount(genre) {
+    const foundIds = getFoundTrackIdsSet();
 
-        return genre.playableTrackIds.filter(function (trackId) {
-            return foundIds.has(trackId);
-        }).length;
-    }
-
-    return genre.playableCount;
+    return genre.playableTrackIds.filter(function (trackId) {
+        return !foundIds.has(trackId);
+    }).length;
 }
 
-function getModalTotalForCurrentMode() {
-    if (isImageAnswerMode()) {
-        return getTracksForCurrentMode().length;
-    }
-
-    return gameState.tracks.length;
+function formatGenreUnfoundCount(genre) {
+    return '(' + getGenreUnfoundCount(genre) + ' à trouver)';
 }
 
-export function getActiveGenresPlayableCount() {
-    return gameState.tracks.length;
+function getActiveGenreLabel() {
+    const activeGenreId = gameState.activeGenres[0];
+    const activeGenre = genresWithCounts.find(function (genre) {
+        return genre.id === activeGenreId;
+    });
+
+    return activeGenre ? activeGenre.label : '';
 }
 
 function syncGenreListCounts($) {
     genresWithCounts.forEach(function (genre) {
-        const $checkbox = $('.js-genre-checkbox[value="' + genre.id + '"]');
-        $checkbox
+        const $radio = $('.js-genre-radio[value="' + genre.id + '"]');
+        $radio
             .closest('.genres_picker__item')
             .find('.genres_picker__count')
-            .text('(' + getGenreDisplayCount(genre) + ')');
+            .text(formatGenreUnfoundCount(genre));
     });
-
-    $('.js-genres-modal-total').text(getModalTotalForCurrentMode());
 }
 
-export function updateActiveTracksCount($) {
-    $('.js-active-tracks-count').text(getTracksForCurrentMode().length);
+function syncActiveGenreButton($) {
+    const label = getActiveGenreLabel();
+    const $button = $('.js-open-genres-picker');
+
+    $('.js-active-genre-label').text(label);
+    $button.attr('aria-label', label).attr('title', label);
+}
+
+export function syncGenreSettingsUI($) {
+    syncActiveGenreButton($);
     syncGenreListCounts($);
 }
 
-export function syncGenreCheckboxes($) {
-    $('.js-genre-checkbox').each(function () {
-        const genreId = $(this).val();
-        $(this).prop('checked', gameState.activeGenres.includes(genreId));
+export function syncGenreRadios($) {
+    const activeGenreId = gameState.activeGenres[0];
+
+    $('.js-genre-radio').each(function () {
+        $(this).prop('checked', $(this).val() === activeGenreId);
     });
+}
+
+export function closeGenresPicker($) {
+    const dialog = $('.js-genres-picker').get(0);
+    if (dialog && dialog.open) {
+        dialog.close();
+    }
+}
+
+export function syncGenreSettingsVisibility($) {
+    const $settingsGenres = $('.js-settings-genres');
+
+    if (isCodexMode()) {
+        $settingsGenres.removeClass('is-hidden');
+    } else {
+        $settingsGenres.addClass('is-hidden');
+        closeGenresPicker($);
+    }
 }
 
 export function renderGenreList($) {
     const $list = $('.js-genres-list');
+    const activeGenreId = gameState.activeGenres[0];
     $list.empty();
 
     genresWithCounts.forEach(function (genre) {
-        const checkboxId = 'genre-' + genre.id;
+        const radioId = 'genre-' + genre.id;
         const $item = $('<li class="genres_picker__list_item"></li>');
         const $label = $('<label class="settings_difficulty__checkbox genres_picker__item"></label>').attr(
             'for',
-            checkboxId
+            radioId
         );
 
         $label.append(
-            $('<input type="checkbox" class="js-genre-checkbox" />')
-                .attr('id', checkboxId)
+            $('<input type="radio" class="js-genre-radio" name="activeGenre" />')
+                .attr('id', radioId)
                 .attr('value', genre.id)
-                .prop('checked', gameState.activeGenres.includes(genre.id))
+                .prop('checked', genre.id === activeGenreId)
         );
         $label.append(
             $('<span></span>').append(
                 genre.label + ' ',
-                $('<span class="genres_picker__count"></span>').text('(' + getGenreDisplayCount(genre) + ')')
+                $('<span class="genres_picker__count"></span>').text(formatGenreUnfoundCount(genre))
             )
         );
 
@@ -89,19 +111,12 @@ export function renderGenreList($) {
 }
 
 export function openGenresPicker($) {
-    syncGenreCheckboxes($);
-    updateActiveTracksCount($);
+    syncGenreRadios($);
+    syncGenreSettingsUI($);
 
     const dialog = $('.js-genres-picker').get(0);
     if (dialog && typeof dialog.showModal === 'function') {
         dialog.showModal();
-    }
-}
-
-export function closeGenresPicker($) {
-    const dialog = $('.js-genres-picker').get(0);
-    if (dialog && dialog.open) {
-        dialog.close();
     }
 }
 
@@ -134,7 +149,8 @@ async function computeGenresWithCounts() {
 export async function initGenreSelection($, onGenresChange, onTracksSettingsSync) {
     await computeGenresWithCounts();
     renderGenreList($);
-    updateActiveTracksCount($);
+    syncGenreSettingsVisibility($);
+    syncGenreSettingsUI($);
 
     $('.js-open-genres-picker').on('click', function () {
         openGenresPicker($);
@@ -150,38 +166,28 @@ export async function initGenreSelection($, onGenresChange, onTracksSettingsSync
         }
     });
 
-    $(document).on('change', '.js-genre-checkbox', async function () {
+    $(document).on('change', '.js-genre-radio', async function () {
         const genreId = $(this).val();
-        const isChecked = $(this).prop('checked');
         const previousGenres = [...gameState.activeGenres];
-        const nextGenres = isChecked
-            ? [...gameState.activeGenres, genreId]
-            : gameState.activeGenres.filter(function (activeGenreId) {
-                  return activeGenreId !== genreId;
-              });
 
-        if (nextGenres.length === 0) {
-            $(this).prop('checked', true);
-            return;
-        }
-
-        gameState.activeGenres = nextGenres;
+        gameState.activeGenres = [genreId];
 
         if (typeof onGenresChange === 'function') {
             try {
                 await onGenresChange();
             } catch (error) {
                 gameState.activeGenres = previousGenres;
-                syncGenreCheckboxes($);
+                syncGenreRadios($);
                 if (typeof onTracksSettingsSync === 'function') {
                     onTracksSettingsSync();
                 } else {
-                    updateActiveTracksCount($);
+                    syncGenreSettingsUI($);
                 }
                 return;
             }
         }
 
-        syncGenreCheckboxes($);
+        syncGenreRadios($);
+        syncGenreSettingsUI($);
     });
 }

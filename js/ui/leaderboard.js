@@ -391,7 +391,6 @@ export function updateStatsBestScore($) {
 }
 
 export function openLeaderboard($) {
-    $('body.glitched').addClass('no_glitch');
     $('.js-settings').removeClass('visible');
     $('.js-leaderboard').addClass('visible');
     $('.js-close-leaderboard').addClass('visible');
@@ -401,7 +400,6 @@ export function openLeaderboard($) {
 }
 
 export function closeLeaderboard($) {
-    $('body.glitched').removeClass('no_glitch');
     $('.js-settings').addClass('visible');
     $('.js-leaderboard').removeClass('visible');
     $('.js-close-leaderboard').removeClass('visible');

@@ -589,7 +589,7 @@ const APPController = (function(UICtrl, APICtrl) {
             }            
             [leaderboard, leaderboardCustom] = returnBestScores(allScores, leaderboard, leaderboardCustom);
             // Display leaderboard
-            buildLeaderboard(leaderboard, "Classement parties classiques");
+            buildLeaderboard(leaderboard, "Classement parties standards");
             buildLeaderboard(leaderboardCustom, "Classement parties personnalisées");
             openLeaderboard();
         });

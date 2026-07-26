@@ -227,7 +227,7 @@ scoreIncrement = (POINTSBYANSWER + streakBonus) × POINTSMULTIPLICATOR
 
 Leaderboards split:
 
-- **Parties classiques** — exactly **40** tracks (default)
+- **Parties standards** — exactly **40** tracks (default)
 - **Parties personnalisées** — any other track count
 
 Best score per player per difficulty is kept via `returnBestScores()`.
@@ -240,7 +240,7 @@ Opened via the trophy button in the top bar. Four tabs:
 
 ### Classement
 
-Leaderboards built from all rows in `scores`, split classic vs custom games, sorted by points per difficulty.
+Leaderboards built from all rows in `scores`, split standard vs custom games, sorted by points per difficulty.
 
 ### Statistiques
 

@@ -11,10 +11,10 @@ body {
 body.no_scroll {
 	overflow: hidden;
 }
-body.glitched .text_symbol,
-body.glitched_halfgame .text_symbol_halfgame {
-	font-family: "Yarndings 12", system-ui;
-}
+// body.glitched .text_symbol,
+// body.glitched_halfgame .text_symbol_halfgame {
+// 	font-family: "Yarndings 12", system-ui;
+// }
 body.glitched:before {
 	content: "";
 	position: fixed;

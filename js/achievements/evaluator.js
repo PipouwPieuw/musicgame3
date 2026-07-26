@@ -86,7 +86,7 @@ function getStatValue(stat, playerData, sessionContext) {
         case 'likedTracksCount':
             return (playerData.likedTracks || []).length;
         case 'bestScore': {
-            const targetKey = sessionContext?.condition?.scoreKey || scoreKey || 'Classique';
+            const targetKey = sessionContext?.condition?.scoreKey || scoreKey || 'Codex';
             let best = 0;
             for (const entry of playerData.scores || []) {
                 const entryKey = migrateScoreKey(entry[0]);

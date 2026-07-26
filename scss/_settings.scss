@@ -147,6 +147,10 @@
 	margin-left: auto;
 	flex-shrink: 0;
 
+	&.is-hidden {
+		display: none;
+	}
+
 	@media only screen and (max-width: 640px) {
 		margin-left: 0;
 		margin-top: 8px;
@@ -210,12 +214,6 @@
 		font-weight: 400;
 	}
 
-	&__total {
-		font-size: 16px;
-		font-weight: 700;
-		text-align: right;
-	}
-
 	&__close {
 		margin-left: auto;
 	}
@@ -249,7 +247,7 @@
 			flex-wrap: wrap;
 			// Room for the “Mode débloqué !” tooltip above newly unlocked options.
 			padding-top: 55px;
-			margin-top: -40px;
+			margin-top: -55px;
 
 			.settings_difficulty__option {
 				// flex: 0 0 25%;

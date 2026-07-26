@@ -1,5 +1,5 @@
-import { GAME_MODE_CLASSIQUE, GAME_MODE_VIGNETTES, SEGMENT_DURATIONS_1 } from '../config.js';
-import { gameState, getDisplayLabel, isClassicMode, isImageAnswerMode } from './state.js';
+import { GAME_MODE_CODEX, GAME_MODE_VIGNETTES, SEGMENT_DURATIONS_1 } from '../config.js';
+import { gameState, getDisplayLabel, isCodexMode, isImageAnswerMode } from './state.js';
 
 /**
  * Apply difficulty ladder (audio, multiplier, glitch).
@@ -9,7 +9,7 @@ export function applyDifficulty(level) {
     const difficultyLevel = parseInt(level, 10);
     gameState.difficultyLevel = difficultyLevel;
 
-    if (isClassicMode()) {
+    if (isCodexMode()) {
         gameState.pointsMultiplier = 1;
     } else {
         gameState.pointsMultiplier = difficultyLevel;
@@ -21,7 +21,7 @@ export function applyDifficulty(level) {
     audioPlayer.volume = difficultyLevel < 4 ? 1 : 0;
     audioPlayerHardcore.volume = difficultyLevel < 4 ? 0 : 1;
 
-    document.body.classList.toggle('glitched', difficultyLevel === 4);
+    // document.body.classList.toggle('glitched', difficultyLevel === 4);
 
     if (difficultyLevel >= 4) {
         gameState.currentSegmentDurations = [...SEGMENT_DURATIONS_1];
@@ -29,9 +29,9 @@ export function applyDifficulty(level) {
 }
 
 export function applyGameMode(mode) {
-    gameState.gameMode = mode === GAME_MODE_VIGNETTES ? GAME_MODE_VIGNETTES : GAME_MODE_CLASSIQUE;
+    gameState.gameMode = mode === GAME_MODE_VIGNETTES ? GAME_MODE_VIGNETTES : GAME_MODE_CODEX;
 
-    if (isClassicMode()) {
+    if (isCodexMode()) {
         applyDifficulty(1);
     } else {
         applyDifficulty(gameState.difficultyLevel || 1);
@@ -47,7 +47,7 @@ export function updateAnswerModeUI($) {
         $('.js-answers').addClass('visually_hidden');
     }
 
-    $('.js-skip-round').toggleClass('visually_hidden', !isClassicMode());
+    $('.js-skip-round').toggleClass('visually_hidden', !isCodexMode());
 }
 
 export function updateDifficultyUI($, displayLabel) {

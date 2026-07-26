@@ -19,7 +19,7 @@
     {
       "id": "found_10_tracks",
       "name": "Explorateur",
-      "description": "Trouver 10 morceaux en mode Classique",
+      "description": "Trouver 10 morceaux en mode Codex",
       "image": "assets/icons/trophy.svg",
       "condition": { "stat": "foundTracksCount", "op": ">=", "value": 10 },
       "progressLabel": "morceaux"
@@ -35,7 +35,7 @@
     {
       "id": "found_50_tracks",
       "name": "Cartographe",
-      "description": "Trouver 50 morceaux en mode Classique",
+      "description": "Trouver 50 morceaux en mode Codex",
       "image": "assets/icons/trophy.svg",
       "condition": { "stat": "foundTracksCount", "op": ">=", "value": 50 },
       "progressLabel": "morceaux"
@@ -50,11 +50,11 @@
     },
     {
       "id": "classic_games_10",
-      "name": "Classique confirmé",
-      "description": "Terminer 10 parties en mode Classique",
+      "name": "Codex confirmé",
+      "description": "Terminer 10 parties en mode Codex",
       "image": "assets/icons/trophy.svg",
-      "condition": { "stat": "gamesPlayed", "op": ">=", "value": 10, "scoreKey": "Classique" },
-      "progressLabel": "parties Classique"
+      "condition": { "stat": "gamesPlayed", "op": ">=", "value": 10, "scoreKey": "Codex" },
+      "progressLabel": "parties Codex"
     },
     {
       "id": "high_score_session",

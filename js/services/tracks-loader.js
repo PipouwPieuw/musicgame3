@@ -167,6 +167,10 @@ export async function loadTracksFromGenres(genreIds) {
     return tracks;
 }
 
+export function getAvailableGenreIds() {
+    return Object.keys(GENRE_FILES);
+}
+
 export async function loadTracks(genre = DEFAULT_GENRE) {
     return loadTracksFromGenres([genre]);
 }

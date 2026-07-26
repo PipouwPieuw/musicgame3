@@ -1,14 +1,13 @@
 import {
     DEFAULTTRACKSBYGAME,
     DIFFICULTYNAMES,
-    GAME_MODE_CLASSIQUE,
     SCORE_KEY_DIFFICULTY_LEVEL,
     SEEN_UNLOCK_VIGNETTES,
     VIGNETTES_DIFFICULTY_ENABLED,
     VIGNETTES_DIFFICULTY_UNLOCK,
     VIGNETTES_UNLOCK_THRESHOLD,
 } from '../config.js';
-import { applyDifficulty, applyGameMode, updateDifficultyUI } from '../game/difficulty.js';
+import { applyDifficulty, updateDifficultyUI } from '../game/difficulty.js';
 import { computePerfectScore } from '../game/scoring.js';
 import { gameState, isImageAnswerMode } from '../game/state.js';
 
@@ -105,7 +104,7 @@ export function isVignettesDifficultyUnlocked(level, playerData) {
 
 /** Whether this score bucket is offered at all (ignores player unlock progress). */
 export function isScoreKeyEnabled(scoreKey) {
-    if (scoreKey === 'Classique') {
+    if (scoreKey === 'Codex') {
         return true;
     }
 
@@ -119,7 +118,7 @@ export function isScoreKeyEnabled(scoreKey) {
 
 /** Whether the logged-in player may see this score bucket in the leaderboard. */
 export function isScoreKeyUnlocked(scoreKey, playerData) {
-    if (scoreKey === 'Classique') {
+    if (scoreKey === 'Codex') {
         return true;
     }
 
@@ -131,13 +130,11 @@ export function isScoreKeyUnlocked(scoreKey, playerData) {
     return isVignettesDifficultyUnlocked(level, playerData);
 }
 
-function forceClassiqueMode($) {
-    const $classique = $('#gameModeClassique');
-    if (!$classique.prop('checked')) {
-        $classique.prop('checked', true);
-    }
-    applyGameMode(GAME_MODE_CLASSIQUE);
-    updateDifficultyUI($, 'Classique');
+function forceCodexMode($) {
+    const $codex = $('#gameModeCodex');
+    $codex.prop('checked', true);
+    // Trigger change so app.js reloads the Codex (single-genre) catalog and syncs genre UI.
+    $codex.trigger('change');
 }
 
 function forceNormalDifficulty($) {
@@ -215,7 +212,7 @@ export function syncVignettesModeUnlock($, options) {
         $option.addClass('is-locked').removeClass('settings_difficulty__option--new');
         $radio.prop('disabled', true);
         if ($radio.prop('checked') || isImageAnswerMode()) {
-            forceClassiqueMode($);
+            forceCodexMode($);
         }
         syncVignettesDifficultyRadios($, options);
         return;
@@ -274,7 +271,7 @@ export function lockVignettesMode($) {
     const $radio = $('#gameModeVignettes');
     $option.addClass('is-locked').removeClass('settings_difficulty__option--new');
     $radio.prop('disabled', true);
-    forceClassiqueMode($);
+    forceCodexMode($);
     syncVignettesDifficultyRadios($);
 }
 

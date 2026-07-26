@@ -21,8 +21,8 @@ import {
 } from './game/round.js';
 import { buildSetlist, getTracksForCurrentMode } from './game/setlist.js';
 import { getAudioElements, resetStreak, updateScoreUI } from './game/scoring.js';
-import { gameState, resetGameState, getDisplayLabel, getScoreKey, isClassicMode, isImageAnswerMode } from './game/state.js';
-import { loadTracksFromGenres } from './services/tracks-loader.js';
+import { gameState, resetGameState, getDisplayLabel, getScoreKey, isCodexMode, isImageAnswerMode } from './game/state.js';
+import { getAvailableGenreIds, loadTracksFromGenres } from './services/tracks-loader.js';
 import { filterPlayableTracks, getPreviewPath, loadCoversManifest, migrateLikedTracksToIds } from './lib/track-utils.js';
 import {
     clearStoredUsername,
@@ -62,7 +62,11 @@ import {
 } from './ui/vignettes-unlock.js';
 import { loadAllAchievementDefinitions } from './achievements/loader.js';
 import { processPostGameAchievements } from './achievements/post-game.js';
-import { initGenreSelection, updateActiveTracksCount } from './ui/genre-selection.js';
+import {
+    initGenreSelection,
+    syncGenreSettingsVisibility,
+    syncGenreSettingsUI,
+} from './ui/genre-selection.js';
 
 const $ = window.jQuery;
 
@@ -129,9 +133,11 @@ async function loadPlayerSession(username) {
 }
 
 async function endGame() {
-    gameState.playerData.scores.push([getScoreKey(), gameState.tracksByGame, gameState.score]);
+    if (!isCodexMode()) {
+        gameState.playerData.scores.push([getScoreKey(), gameState.tracksByGame, gameState.score]);
+    }
 
-    if (isClassicMode()) {
+    if (isCodexMode()) {
         for (let id of gameState.foundTracksIds) {
             if (!gameState.playerData.foundTracksIds.includes(id)) {
                 gameState.playerData.foundTracksIds.push(id);
@@ -160,6 +166,7 @@ async function endGame() {
     $('.js-wrapper').removeClass('game_started');
     $('.js-wrapper').addClass('game_ended');
     $('.js-score-wrapper').removeClass('visible');
+    $('.js-end-game-score').toggleClass('is-hidden', isCodexMode());
     if (gameState.difficultyLevel == 4) {
         document.body.style.setProperty('--glitchedOpacity', 0);
         $('body').removeClass('glitched_halfgame');
@@ -191,12 +198,12 @@ function resetGame() {
 function startGame() {
     const trackPool = getTracksForCurrentMode();
 
-    if (isClassicMode() && gameState.onlyUnfoundTracks && trackPool.length === 0) {
-        alert('Tous les morceaux ont déjà été trouvés. Décochez l\'option ou choisissez un autre mode.');
+    if (isCodexMode() && trackPool.length === 0) {
+        alert('Tous les morceaux de cette catégorie ont déjà été trouvés. Choisissez une autre catégorie ou jouez en Vignettes.');
         return;
     }
 
-    if (isClassicMode()) {
+    if (isCodexMode()) {
         gameState.foundTracksIds = [];
     }
     buildSetlist(trackPool, gameState.tracksByGame);
@@ -204,7 +211,9 @@ function startGame() {
     $('.js-wrapper').removeClass('game_ended');
     $('.js-settings').removeClass('visible');
     $('.js-wrapper').addClass('game_started');
-    $('.js-score-wrapper').addClass('visible');
+    if (!isCodexMode()) {
+        $('.js-score-wrapper').addClass('visible');
+    }
     playRound($);
 }
 
@@ -242,12 +251,13 @@ function syncTracksByGameToCatalog() {
         $input.attr('min', min).attr('max', min);
     }
 
-    updateActiveTracksCount($);
+    syncGenreSettingsUI($);
     syncPlayButtonState($);
 }
 
 async function reloadActiveTracks() {
-    const tracks = await loadTracksFromGenres(gameState.activeGenres);
+    const genreIds = isImageAnswerMode() ? getAvailableGenreIds() : gameState.activeGenres;
+    const tracks = await loadTracksFromGenres(genreIds);
     gameState.tracks = await filterPlayableTracks(tracks);
 
     if (gameState.tracks.length === 0) {
@@ -258,6 +268,37 @@ async function reloadActiveTracks() {
 
     syncTracksByGameToCatalog();
     migrateStoredLikedTracks();
+}
+
+async function handleGameModeChange(selectedMode) {
+    applyGameMode(selectedMode);
+    updateDifficultyUI($);
+    syncGenreSettingsVisibility($);
+
+    if (selectedMode === GAME_MODE_VIGNETTES) {
+        const $checkedDifficulty = $('.js-input-difficulty:checked');
+        if ($checkedDifficulty.length) {
+            applyDifficulty($checkedDifficulty.val());
+            updateDifficultyUI($);
+        }
+
+        if (gameState.playerData && setUnlockSeen(gameState.playerData, SEEN_UNLOCK_VIGNETTES)) {
+            clearUnlockNewHighlight($, SEEN_UNLOCK_VIGNETTES);
+            savePlayerProfile(gameState.username, gameState.playerData).catch(function (error) {
+                console.error('Failed to save seen unlock flag', error);
+                delete gameState.playerData.seenUnlocks[SEEN_UNLOCK_VIGNETTES];
+                $('.js-vignettes-option').addClass('settings_difficulty__option--new');
+                alert('Impossible de sauvegarder le statut du mode Vignettes. Vérifiez que le serveur est démarré.');
+            });
+        }
+    }
+
+    try {
+        await reloadActiveTracks();
+    } catch (error) {
+        console.error(error);
+        alert(error.message || 'Impossible de charger le catalogue de morceaux.');
+    }
 }
 
 async function handleGenresChange() {
@@ -375,7 +416,9 @@ function bindEvents() {
     $('.js-replay-game').on('click', function () {
         resetGame();
         $('.js-wrapper').addClass('game_started');
-        $('.js-score-wrapper').addClass('visible');
+        if (!isCodexMode()) {
+            $('.js-score-wrapper').addClass('visible');
+        }
         playRound($);
     });
 
@@ -415,35 +458,8 @@ function bindEvents() {
         gameState.tracksByGame = +$(this).val();
     });
 
-    $('.js-unfound-only').on('change', function () {
-        gameState.onlyUnfoundTracks = $(this).prop('checked');
-        syncTracksByGameToCatalog();
-    });
-
     $('.js-input-game-mode').on('change', function () {
-        const selectedMode = String($(this).val());
-        applyGameMode(selectedMode);
-        updateDifficultyUI($);
-
-        if (selectedMode === GAME_MODE_VIGNETTES) {
-            const $checkedDifficulty = $('.js-input-difficulty:checked');
-            if ($checkedDifficulty.length) {
-                applyDifficulty($checkedDifficulty.val());
-                updateDifficultyUI($);
-            }
-
-            if (gameState.playerData && setUnlockSeen(gameState.playerData, SEEN_UNLOCK_VIGNETTES)) {
-                clearUnlockNewHighlight($, SEEN_UNLOCK_VIGNETTES);
-                savePlayerProfile(gameState.username, gameState.playerData).catch(function (error) {
-                    console.error('Failed to save seen unlock flag', error);
-                    delete gameState.playerData.seenUnlocks[SEEN_UNLOCK_VIGNETTES];
-                    $('.js-vignettes-option').addClass('settings_difficulty__option--new');
-                    alert('Impossible de sauvegarder le statut du mode Vignettes. Vérifiez que le serveur est démarré.');
-                });
-            }
-        }
-
-        syncTracksByGameToCatalog();
+        handleGameModeChange(String($(this).val()));
     });
 
     $('.js-input-difficulty').on('change', function () {
@@ -560,8 +576,9 @@ function init() {
 
     updateScoreUI($);
     gameState.tracksByGame = DEFAULTTRACKSBYGAME;
-    applyGameMode('classique');
+    applyGameMode('codex');
     updateDifficultyUI($, getDisplayLabel());
+    syncGenreSettingsVisibility($);
     updateAnswerModeUI($);
     syncStatsDifficultyColumns($);
     loadAllAchievementDefinitions().catch(function (error) {

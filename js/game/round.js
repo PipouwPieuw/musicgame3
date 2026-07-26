@@ -20,7 +20,7 @@ import {
 } from './image-answers.js';
 import { applyCorrectAnswer, applyWrongAnswer, playCorrectSound, resetCountdownBar, updateTrackNumberUI } from './scoring.js';
 import { getFoundPlayableTracks, getTracksForCurrentMode } from './setlist.js';
-import { gameState, isClassicMode, isImageAnswerMode } from './state.js';
+import { gameState, isCodexMode, isImageAnswerMode } from './state.js';
 
 const WRONG_ANSWER_FLASH_MS = 400;
 const ROUND_END_DISPLAY_MS = 2050;
@@ -59,7 +59,7 @@ function enableAnswerForm($) {
     const $form = $('.js-answer-form');
     $form.addClass('answer_form--playing');
     $('.js-answer-input').prop('readonly', false).prop('disabled', false).focus();
-    if (isClassicMode()) {
+    if (isCodexMode()) {
         $('.js-skip-round').prop('disabled', false);
     }
 }
@@ -248,7 +248,7 @@ export function handleTimeout($) {
 }
 
 export function skipRound($) {
-    if (!gameState.isPlaying || !isClassicMode() || isImageAnswerMode()) {
+    if (!gameState.isPlaying || !isCodexMode() || isImageAnswerMode()) {
         return;
     }
 
@@ -271,7 +271,7 @@ export function submitAnswer($) {
 
     if (isCorrect) {
         const { audioPlayer } = { audioPlayer: document.getElementById('audio_player') };
-        if (isClassicMode()) {
+        if (isCodexMode()) {
             gameState.foundTracksIds.push(trackId);
         }
         finishRound($, audioPlayer);

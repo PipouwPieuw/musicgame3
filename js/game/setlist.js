@@ -1,9 +1,9 @@
 import { SHUFFLE } from '../config.js';
 import { shuffleArray } from '../lib/shuffle.js';
-import { gameState, isClassicMode, isImageAnswerMode } from './state.js';
+import { gameState, isCodexMode, isImageAnswerMode } from './state.js';
 
 /**
- * Playable catalog tracks that the player has found in Classique mode.
+ * Playable catalog tracks that the player has found in Codex mode.
  * Used as the exclusive pool for Vignettes setlist and image distractors.
  */
 export function getFoundPlayableTracks() {
@@ -15,8 +15,8 @@ export function getFoundPlayableTracks() {
 }
 
 /**
- * Playable catalog tracks not yet found in Classique.
- * Used when the “non trouvés uniquement” Classique option is checked.
+ * Playable catalog tracks not yet found in Codex.
+ * Codex always draws exclusively from this pool.
  */
 export function getUnfoundPlayableTracks() {
     const foundIds = new Set(gameState.playerData?.foundTracksIds || []);
@@ -26,13 +26,13 @@ export function getUnfoundPlayableTracks() {
     });
 }
 
-/** Catalog pool for the active mode and Classique filter options. */
+/** Catalog pool for the active mode. */
 export function getTracksForCurrentMode() {
     if (isImageAnswerMode()) {
         return getFoundPlayableTracks();
     }
 
-    if (isClassicMode() && gameState.onlyUnfoundTracks) {
+    if (isCodexMode()) {
         return getUnfoundPlayableTracks();
     }
 

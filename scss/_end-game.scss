@@ -21,6 +21,10 @@
 	display: flex;
 	justify-content: space-between;
 	font-weight: 700;
+
+	&.is-hidden {
+		display: none;
+	}
 }
 .end_game__score:not(:last-child) {
 	border-bottom: 2px solid black;
