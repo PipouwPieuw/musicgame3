@@ -153,7 +153,7 @@
                             <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--1 js-input-difficulty" name="difficultyLevel" id="difficultyLevel1" value="1" checked/>
                             <label class="default_transition" for="difficultyLevel1">
                                 <span class="default_transition">
-                                    <span class="text_no_glitch">Normal</span>
+                                    <span class="text_no_glitch">Facile</span>
                                     <span class="text_glitch"></span>
                                 </span>
                             </label>
@@ -161,34 +161,32 @@
                                 <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-difficulty" name="difficultyLevel" id="difficultyLevel2" value="2" disabled/>
                                 <label class="default_transition" for="difficultyLevel2">
                                     <span class="default_transition">
+                                        <span class="text_no_glitch">Moyen</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="settings_difficulty__option js-difficulty-option is-locked" data-difficulty-level="3">
+                                <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--3 js-input-difficulty" name="difficultyLevel" id="difficultyLevel3" value="3" disabled/>
+                                <label class="default_transition" for="difficultyLevel3">
+                                    <span class="default_transition">
                                         <span class="text_no_glitch">Difficile</span>
                                     </span>
                                 </label>
                             </div>
-                            <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--3 js-input-difficulty" name="difficultyLevel" id="difficultyLevel3" value="3"/>
-                            <label class="default_transition" for="difficultyLevel3">
-                                <span class="default_transition">
-                                    <span class="text_no_glitch">Infernal</span>
-                                </span>
-                            </label> -->
-                            <!-- <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--4 js-input-difficulty" name="difficultyLevel" id="difficultyLevel4" value="4"/>
-                            <label class="default_transition" for="difficultyLevel4">
-                                <span class="default_transition">
-                                    <span class="text_no_glitch">Extrême</span>
-                                </span>
-                            </label>
-                            <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--5 js-input-difficulty" name="difficultyLevel" id="difficultyLevel5" value="5"/>
-                            <label class="default_transition" for="difficultyLevel5">
-                                <span class="default_transition">
-                                    <span class="text_no_glitch">Glitched</span>
-                                </span>
-                            </label> -->
+                            <div class="settings_difficulty__option js-difficulty-option is-locked" data-difficulty-level="4">
+                                <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--4 js-input-difficulty" name="difficultyLevel" id="difficultyLevel4" value="4" disabled/>
+                                <label class="default_transition" for="difficultyLevel4">
+                                    <span class="default_transition">
+                                        <span class="text_no_glitch">Glitched</span>
+                                    </span>
+                                </label>
+                            </div>
                         </div>
                         <div class="settings_difficulty__row">
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-1">
                                 <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
-                                        <li><span>Les extraits durent <b><u>30 secondes</u></b></span></li>
+                                        <li><span>Les extraits durent <b><u style="color: green">30 secondes</u></b></span></li>
                                         <li><span>Multiplicateur de points : <b><u style="color: green">x1</u></b></span></li>
                                     </ul>
                                 </div>
@@ -207,28 +205,21 @@
                                     <ul class="settings_difficulty__description">
                                         <li><span>Les extraits durent <b><u style="color: #FF0000">5 secondes</u></b></span></li>
                                         <li><span>La portion jouée de chaque extrait est <b><u style="color: #FF0000">aléatoire</u></b></span></li>
+                                        <li><span>Des <b><u style="color: #FF0000">images alternatives</u></b></span> peuvent être affichées</li>
                                         <li><span>Multiplicateur de points : <b><u style="color: #FF0000">x3</u></b></span></li>
                                     </ul>
                                 </div>
                             </div>
-                            <!-- <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-4">
-                                <div class="settings_panel__description">
-                                    <ul class="settings_difficulty__description">
-                                        <li><span>Les extraits durent <b><u>5 secondes</u></b></span></li>
-                                        <li><span>La portion jouée de chaque extrait est <b><u>aléatoire</u></b></span></li>
-                                        <li><span>Multiplicateur de points : <b><u style="color: #800080">x4</u></b></span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-5">
+                            <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-4">
                                 <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
                                         <li><span>Les extraits durent <b><u>5 secondes</u></b></span></li>
                                         <li><span>Extrait <b><u style="color: #000000">glitché</u></b> et portions aléatoires</span></li>
-                                        <li><span>Multiplicateur de points : <b><u style="color: #000000">x5</u></b></span></li>
+                                        <li><span>Les images deviennent progresivement <b><u style="color: #000000">corrompues</u></b></span></li>
+                                        <li><span>Multiplicateur de points : <b><u style="color: #000000">x4</u></b></span></li>
                                     </ul>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -359,70 +350,61 @@
                         <span class="stats_table__mode_title leaderboard__title leaderboard__title--2 panel_label">Vignettes</span>
                         <div class="stats_row hide_mobile">
                             <span class="stats_cell stats_cell--first"></span>
-                            <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Normal">Normal</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Facile">Facile</span>
+                            <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Moyen">Moyen</span>
                             <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Difficile">Difficile</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Infernal">Infernal</span>
-                            <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Extrême">Extrême</span>
                             <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Glitched">Glitched</span>
                         </div>
                         <div class="stats_row">
                             <span class="stats_cell stats_cell--first stats_label">Parties jouées</span>
                             <div class="stats_row stats_row--mobile hide_desktop">
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Normal">Normal</span>
+                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Facile">Facile</span>
+                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Moyen">Moyen</span>
                                 <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Difficile">Difficile</span>
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Infernal">Infernal</span>
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Extrême">Extrême</span>
                                 <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Glitched">Glitched</span>
                             </div>
-                            <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Normal" rel="Vignettes_Normal">0</span>
+                            <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Facile" rel="Vignettes_Facile">0</span>
+                            <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Moyen" rel="Vignettes_Moyen">0</span>
                             <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Difficile" rel="Vignettes_Difficile">0</span>
-                            <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Infernal" rel="Vignettes_Infernal">0</span>
-                            <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Extrême" rel="Vignettes_Extrême">0</span>
                             <span class="stats_cell stats_value js-games-played js-stats-col" data-score-key="Vignettes_Glitched" rel="Vignettes_Glitched">0</span>
                         </div>
                         <div class="stats_row">
                             <span class="stats_cell stats_cell--first stats_label">Réponses correctes</span>
                             <div class="stats_row stats_row--mobile hide_desktop">
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Normal">Normal</span>
+                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Facile">Facile</span>
+                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Moyen">Moyen</span>
                                 <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Difficile">Difficile</span>
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Infernal">Infernal</span>
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Extrême">Extrême</span>
                                 <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Glitched">Glitched</span>
                             </div>
-                            <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Normal" rel="Vignettes_Normal">0</span>
+                            <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Facile" rel="Vignettes_Facile">0</span>
+                            <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Moyen" rel="Vignettes_Moyen">0</span>
                             <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Difficile" rel="Vignettes_Difficile">0</span>
-                            <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Infernal" rel="Vignettes_Infernal">0</span>
-                            <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Extrême" rel="Vignettes_Extrême">0</span>
                             <span class="stats_cell stats_value js-good-answers js-stats-col" data-score-key="Vignettes_Glitched" rel="Vignettes_Glitched">0</span>
                         </div>
                         <div class="stats_row">
                             <span class="stats_cell stats_cell--first stats_label">Réponses incorrectes</span>
                             <div class="stats_row stats_row--mobile hide_desktop">
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Normal">Normal</span>
+                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Facile">Facile</span>
+                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Moyen">Moyen</span>
                                 <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Difficile">Difficile</span>
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Infernal">Infernal</span>
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Extrême">Extrême</span>
                                 <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Glitched">Glitched</span>
                             </div>
-                            <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Normal" rel="Vignettes_Normal">0</span>
+                            <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Facile" rel="Vignettes_Facile">0</span>
+                            <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Moyen" rel="Vignettes_Moyen">0</span>
                             <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Difficile" rel="Vignettes_Difficile">0</span>
-                            <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Infernal" rel="Vignettes_Infernal">0</span>
-                            <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Extrême" rel="Vignettes_Extrême">0</span>
                             <span class="stats_cell stats_value js-wrong-answers js-stats-col" data-score-key="Vignettes_Glitched" rel="Vignettes_Glitched">0</span>
                         </div>
                         <div class="stats_row">
                             <span class="stats_cell stats_cell--first stats_label">Meilleurs scores</span>
                             <div class="stats_row stats_row--mobile hide_desktop">
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Normal">Normal</span>
+                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Facile">Facile</span>
+                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Moyen">Moyen</span>
                                 <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Difficile">Difficile</span>
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Infernal">Infernal</span>
-                                <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Extrême">Extrême</span>
                                 <span class="stats_cell stats_cell--header leaderboard__title panel_label js-stats-col" data-score-key="Vignettes_Glitched">Glitched</span>
                             </div>
-                            <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Normal" rel="Vignettes_Normal">0</span>
+                            <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Facile" rel="Vignettes_Facile">0</span>
+                            <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Moyen" rel="Vignettes_Moyen">0</span>
                             <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Difficile" rel="Vignettes_Difficile">0</span>
-                            <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Infernal" rel="Vignettes_Infernal">0</span>
-                            <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Extrême" rel="Vignettes_Extrême">0</span>
                             <span class="stats_cell stats_value js-best-score js-stats-col" data-score-key="Vignettes_Glitched" rel="Vignettes_Glitched">0</span>
                         </div>
                     </div>

@@ -68,9 +68,14 @@ export function isHardcoreAudio() {
     return gameState.difficultyLevel >= 3;
 }
 
-/** Random clip start (Difficile+), same picker as Infernal. */
+/** Random clip start (Moyen+). */
 export function usesRandomTrackStart() {
     return gameState.difficultyLevel >= 2;
+}
+
+/** Alternate cover variants among ID-prefixed images (Difficile+). */
+export function usesAlternateCovers() {
+    return gameState.difficultyLevel >= 3;
 }
 
 export function isImageAnswerMode() {

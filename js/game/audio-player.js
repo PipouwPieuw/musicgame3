@@ -93,7 +93,7 @@ export function setupAudioListeners($, { audioPlayer, audioPlayerHardcore, jsAud
             return;
         }
 
-        if (gameState.isPlaying && gameState.difficultyLevel >= 5) {
+        if (gameState.isPlaying && gameState.difficultyLevel >= 4) {
             const segmentEnd =
                 gameState.currentAudioTime +
                 gameState.currentSegmentDurations[0] * audioPlayerHardcore.playbackRate;
@@ -169,7 +169,7 @@ function beginRoundPlayback($, audioPlayer, audioPlayerHardcore) {
         return;
     }
 
-    if (gameState.difficultyLevel >= 5) {
+    if (gameState.difficultyLevel >= 4) {
         gameState.currentAudioTime = pickHardcoreStart(audioPlayer);
         audioPlayerHardcore.currentTime = gameState.currentAudioTime;
         audioPlayerHardcore.playbackRate = setPlaybackRate();
@@ -187,7 +187,7 @@ function beginRoundPlayback($, audioPlayer, audioPlayerHardcore) {
     $('.js-countdown').text(Math.ceil(getRoundDuration()));
 
     audioPlayer.play();
-    if (gameState.difficultyLevel >= 5) {
+    if (gameState.difficultyLevel >= 4) {
         audioPlayerHardcore.play();
     }
 

@@ -23,7 +23,7 @@ import { buildSetlist, getTracksForCurrentMode } from './game/setlist.js';
 import { getAudioElements, resetStreak, updateScoreUI } from './game/scoring.js';
 import { gameState, resetGameState, getDisplayLabel, getScoreKey, isClassicMode, isImageAnswerMode } from './game/state.js';
 import { loadTracksFromGenres } from './services/tracks-loader.js';
-import { filterPlayableTracks, getPreviewPath, migrateLikedTracksToIds } from './lib/track-utils.js';
+import { filterPlayableTracks, getPreviewPath, loadCoversManifest, migrateLikedTracksToIds } from './lib/track-utils.js';
 import {
     clearStoredUsername,
     getStoredUsername,
@@ -160,7 +160,7 @@ async function endGame() {
     $('.js-wrapper').removeClass('game_started');
     $('.js-wrapper').addClass('game_ended');
     $('.js-score-wrapper').removeClass('visible');
-    if (gameState.difficultyLevel == 5) {
+    if (gameState.difficultyLevel == 4) {
         document.body.style.setProperty('--glitchedOpacity', 0);
         $('body').removeClass('glitched_halfgame');
     }
@@ -177,7 +177,7 @@ function quitGame() {
     resetStreak($);
     $('.js-wrapper').removeClass('game_ended');
     $('.js-score-wrapper').removeClass('visible');
-    if (gameState.difficultyLevel == 5) {
+    if (gameState.difficultyLevel == 4) {
         document.body.style.setProperty('--glitchedOpacity', 0);
         $('body').removeClass('glitched_halfgame');
     }
@@ -511,6 +511,7 @@ function bindEvents() {
         syncStatsDifficultyColumns($);
 
         getAllScores().then(function (result) {
+            $('.js-leaderboard-content').empty();
             const leaderboard = {};
             const leaderboardCustom = {};
             for (const i in SCORE_KEYS) {
@@ -568,6 +569,10 @@ function init() {
     });
     bindEvents();
     initFoundTracksReveal($);
+
+    loadCoversManifest().catch(function (error) {
+        console.warn('Failed to load covers manifest', error);
+    });
 
     loadPlaylist()
         .then(function (loaded) {

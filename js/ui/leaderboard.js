@@ -8,7 +8,7 @@ import {
     playAnswerRevealDismiss,
     setAnswerRevealContent,
 } from './answer-reveal.js';
-import { isScoreKeyUnlocked } from './vignettes-unlock.js';
+import { isScoreKeyEnabled, isScoreKeyUnlocked } from './vignettes-unlock.js';
 import { getAchievementDefinitions } from '../achievements/loader.js';
 import { getConditionProgress } from '../achievements/evaluator.js';
 import {
@@ -44,7 +44,8 @@ export function buildLeaderboard($, object, title) {
         const entries = [];
         for (const entry of group.keys) {
             const label = entry.key;
-            if (!isScoreKeyUnlocked(label, gameState.playerData)) {
+            // Show every currently offered mode (enabled), not only personally unlocked ones.
+            if (!isScoreKeyEnabled(label)) {
                 continue;
             }
             if (!object[label] || object[label].length == 0) {
@@ -376,7 +377,7 @@ export function updateStatsBestScore($) {
         const currentData = gameState.playerData.scores[scoreItem];
         const currentDifficulty = migrateScoreKey(currentData[0]);
         const currentScore = currentData[2];
-        if (!(currentDifficulty in bestScores)) {
+        if (!currentDifficulty || !(currentDifficulty in bestScores)) {
             continue;
         }
         bestScores[currentDifficulty] =

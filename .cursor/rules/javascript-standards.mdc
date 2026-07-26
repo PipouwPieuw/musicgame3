@@ -47,7 +47,7 @@ $('.js-settings').addClass('visible');
 
 ## Game Logic
 
-- Difficulty levels 1–5 drive behavior (`gameState.difficultyLevel`). Changes to scoring, audio, or answer validation must respect all five modes.
+- Difficulty levels 1–4 drive behavior (`gameState.difficultyLevel`). Changes to scoring, audio, or answer validation must respect all four modes.
 - Answers: typed song title validated via `js/lib/normalize-title.js` (normalized exact match).
 - Audio: `#audio_player` (normal) and `#audio_player_hardcore` (glitched). Volume crossfade is intentional — preserve it.
 

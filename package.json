@@ -10,7 +10,8 @@
     "watch": "sass scss/main.scss style.css --style=compressed --no-source-map --watch",
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "import-players": "node server/scripts/import-players-json.js"
+    "import-players": "node server/scripts/import-players-json.js",
+    "optimize-covers": "node scripts/optimize-covers.js"
   },
   "dependencies": {
     "24": "^0.0.0",
@@ -18,6 +19,7 @@
     "express": "^4.21.2"
   },
   "devDependencies": {
-    "sass": "1.69.7"
+    "sass": "1.69.7",
+    "sharp": "^0.34.4"
   }
 }

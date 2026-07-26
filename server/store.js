@@ -3,8 +3,11 @@ import {
     KEYWORD_MAX_LENGTH,
     KEYWORD_MIN_LENGTH,
     migrateScoresList,
+    migrateSeenUnlocksMap,
     migrateStatMap,
     SCORE_KEYS,
+    SEEN_UNLOCK_LADDER_V2,
+    shouldRemapOldDifficileToMoyen,
 } from '../js/config.js';
 import { supabase } from './supabase.js';
 
@@ -19,7 +22,7 @@ export function createDefaultProfile(username) {
         wrong_answers: emptyScoreMap(),
         scores: [],
         foundTracksIds: [],
-        seenUnlocks: {},
+        seenUnlocks: { [SEEN_UNLOCK_LADDER_V2]: true },
         unlockedAchievements: [],
         lastHeldGlobalTrophies: [],
     };
@@ -29,18 +32,7 @@ export function createDefaultProfile(username) {
  * Normalize seen-unlock map. Migrates legacy hasSeenVignettesMode / has_seen_vignettes_mode into { vignettes: true }.
  */
 export function normalizeSeenUnlocks(seenUnlocks, legacyHasSeenVignettes) {
-    const map = {};
-    if (seenUnlocks && typeof seenUnlocks === 'object' && !Array.isArray(seenUnlocks)) {
-        for (const key of Object.keys(seenUnlocks)) {
-            if (seenUnlocks[key]) {
-                map[key] = true;
-            }
-        }
-    }
-    if (legacyHasSeenVignettes && !map.vignettes) {
-        map.vignettes = true;
-    }
-    return map;
+    return migrateSeenUnlocksMap(seenUnlocks, legacyHasSeenVignettes);
 }
 
 function normalizeUnlockedAchievements(list) {
@@ -80,10 +72,18 @@ export function normalizeProfile(profile) {
     profile.unlockedAchievements = normalizeUnlockedAchievements(profile.unlockedAchievements);
     profile.lastHeldGlobalTrophies = normalizeHeldGlobalTrophies(profile.lastHeldGlobalTrophies);
 
-    profile.games_played = migrateStatMap(profile.games_played);
-    profile.good_answers = migrateStatMap(profile.good_answers);
-    profile.wrong_answers = migrateStatMap(profile.wrong_answers);
-    profile.scores = migrateScoresList(profile.scores);
+    const remapOldDifficile = shouldRemapOldDifficileToMoyen(profile);
+    const migrateOptions = { remapOldDifficile: remapOldDifficile };
+
+    profile.games_played = migrateStatMap(profile.games_played, migrateOptions);
+    profile.good_answers = migrateStatMap(profile.good_answers, migrateOptions);
+    profile.wrong_answers = migrateStatMap(profile.wrong_answers, migrateOptions);
+    profile.scores = migrateScoresList(profile.scores, migrateOptions);
+
+    if (!profile.seenUnlocks) {
+        profile.seenUnlocks = {};
+    }
+    profile.seenUnlocks[SEEN_UNLOCK_LADDER_V2] = true;
 
     for (const name of SCORE_KEYS) {
         if (profile.games_played[name] == null) {

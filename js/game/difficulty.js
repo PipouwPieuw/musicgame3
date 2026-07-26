@@ -18,12 +18,12 @@ export function applyDifficulty(level) {
     const audioPlayer = document.getElementById('audio_player');
     const audioPlayerHardcore = document.getElementById('audio_player_hardcore');
 
-    audioPlayer.volume = difficultyLevel < 5 ? 1 : 0;
-    audioPlayerHardcore.volume = difficultyLevel < 5 ? 0 : 1;
+    audioPlayer.volume = difficultyLevel < 4 ? 1 : 0;
+    audioPlayerHardcore.volume = difficultyLevel < 4 ? 0 : 1;
 
-    document.body.classList.toggle('glitched', difficultyLevel === 5);
+    document.body.classList.toggle('glitched', difficultyLevel === 4);
 
-    if (difficultyLevel >= 5) {
+    if (difficultyLevel >= 4) {
         gameState.currentSegmentDurations = [...SEGMENT_DURATIONS_1];
     }
 }

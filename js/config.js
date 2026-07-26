@@ -1,5 +1,6 @@
 export const DEFAULT_COVER_PATH = 'assets/images/default.png';
 export const NOT_FOUND_COVER_PATH = 'assets/images/not-found.png';
+export const COVERS_MANIFEST_PATH = 'assets/covers/manifest.json';
 
 export const DEVMODE = false;
 export const SHUFFLE = true;
@@ -10,26 +11,24 @@ export const GAME_MODE_VIGNETTES = 'vignettes';
 /** Key in playerData.seenUnlocks for the Vignettes mode “débloqué” tooltip. */
 export const SEEN_UNLOCK_VIGNETTES = 'vignettes';
 
-/** Difficulty ladder names (levels 1–5), used by Vignettes mode. */
-export const DIFFICULTYNAMES = ['Normal', 'Difficile', 'Infernal', 'Extrême', 'Glitched'];
+/** Difficulty ladder names (levels 1–4), used by Vignettes mode. */
+export const DIFFICULTYNAMES = ['Facile', 'Moyen', 'Difficile', 'Glitched'];
 
 /** Persistence / stats / leaderboard keys (mode + optional difficulty). */
 export const SCORE_KEYS = [
     'Classique',
-    'Vignettes_Normal',
+    'Vignettes_Facile',
+    'Vignettes_Moyen',
     'Vignettes_Difficile',
-    'Vignettes_Infernal',
-    'Vignettes_Extrême',
     'Vignettes_Glitched',
 ];
 
 /** French display labels for SCORE_KEYS. */
 export const SCORE_KEY_LABELS = {
     Classique: 'Classique',
-    Vignettes_Normal: 'Vignettes — Normal',
+    Vignettes_Facile: 'Vignettes — Facile',
+    Vignettes_Moyen: 'Vignettes — Moyen',
     Vignettes_Difficile: 'Vignettes — Difficile',
-    Vignettes_Infernal: 'Vignettes — Infernal',
-    Vignettes_Extrême: 'Vignettes — Extrême',
     Vignettes_Glitched: 'Vignettes — Glitched',
 };
 
@@ -45,29 +44,98 @@ export const SCORE_KEY_GROUPS = [
     {
         modeLabel: 'Vignettes',
         keys: [
-            { key: 'Vignettes_Normal', difficultyLabel: 'Normal' },
+            { key: 'Vignettes_Facile', difficultyLabel: 'Facile' },
+            { key: 'Vignettes_Moyen', difficultyLabel: 'Moyen' },
             { key: 'Vignettes_Difficile', difficultyLabel: 'Difficile' },
-            { key: 'Vignettes_Infernal', difficultyLabel: 'Infernal' },
-            { key: 'Vignettes_Extrême', difficultyLabel: 'Extrême' },
             { key: 'Vignettes_Glitched', difficultyLabel: 'Glitched' },
         ],
     },
 ];
 
+/**
+ * Renames for keys that no longer exist as SCORE_KEYS.
+ * Vignettes_Difficile is NOT listed here: it now means the new 5s mode.
+ * Old 10s Difficile → Moyen is a one-shot remap (see remapOldDifficile).
+ */
+const SCORE_KEY_RENAMES = {
+    Vignettes_Normal: 'Vignettes_Facile',
+};
+
+/** Dropped Vignettes keys (Infernal / Extrême) — filtered out of stats/scores. */
+const DROPPED_SCORE_KEYS = {
+    Vignettes_Infernal: true,
+    Vignettes_Extrême: true,
+};
+
+/**
+ * Marker in seenUnlocks: Facile/Moyen/Difficile/Glitched ladder migration applied.
+ * After this flag is set, Vignettes_Difficile means the new 5s difficulty.
+ */
+export const SEEN_UNLOCK_LADDER_V2 = '__ladder_v2';
+
 /** Map legacy single-axis keys to SCORE_KEYS. */
 export const LEGACY_SCORE_KEY_MAP = {
     Normal: 'Classique',
-    Difficile: 'Vignettes_Normal',
+    Difficile: 'Vignettes_Facile',
     Infernal: 'Vignettes_Infernal',
     Extrême: 'Vignettes_Extrême',
     Glitched: 'Vignettes_Glitched',
 };
 
+function collectScoreMapKeys(map) {
+    if (!map || typeof map !== 'object') {
+        return [];
+    }
+    return Object.keys(map);
+}
+
+function collectScoresListKeys(scores) {
+    const keys = [];
+    if (!scores || !scores.length) {
+        return keys;
+    }
+    for (let i = 0; i < scores.length; i++) {
+        const entry = scores[i];
+        if (entry && entry.length) {
+            keys.push(entry[0]);
+        }
+    }
+    return keys;
+}
+
+/** True when profile still has pre-rename Vignettes_Normal rows (old Facile). */
+export function shouldRemapOldDifficileToMoyen(profile) {
+    if (profile?.seenUnlocks && profile.seenUnlocks[SEEN_UNLOCK_LADDER_V2]) {
+        return false;
+    }
+    const keys = collectScoreMapKeys(profile?.games_played)
+        .concat(collectScoreMapKeys(profile?.good_answers))
+        .concat(collectScoreMapKeys(profile?.wrong_answers))
+        .concat(collectScoresListKeys(profile?.scores));
+    return keys.indexOf('Vignettes_Normal') !== -1;
+}
+
 export function migrateScoreKey(key) {
+    if (Object.prototype.hasOwnProperty.call(SCORE_KEY_RENAMES, key)) {
+        return SCORE_KEY_RENAMES[key];
+    }
+    if (DROPPED_SCORE_KEYS[key]) {
+        return null;
+    }
     if (SCORE_KEYS.indexOf(key) !== -1) {
         return key;
     }
-    return LEGACY_SCORE_KEY_MAP[key] || key;
+    const legacy = LEGACY_SCORE_KEY_MAP[key];
+    if (legacy) {
+        if (DROPPED_SCORE_KEYS[legacy]) {
+            return null;
+        }
+        if (Object.prototype.hasOwnProperty.call(SCORE_KEY_RENAMES, legacy)) {
+            return SCORE_KEY_RENAMES[legacy];
+        }
+        return legacy;
+    }
+    return key;
 }
 
 export function emptyScoreMap() {
@@ -78,18 +146,29 @@ export function emptyScoreMap() {
     return map;
 }
 
-export function migrateStatMap(map) {
+/**
+ * @param {object} map
+ * @param {{ remapOldDifficile?: boolean }} [options]
+ */
+export function migrateStatMap(map, options) {
     const result = emptyScoreMap();
     if (!map) {
         return result;
     }
 
+    const remapOldDifficile = Boolean(options && options.remapOldDifficile);
+
     for (const key in map) {
         if (!Object.prototype.hasOwnProperty.call(map, key)) {
             continue;
         }
-        const newKey = migrateScoreKey(key);
-        if (SCORE_KEYS.indexOf(newKey) === -1) {
+        let newKey;
+        if (key === 'Vignettes_Difficile' && remapOldDifficile) {
+            newKey = 'Vignettes_Moyen';
+        } else {
+            newKey = migrateScoreKey(key);
+        }
+        if (!newKey || SCORE_KEYS.indexOf(newKey) === -1) {
             continue;
         }
         result[newKey] = (result[newKey] || 0) + (map[key] || 0);
@@ -98,19 +177,75 @@ export function migrateStatMap(map) {
     return result;
 }
 
-export function migrateScoresList(scores) {
+/**
+ * @param {Array} scores
+ * @param {{ remapOldDifficile?: boolean }} [options]
+ */
+export function migrateScoresList(scores, options) {
     if (!scores || !scores.length) {
         return [];
     }
 
-    return scores.map(function (entry) {
+    const remapOldDifficile = Boolean(options && options.remapOldDifficile);
+
+    const migrated = [];
+    for (let i = 0; i < scores.length; i++) {
+        const entry = scores[i];
         if (!entry || !entry.length) {
-            return entry;
+            continue;
         }
         const next = entry.slice();
-        next[0] = migrateScoreKey(entry[0]);
-        return next;
-    });
+        let key = next[0];
+        if (key === 'Vignettes_Difficile' && remapOldDifficile) {
+            key = 'Vignettes_Moyen';
+        } else {
+            key = migrateScoreKey(key);
+        }
+        if (!key || SCORE_KEYS.indexOf(key) === -1) {
+            continue;
+        }
+        next[0] = key;
+        migrated.push(next);
+    }
+    return migrated;
+}
+
+/**
+ * Migrate seenUnlocks difficulty keys.
+ * Before the ladder-v2 flag: remaps old level-2 key Vignettes_Difficile → Vignettes_Moyen
+ * so the new Difficile unlock tooltip can show. After the flag: keeps Vignettes_Difficile
+ * (new difficulty dismissals). Drops Infernal/Extrême. Preserves internal flags.
+ */
+export function migrateSeenUnlocksMap(seenUnlocks, legacyHasSeenVignettes) {
+    const map = {};
+    const ladderV2Done = Boolean(
+        seenUnlocks &&
+            typeof seenUnlocks === 'object' &&
+            !Array.isArray(seenUnlocks) &&
+            seenUnlocks[SEEN_UNLOCK_LADDER_V2]
+    );
+
+    if (seenUnlocks && typeof seenUnlocks === 'object' && !Array.isArray(seenUnlocks)) {
+        for (const key of Object.keys(seenUnlocks)) {
+            if (!seenUnlocks[key]) {
+                continue;
+            }
+            let nextKey = key;
+            if (key === 'Vignettes_Normal') {
+                nextKey = 'Vignettes_Facile';
+            } else if (key === 'Vignettes_Difficile' && !ladderV2Done) {
+                // Old level-2 (now Moyen) used this key for the unlock tooltip.
+                nextKey = 'Vignettes_Moyen';
+            } else if (key === 'Vignettes_Infernal' || key === 'Vignettes_Extrême') {
+                continue;
+            }
+            map[nextKey] = true;
+        }
+    }
+    if (legacyHasSeenVignettes && !map.vignettes) {
+        map.vignettes = true;
+    }
+    return map;
 }
 
 /** Soft login keyword length bounds (plaintext ownership check, not real auth). */
@@ -135,33 +270,29 @@ export const VIGNETTES_MIN_TRACKS_BY_GAME = 20;
 export const VIGNETTES_DIFFICULTY_ENABLED = {
     1: true,
     2: true,
-    3: false,
-    4: false,
-    5: false,
+    3: true,
+    4: true,
 };
 
 /**
  * Unlock conditions per Vignettes difficulty level (1-indexed).
  * null = unlocked once the mode is unlocked (and ENABLED).
  * perfectScoreOnPrevious = perfect DEFAULTTRACKSBYGAME run on the previous difficulty.
- * Higher levels stay gated by VIGNETTES_DIFFICULTY_ENABLED until re-enabled.
  */
 export const VIGNETTES_DIFFICULTY_UNLOCK = {
     1: null,
     2: { type: 'perfectScoreOnPrevious' },
     3: { type: 'perfectScoreOnPrevious' },
     4: { type: 'perfectScoreOnPrevious' },
-    5: { type: 'perfectScoreOnPrevious' },
 };
 
 /** Maps SCORE_KEYS to Vignettes difficulty level (null = Classique / no ladder). */
 export const SCORE_KEY_DIFFICULTY_LEVEL = {
     Classique: null,
-    Vignettes_Normal: 1,
-    Vignettes_Difficile: 2,
-    Vignettes_Infernal: 3,
-    Vignettes_Extrême: 4,
-    Vignettes_Glitched: 5,
+    Vignettes_Facile: 1,
+    Vignettes_Moyen: 2,
+    Vignettes_Difficile: 3,
+    Vignettes_Glitched: 4,
 };
 
 export const MODIFIER_RATES = [0.25, 0.33, 0.5, 0.66, 0.75, 0.87, 1, 1.25, 1.5, 2, 2.25, 2.5, 2.75, 3, 1];

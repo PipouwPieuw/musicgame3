@@ -1,7 +1,8 @@
 import { DEFAULT_COVER_PATH, IMAGE_ANSWER_COUNT } from '../config.js';
 import { preloadImages } from '../lib/preload-image.js';
 import { shuffleArray } from '../lib/shuffle.js';
-import { getCoverPath } from '../lib/track-utils.js';
+import { getCoverPath, pickCoverStem } from '../lib/track-utils.js';
+import { usesAlternateCovers } from './state.js';
 
 export function buildImageChoices(correctTrackId, tracks) {
     const choices = [{ trackId: correctTrackId, isCorrect: true }];
@@ -22,7 +23,15 @@ export function buildImageChoices(correctTrackId, tracks) {
         choices.push({ trackId, isCorrect: false });
     }
 
-    return shuffleArray(choices);
+    const useAlternates = usesAlternateCovers();
+
+    return shuffleArray(choices).map(function (choice) {
+        return {
+            trackId: choice.trackId,
+            isCorrect: choice.isCorrect,
+            coverStem: pickCoverStem(choice.trackId, useAlternates),
+        };
+    });
 }
 
 export async function renderImageChoices($, choices) {
@@ -30,7 +39,7 @@ export async function renderImageChoices($, choices) {
     $list.empty().removeClass('is-ready');
 
     const coverPaths = choices.map(function (choice) {
-        return getCoverPath(choice.trackId);
+        return getCoverPath(choice.trackId, choice.coverStem);
     });
 
     choices.forEach(function (choice, index) {
@@ -82,4 +91,17 @@ export function disableImageAnswers($) {
 
 export function getImageAnswerButton($, index) {
     return $('.js-answers .js-answer[data-index="' + index + '"]');
+}
+
+/** Cover stem shown for the correct choice this round (for reveal sync). */
+export function getCorrectChoiceCoverStem(choices) {
+    if (!Array.isArray(choices)) {
+        return null;
+    }
+    for (let i = 0; i < choices.length; i++) {
+        if (choices[i] && choices[i].isCorrect) {
+            return choices[i].coverStem || choices[i].trackId;
+        }
+    }
+    return null;
 }

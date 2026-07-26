@@ -13,6 +13,7 @@ import {
     buildImageChoices,
     disableImageAnswers,
     enableImageAnswers,
+    getCorrectChoiceCoverStem,
     getImageAnswerButton,
     renderImageChoices,
     resetImageAnswers,
@@ -92,7 +93,10 @@ function showGuessingPhaseUI($) {
 }
 
 function revealTrackMetadata($, trackId) {
-    const meta = getTrackMetadata(gameState.tracks, trackId);
+    const coverStem = isImageAnswerMode()
+        ? getCorrectChoiceCoverStem(gameState.roundChoices)
+        : null;
+    const meta = getTrackMetadata(gameState.tracks, trackId, coverStem);
     // $('.js-name').text(meta.name);
     // $('.js-description').text(meta.subTitle?.trim() ? meta.subTitle : '');
     // Quiet preload into the hidden overlay (no animation) for the next reveal.
@@ -143,7 +147,10 @@ async function finishRound($, audioPlayer) {
 
     playCorrectSound();
 
-    const meta = getTrackMetadata(gameState.tracks, gameState.currentTrackId);
+    const coverStem = isImageAnswerMode()
+        ? getCorrectChoiceCoverStem(gameState.roundChoices)
+        : null;
+    const meta = getTrackMetadata(gameState.tracks, gameState.currentTrackId, coverStem);
     const discovery = isTrackDiscovery(gameState.currentTrackId);
     await setAnswerRevealContent($, {
         title: meta.name,
@@ -407,7 +414,7 @@ export function playRound($) {
     setLikeButton($, trackId);
     showGuessingPhaseUI($);
 
-    if (gameState.difficultyLevel === 5) {
+    if (gameState.difficultyLevel === 4) {
         document.body.style.setProperty('--glitchedOpacity', gameState.playedTracks / (gameState.tracksByGame - 1));
         $('body').toggleClass('glitched_halfgame', gameState.playedTracks > gameState.tracksByGame / 2);
     }

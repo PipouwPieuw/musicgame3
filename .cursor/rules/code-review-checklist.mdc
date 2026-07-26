@@ -8,7 +8,7 @@ alwaysApply: true
 Before considering a task done, verify:
 
 ## Correctness
-- [ ] Change works across difficulty levels 1–5 when game logic is touched
+- [ ] Change works across difficulty levels 1–4 when game logic is touched
 - [ ] Mobile (≤640px) and desktop layouts still behave correctly
 - [ ] Login, game flow, leaderboard, and favorites paths are unaffected (or intentionally updated)
 

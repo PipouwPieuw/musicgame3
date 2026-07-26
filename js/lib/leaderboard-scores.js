@@ -1,16 +1,17 @@
-import { DEFAULTTRACKSBYGAME, migrateScoreKey, SCORE_KEYS } from '../config.js';
+import { DEFAULTTRACKSBYGAME, migrateScoresList, SCORE_KEYS } from '../config.js';
 
 export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
     for (const element in allScores) {
-        const scores = allScores[element].scores;
-        if (scores == null) {
+        // Scores from /api/leaderboard are already normalized; migrateScoresList
+        // still remaps any leftover legacy keys without touching new Difficile.
+        const scores = migrateScoresList(allScores[element].scores);
+        if (scores == null || !scores.length) {
             continue;
         }
         const name = allScores[element].name;
         const initials = allScores[element].initials;
         for (const currentScore in scores) {
-            const [rawDifficulty, tracks, points] = scores[currentScore];
-            const difficulty = migrateScoreKey(rawDifficulty);
+            const [difficulty, tracks, points] = scores[currentScore];
             if (!(difficulty in leaderboard) || !(difficulty in leaderboardCustom)) {
                 continue;
             }

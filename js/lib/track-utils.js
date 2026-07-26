@@ -1,3 +1,7 @@
+import { COVERS_MANIFEST_PATH } from '../config.js';
+
+let coversManifest = {};
+
 export function findTrackById(tracks, trackId) {
     return tracks.find(function (track) {
         return track.id === trackId;
@@ -41,11 +45,50 @@ export async function filterPlayableTracks(tracks) {
     });
 }
 
-export function getCoverPath(trackId) {
-    return `assets/covers/${trackId}.png`;
+/**
+ * Load assets/covers/manifest.json once. On failure, alternate covers fall back to base id.
+ */
+export async function loadCoversManifest() {
+    try {
+        const response = await fetch(COVERS_MANIFEST_PATH);
+        if (!response.ok) {
+            coversManifest = {};
+            return coversManifest;
+        }
+        const data = await response.json();
+        coversManifest = data && typeof data === 'object' ? data : {};
+    } catch (error) {
+        console.warn('Failed to load covers manifest; using base covers only.', error);
+        coversManifest = {};
+    }
+    return coversManifest;
 }
 
-export function getTrackMetadata(tracks, trackId) {
+export function getCoverStemsForTrack(trackId) {
+    const stems = coversManifest[trackId];
+    if (Array.isArray(stems) && stems.length > 0) {
+        return stems;
+    }
+    return [trackId];
+}
+
+/**
+ * Pick a cover stem. When useAlternates is true, choose uniformly among ID-prefixed variants.
+ */
+export function pickCoverStem(trackId, useAlternates) {
+    if (!useAlternates) {
+        return trackId;
+    }
+    const stems = getCoverStemsForTrack(trackId);
+    return stems[Math.floor(Math.random() * stems.length)];
+}
+
+export function getCoverPath(trackId, coverStem) {
+    const stem = coverStem || trackId;
+    return `assets/covers/${stem}.webp`;
+}
+
+export function getTrackMetadata(tracks, trackId, coverStem) {
     const track = findTrackById(tracks, trackId);
 
     if (!track) {
@@ -59,7 +102,7 @@ export function getTrackMetadata(tracks, trackId) {
     return {
         name: track.title,
         subTitle: track.subTitle,
-        image: getCoverPath(trackId),
+        image: getCoverPath(trackId, coverStem),
     };
 }
 
