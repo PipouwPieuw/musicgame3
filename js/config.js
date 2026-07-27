@@ -385,7 +385,7 @@ export const VIGNETTES_DIFFICULTY_ENABLED = {
     1: true,
     2: true,
     3: true,
-    4: false,
+    4: true,
 };
 
 /**
