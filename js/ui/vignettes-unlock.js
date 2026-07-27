@@ -47,7 +47,7 @@ export function setUnlockSeen(playerData, unlockKey) {
 }
 
 /**
- * Whether the player has a full-length (DEFAULTTRACKSBYGAME) zero-wrong clear for this score key.
+ * Whether the player has a full-length (STANDARD_TRACKS_BY_SCORE_KEY) zero-wrong clear for this score key.
  */
 export function hasPerfectClearForKey(playerData, scoreKey) {
     if (!scoreKey || SCORE_KEY_DIFFICULTY_LEVEL[scoreKey] == null) {

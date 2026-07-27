@@ -199,11 +199,11 @@
 /*	justify-content: center;*/
 /*	padding: 15px 65px 15px 15px;*/
 }
-@media only screen and (max-width: 640px) {	
-	.track_display__details {
-/*		padding: 5px 55px 5px 5px;*/
-	}
-}
+// @media only screen and (max-width: 640px) {	
+// 	.track_display__details {
+// 		padding: 5px 55px 5px 5px;
+// 	}
+// }
 .track_display__content {
 	flex: 1 0 calc(100% - 60px);
 /*	width: calc(100% - 60px);*/
@@ -229,6 +229,7 @@
 		font-size: 22px;
 /*		line-height: 20px;*/
 		display: -webkit-box;
+		line-clamp: 3;
 	    -webkit-line-clamp: 3;
 	    -webkit-box-orient: vertical;
 	    overflow: hidden;

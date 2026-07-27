@@ -1,4 +1,4 @@
-import { LEADERBOARD_SCORE_KEYS, DEFAULTTRACKSBYGAME, migrateScoresList } from '../config.js';
+import { LEADERBOARD_SCORE_KEYS, STANDARD_TRACKS_BY_SCORE_KEY, migrateScoresList } from '../config.js';
 
 export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
     for (const element in allScores) {
@@ -15,7 +15,8 @@ export function returnBestScores(allScores, leaderboard, leaderboardCustom) {
             if (!(difficulty in leaderboard) || !(difficulty in leaderboardCustom)) {
                 continue;
             }
-            if (tracks != DEFAULTTRACKSBYGAME) {
+            const standardTracks = STANDARD_TRACKS_BY_SCORE_KEY[difficulty];
+            if (standardTracks == null || tracks != standardTracks) {
                 if (!(name in leaderboardCustom[difficulty])) {
                     leaderboardCustom[difficulty][name] = [name, tracks, points, initials];
                 } else if (leaderboardCustom[difficulty][name][2] < points) {

@@ -351,7 +351,34 @@ export const MINSTREAK = 3;
 /** Max additive streak bonus; at cap, base points are doubled (hot streak). */
 export const MAX_STREAK_BONUS = 5;
 export const DEFAULT_ACTIVE_GENRES = ['shows2000'];
+/** Legacy default (Facile / historical scores). Prefer STANDARD_TRACKS_BY_SCORE_KEY for new logic. */
 export const DEFAULTTRACKSBYGAME = 20;
+/**
+ * Standard round counts by score key.
+ * Codex: null = use full current pool (unfound playable in selected genre).
+ */
+export const STANDARD_TRACKS_BY_SCORE_KEY = {
+    Codex: null,
+    Vignettes_Facile: 20,
+    Vignettes_Moyen: 40,
+    Vignettes_Difficile: 40,
+    Vignettes_Glitched: 60,
+};
+
+/**
+ * Resolve how many tracks a game should use for a score key, clamped to pool size.
+ * @param {string} scoreKey
+ * @param {number} poolSize
+ * @returns {number}
+ */
+export function getStandardTracksByGame(scoreKey, poolSize) {
+    const configured = STANDARD_TRACKS_BY_SCORE_KEY[scoreKey];
+    if (configured == null) {
+        return poolSize;
+    }
+    return Math.min(configured, poolSize);
+}
+
 export const DEFAULTTRACKDURATION = 30;
 export const MOYENTRACKDURATION = 20;
 export const DIFFICILETRACKDURATION = 10;
@@ -391,7 +418,8 @@ export const VIGNETTES_DIFFICULTY_ENABLED = {
 /**
  * Unlock conditions per Vignettes difficulty level (1-indexed).
  * null = unlocked once the mode is unlocked (and ENABLED).
- * perfectClearOnPrevious = 20/20 (DEFAULTTRACKSBYGAME, zero wrongs) on the previous difficulty.
+ * perfectClearOnPrevious = full standard length for that difficulty
+ * (STANDARD_TRACKS_BY_SCORE_KEY, zero wrongs) on the previous difficulty.
  */
 export const VIGNETTES_DIFFICULTY_UNLOCK = {
     1: null,

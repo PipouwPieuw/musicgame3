@@ -1,12 +1,13 @@
 import {
-    DEFAULTTRACKSBYGAME,
     LEADERBOARD_SCORE_KEYS,
     DEVMODE,
     GAME_MODE_VIGNETTES,
     KEYWORD_MIN_LENGTH,
     KEYWORD_MAX_LENGTH,
     SEEN_UNLOCK_VIGNETTES,
+    STANDARD_TRACKS_BY_SCORE_KEY,
     VIGNETTES_MIN_TRACKS_BY_GAME,
+    getStandardTracksByGame,
 } from './config.js';
 import { setupAudioListeners } from './game/audio-player.js';
 import { applyDifficulty, applyGameMode, updateAnswerModeUI, updateDifficultyUI } from './game/difficulty.js';
@@ -149,7 +150,7 @@ async function endGame() {
         gameState.playerData.scores.push([getScoreKey(), gameState.tracksByGame, gameState.score]);
 
         if (
-            gameState.tracksByGame === DEFAULTTRACKSBYGAME &&
+            gameState.tracksByGame === STANDARD_TRACKS_BY_SCORE_KEY[getScoreKey()] &&
             gameState.sessionWrongCount === 0
         ) {
             if (!gameState.playerData.perfectClears) {
@@ -254,26 +255,7 @@ function syncPlayButtonState($) {
 
 function syncTracksByGameToCatalog() {
     const availableTracks = getTracksForCurrentMode().length;
-    const $input = $('.js-nb-tracks');
-    let min = 1;
-
-    if (isImageAnswerMode() && availableTracks >= VIGNETTES_MIN_TRACKS_BY_GAME) {
-        min = VIGNETTES_MIN_TRACKS_BY_GAME;
-    }
-
-    if (availableTracks > 0) {
-        if (gameState.tracksByGame > availableTracks) {
-            gameState.tracksByGame = availableTracks;
-        }
-
-        if (gameState.tracksByGame < min) {
-            gameState.tracksByGame = min;
-        }
-
-        $input.attr('min', min).attr('max', availableTracks).val(gameState.tracksByGame);
-    } else {
-        $input.attr('min', min).attr('max', min);
-    }
+    gameState.tracksByGame = getStandardTracksByGame(getScoreKey(), availableTracks);
 
     syncGenreSettingsUI($);
     syncPlayButtonState($);
@@ -469,19 +451,20 @@ function bindEvents() {
         syncStatsDifficultyColumns($);
     });
 
-    $('.js-nb-tracks').on('keyup mouseup', function () {
-        const min = +$(this).attr('min');
-        const poolSize = getTracksForCurrentMode().length;
-        const max = Math.min(+$(this).attr('max'), poolSize || +$(this).attr('max'));
-
-        if (+$(this).val() < min) {
-            $(this).val(min);
-        } else if (+$(this).val() > max) {
-            $(this).val(max);
-        }
-
-        gameState.tracksByGame = +$(this).val();
-    });
+    // Track count is forced by mode/difficulty (STANDARD_TRACKS_BY_SCORE_KEY).
+    // $('.js-nb-tracks').on('keyup mouseup', function () {
+    //     const min = +$(this).attr('min');
+    //     const poolSize = getTracksForCurrentMode().length;
+    //     const max = Math.min(+$(this).attr('max'), poolSize || +$(this).attr('max'));
+    //
+    //     if (+$(this).val() < min) {
+    //         $(this).val(min);
+    //     } else if (+$(this).val() > max) {
+    //         $(this).val(max);
+    //     }
+    //
+    //     gameState.tracksByGame = +$(this).val();
+    // });
 
     $('.js-input-game-mode').on('change', function () {
         handleGameModeChange(String($(this).val()));
@@ -601,7 +584,6 @@ function init() {
     });
 
     updateScoreUI($);
-    gameState.tracksByGame = DEFAULTTRACKSBYGAME;
     applyGameMode('codex');
     updateDifficultyUI($, getDisplayLabel());
     syncGenreSettingsVisibility($);

@@ -1,8 +1,0 @@
-{
-  "genres": {
-    "shows2000": "data/genres/shows2000.json",
-    "shows2010": "data/genres/shows2010.json",
-    "shows1990": "data/genres/shows1990.json",
-    "cartoons": "data/genres/cartoons.json"
-  }
-}
