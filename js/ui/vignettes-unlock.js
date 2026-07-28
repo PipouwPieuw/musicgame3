@@ -2,6 +2,7 @@ import {
     DIFFICULTYNAMES,
     SCORE_KEY_DIFFICULTY_LEVEL,
     SEEN_UNLOCK_VIGNETTES,
+    STANDARD_TRACKS_BY_SCORE_KEY,
     VIGNETTES_DIFFICULTY_ENABLED,
     VIGNETTES_DIFFICULTY_UNLOCK,
     VIGNETTES_UNLOCK_THRESHOLD,
@@ -57,6 +58,18 @@ export function hasPerfectClearForKey(playerData, scoreKey) {
     return Boolean(playerData?.perfectClears && playerData.perfectClears[scoreKey]);
 }
 
+function hasEnoughFoundTracksForLevel(level, playerData) {
+    const scoreKey = getVignettesScoreKeyForLevel(level);
+    if (!scoreKey) {
+        return false;
+    }
+    const required = STANDARD_TRACKS_BY_SCORE_KEY[scoreKey];
+    if (required == null) {
+        return true;
+    }
+    return (playerData?.foundTracksIds?.length || 0) >= required;
+}
+
 function meetsUnlockCondition(condition, level, playerData) {
     if (condition == null) {
         return true;
@@ -67,7 +80,10 @@ function meetsUnlockCondition(condition, level, playerData) {
         if (!previousKey) {
             return false;
         }
-        return hasPerfectClearForKey(playerData, previousKey);
+        return (
+            hasPerfectClearForKey(playerData, previousKey) &&
+            hasEnoughFoundTracksForLevel(level, playerData)
+        );
     }
 
     return false;

@@ -1,8 +1,8 @@
-import { DEFAULT_COVER_PATH, IMAGE_ANSWER_COUNT } from '../config.js';
+import { DEFAULT_COVER_PATH, IMAGE_ANSWER_COUNT, IMAGE_GLITCH_CLASSES } from '../config.js';
 import { preloadImages } from '../lib/preload-image.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { getCoverPath, pickCoverStem } from '../lib/track-utils.js';
-import { usesAlternateCovers } from './state.js';
+import { gameState, usesAlternateCovers } from './state.js';
 
 /**
  * Build IMAGE_ANSWER_COUNT vignette choices for the playing track.
@@ -51,6 +51,38 @@ export function buildImageChoices(correctTrackId, tracks) {
     });
 }
 
+/**
+ * Per-image roll for Glitched mode: chance rises with progress; intensity 0–1.
+ * @returns {{ className: string, intensity: number } | null}
+ */
+function rollImageGlitch() {
+    if (gameState.difficultyLevel !== 4 || IMAGE_GLITCH_CLASSES.length === 0) {
+        return null;
+    }
+
+    const halfGame = gameState.tracksByGame / 2;
+    // Round 1 ≈ 10% (for 20 tracks), mid-game ≈ 100% — mirrors audio jump escalation.
+    const chancePercent = Math.min(100, Math.floor((gameState.playedTracks / halfGame) * 100));
+
+    if (Math.random() * 100 >= chancePercent) {
+        return null;
+    }
+
+    const intensity =
+        gameState.tracksByGame <= 1
+            ? 1
+            : Math.min(1, Math.max(0, gameState.playedTracks / (gameState.tracksByGame - 1)));
+
+    const className =
+        IMAGE_GLITCH_CLASSES[Math.floor(Math.random() * IMAGE_GLITCH_CLASSES.length)];
+
+    return { className, intensity };
+}
+
+function escapeCssUrl(path) {
+    return String(path).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
 export async function renderImageChoices($, choices) {
     const $list = $('.js-answers');
     $list.empty().removeClass('is-ready');
@@ -61,6 +93,8 @@ export async function renderImageChoices($, choices) {
 
     choices.forEach(function (choice, index) {
         const coverPath = coverPaths[index];
+        const glitch = rollImageGlitch();
+
         const $item = $(
             '<li class="list_answers__item list_answers__item--avatar">' +
                 '<button type="button" class="list_answers__avatar js-answer" data-index="' +
@@ -73,8 +107,21 @@ export async function renderImageChoices($, choices) {
                 '</li>'
         );
 
+        if (glitch) {
+            const $avatar = $item.find('.list_answers__avatar');
+            $avatar.addClass(glitch.className);
+            $avatar.css({
+                '--cover-url': 'url("' + escapeCssUrl(coverPath) + '")',
+                '--glitch-intensity': String(glitch.intensity),
+            });
+        }
+
         $item.find('img').on('error', function () {
             $(this).attr('src', DEFAULT_COVER_PATH);
+            const $avatar = $(this).closest('.list_answers__avatar');
+            if ($avatar.is('[class*="--glitch-"]')) {
+                $avatar.css('--cover-url', 'url("' + DEFAULT_COVER_PATH + '")');
+            }
         });
 
         $list.append($item);
@@ -86,6 +133,10 @@ export async function renderImageChoices($, choices) {
         const resolvedPath = resolvedPaths[index];
         if (resolvedPath && resolvedPath !== coverPaths[index]) {
             $(this).attr('src', resolvedPath);
+            const $avatar = $(this).closest('.list_answers__avatar');
+            if ($avatar.is('[class*="--glitch-"]')) {
+                $avatar.css('--cover-url', 'url("' + resolvedPath + '")');
+            }
         }
     });
 

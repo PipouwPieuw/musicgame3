@@ -385,6 +385,20 @@ export const DIFFICILETRACKDURATION = 10;
 // export const HARDCOREMODETRACKDURATION = 5;
 export const HARDCOREMODETRACKDURATION = 10;
 export const IMAGE_ANSWER_COUNT = 8;
+
+/**
+ * CSS modifiers for cover glitch effects (Vignettes — Glitched).
+ * One class is picked at random when a vignette rolls as glitched.
+ * Styles: scss/_image-glitch.scss
+ */
+export const IMAGE_GLITCH_CLASSES = [
+    'list_answers__avatar--glitch-chroma',
+    'list_answers__avatar--glitch-slice',
+    'list_answers__avatar--glitch-filter',
+    'list_answers__avatar--glitch-noise',
+    'list_answers__avatar--glitch-pixel',
+    'list_answers__avatar--glitch-jitter',
+];
 /** Base points per correct answer by Vignettes difficulty level (1-indexed). */
 export const POINTS_BASE_BY_DIFFICULTY = {
     1: 1,
@@ -418,8 +432,9 @@ export const VIGNETTES_DIFFICULTY_ENABLED = {
 /**
  * Unlock conditions per Vignettes difficulty level (1-indexed).
  * null = unlocked once the mode is unlocked (and ENABLED).
- * perfectClearOnPrevious = full standard length for that difficulty
- * (STANDARD_TRACKS_BY_SCORE_KEY, zero wrongs) on the previous difficulty.
+ * perfectClearOnPrevious = full standard length (zero wrongs) on the previous
+ * difficulty, PLUS foundTracksIds.length >= this level's STANDARD_TRACKS_BY_SCORE_KEY
+ * (so the catalog can fill a full game of that difficulty).
  */
 export const VIGNETTES_DIFFICULTY_UNLOCK = {
     1: null,
