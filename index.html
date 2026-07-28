@@ -100,26 +100,52 @@
                         </div>
                         <div class="settings_difficulty__row">
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-1">
-                                <div class="settings_panel__description">
+                                <!-- <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
                                         <li><span><b><u style="color: green">20</u></b> rounds</span></li>
                                         <li><span>Les extraits durent <b><u style="color: green">30 secondes</u></b></span></li>
                                         <li><span>Points de base : <b><u style="color: green">1</u></b></span></li>
                                     </ul>
+                                </div> -->
+
+                                <div class="settings_panel__grid">
+                                    <div class="settings_panel__cell">
+                                        <strong>30</strong> sec
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        <strong>20</strong> rounds
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        <strong>+1</strong> point
+                                    </div>
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-2">
-                                <div class="settings_panel__description">
+                                <!-- <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
                                         <li><span><b><u style="color: #0000FF">40</u></b> rounds</span></li>
                                         <li><span>Les extraits durent <b><u style="color: #0000FF">20 secondes</u></b></span></li>
                                         <li><span>La portion jouée de chaque extrait est <b><u style="color: #0000FF">aléatoire</u></b></span></li>
                                         <li><span>Points de base : <b><u style="color: #0000FF">2</u></b></span></li>
                                     </ul>
+                                </div> -->
+                                <div class="settings_panel__grid">
+                                    <div class="settings_panel__cell">
+                                        <strong>20</strong> sec
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        <strong>40</strong> rounds
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        <strong>+2</strong> points
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        Random
+                                    </div>
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-3">
-                                <div class="settings_panel__description">
+                                <!-- <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
                                         <li><span><b><u style="color: #FF0000">40</u></b> rounds</span></li>
                                         <li><span>Les extraits durent <b><u style="color: #FF0000">10 secondes</u></b></span></li>
@@ -127,10 +153,27 @@
                                         <li><span>Des <b><u style="color: #FF0000">images alternatives</u></b></span> peuvent être affichées</li>
                                         <li><span>Points de base : <b><u style="color: #FF0000">3</u></b></span></li>
                                     </ul>
+                                </div> -->
+                                <div class="settings_panel__grid">
+                                    <div class="settings_panel__cell">
+                                        <strong>10</strong> sec
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        <strong>40</strong> rounds
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        <strong>+3</strong> points
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        Random
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        Images
+                                    </div>
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-4">
-                                <div class="settings_panel__description">
+                                <!-- <div class="settings_panel__description">
                                     <ul class="settings_difficulty__description">
                                         <li><span><b><u>60</u></b> rounds</span></li>
                                         <li><span>Les extraits durent <b><u>10 secondes</u></b></span></li>
@@ -138,22 +181,55 @@
                                         <li><span>Les images deviennent progresivement <b><u style="color: #000000">corrompues</u></b></span></li>
                                         <li><span>Points de base : <b><u style="color: #000000">4</u></b></span></li>
                                     </ul>
+                                </div> -->
+                                <div class="settings_panel__grid">
+                                    <div class="settings_panel__cell">
+                                        <strong>10</strong> sec
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        <strong>40</strong> rounds
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        <strong>+4</strong> points
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        Random
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        Images
+                                    </div>
+                                    <div class="settings_panel__cell">
+                                        Glitch
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="settings_panel__line settings_panel__line--genres js-settings-genres">
-                        <div class="settings_panel__label_wrapper">
-                            <span class="settings_panel__label panel_label">Catégorie</span>
+                    <div class="settings_panel__line js-settings-genres">
+                        <div class="settings_panel__genres">
+                            <div class="settings_panel__label_wrapper">
+                                <span class="settings_panel__label panel_label">Catégorie</span>
+                            </div>
+                            <button
+                                type="button"
+                                class="button_default settings_panel__genres_button js-open-genres-picker"
+                                aria-label=""
+                                title=""
+                            >
+                                <span class="js-active-genre-label"></span>
+                                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 9L12 15L18 9" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
                         </div>
-                        <button
-                            type="button"
-                            class="button_default settings_panel__genres_button js-open-genres-picker"
-                            aria-label=""
-                            title=""
-                        >
-                            <span class="js-active-genre-label"></span>
-                        </button>
+                        <div class="settings_panel__grid settings_panel__grid--align-end">
+                            <div class="settings_panel__cell">
+                                <strong>30</strong> sec
+                            </div>
+                            <div class="settings_panel__cell js-codex-rounds-amount">
+                                <strong>20</strong> rounds
+                            </div>
+                        </div>
                     </div>
                     <dialog class="genres_picker js-genres-picker" aria-labelledby="genresPickerTitle">
                         <div class="genres_picker__inner panel_box visible">

@@ -253,10 +253,15 @@ function syncPlayButtonState($) {
     $playButton.prop('disabled', isVignettesPoolTooSmall);
 }
 
+function syncCodexRoundsAmountUI() {
+    $('.js-codex-rounds-amount strong').text(gameState.tracksByGame);
+}
+
 function syncTracksByGameToCatalog() {
     const availableTracks = getTracksForCurrentMode().length;
     gameState.tracksByGame = getStandardTracksByGame(getScoreKey(), availableTracks);
 
+    syncCodexRoundsAmountUI();
     syncGenreSettingsUI($);
     syncPlayButtonState($);
 }
@@ -434,6 +439,7 @@ function bindEvents() {
         quitGame();
         $('.js-wrapper').removeClass('game_started');
         $('.js-settings').addClass('visible');
+        syncTracksByGameToCatalog();
         syncVignettesModeUnlock($, { animate: true });
         syncStatsDifficultyColumns($);
     });
@@ -447,6 +453,7 @@ function bindEvents() {
         quitGame();
         $('.js-wrapper').removeClass('game_started');
         $('.js-settings').addClass('visible');
+        syncTracksByGameToCatalog();
         syncVignettesModeUnlock($, { animate: true });
         syncStatsDifficultyColumns($);
     });
