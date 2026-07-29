@@ -19,6 +19,159 @@
         "acceptedAnswers": [
           "Only Murders in the Building"
         ]
+      },
+      {
+        "id": "G003",
+        "title": "Severance",
+        "subTitle": "",
+        "year": "2022 - En cours",
+        "acceptedAnswers": [
+          "Severance"
+        ]
+      },
+      {
+        "id": "G004",
+        "title": "Pluribus",
+        "subTitle": "",
+        "year": "2025 - En cours",
+        "acceptedAnswers": [
+          "Pluribus"
+        ]
+      },
+      {
+        "id": "G005",
+        "title": "The White Lotus",
+        "subTitle": "",
+        "year": "2021 - En cours",
+        "acceptedAnswers": [
+          "The White Lotus",
+          "White Lotus"
+        ]
+      },
+      {
+        "id": "G006",
+        "title": "Upload",
+        "subTitle": "",
+        "year": "2020 - 2025",
+        "acceptedAnswers": [
+          "Upload"
+        ]
+      },
+      {
+        "id": "G007",
+        "title": "Locke & Key",
+        "subTitle": "",
+        "year": "2020 - 2022",
+        "acceptedAnswers": [
+          "Locke & Key",
+          "Locke and Key",
+          "Lock & Key",
+          "Lock and Key"
+        ]
+      },
+      {
+        "id": "G008",
+        "title": "WandaVision",
+        "subTitle": "",
+        "year": "2021",
+        "acceptedAnswers": [
+          "WandaVision"
+        ]
+      },
+      {
+        "id": "G009",
+        "title": "Loki",
+        "subTitle": "",
+        "year": "2021 - 2023",
+        "acceptedAnswers": [
+          "Loki"
+        ]
+      },
+      {
+        "id": "G010",
+        "title": "1899",
+        "subTitle": "",
+        "year": "2022",
+        "acceptedAnswers": [
+          "1899"
+        ]
+      },
+      {
+        "id": "G011",
+        "title": "From",
+        "subTitle": "",
+        "year": "2022 - En cours",
+        "acceptedAnswers": [
+          "From"
+        ]
+      },
+      {
+        "id": "G012",
+        "title": "Wednesday",
+        "subTitle": "",
+        "year": "2022 - En cours",
+        "acceptedAnswers": [
+          "Wednesday"
+        ]
+      },
+      {
+        "id": "G013",
+        "title": "Archive 81",
+        "subTitle": "",
+        "year": "2022",
+        "acceptedAnswers": [
+          "Archive 81"
+        ]
+      },
+      {
+        "id": "G014",
+        "title": "The Last of Us",
+        "subTitle": "",
+        "year": "2023 - En cours",
+        "acceptedAnswers": [
+          "The Last of Us"
+        ]
+      },
+      {
+        "id": "G015",
+        "title": "Bodies",
+        "subTitle": "",
+        "year": "2023",
+        "acceptedAnswers": [
+          "Bodies"
+        ]
+      },
+      {
+        "id": "G016",
+        "title": "Shōgun",
+        "subTitle": "",
+        "year": "2024",
+        "acceptedAnswers": [
+          "Shogun"
+        ]
+      },
+      {
+        "id": "G017",
+        "title": "Agatha All Along",
+        "subTitle": "",
+        "year": "2024",
+        "acceptedAnswers": [
+          "Agatha All Along"
+        ]
+      },
+      {
+        "id": "G018",
+        "title": "3 Body Problem",
+        "subTitle": "",
+        "year": "2024 - En cours",
+        "acceptedAnswers": [
+          "3 Body Problem",
+          "Three Body Problem",
+          "3 Bodies Problem",
+          "Three Bodies Problem",
+          "Le problème à trois corps",
+          "Problème à trois corps"
+        ]
       }
     ]
   }
