@@ -1,8 +1,10 @@
 export const DEFAULT_GENRE = 'shows2000';
 const GENRE_FILES = {
+    shows1990: 'data/genres/shows1990.json',
     shows2000: 'data/genres/shows2000.json',
     shows2010: 'data/genres/shows2010.json',
-    shows1990: 'data/genres/shows1990.json',
+    shows2020: 'data/genres/shows2020.json',
+    // frenchShows: 'data/genres/frenchShows.json',
     // shows1980: 'data/genres/shows1980.json',
     animes: 'data/genres/animes.json',
     // cartoons: 'data/genres/cartoons.json',

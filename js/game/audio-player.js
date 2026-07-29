@@ -31,11 +31,27 @@ function pickTrackStart(audioPlayer) {
     return Math.floor(Math.random() * (maxStart + 1));
 }
 
-function pickHardcoreStart(audioPlayer) {
-    const duration = getPlayableDuration(audioPlayer);
-    const maxStart = Number.isFinite(duration) ? Math.max(0, Math.floor(duration) - 1) : 29;
+function getHardcoreSegmentSeconds() {
+    const upcoming = gameState.currentSegmentDurations[0];
+    return Number.isFinite(upcoming) && upcoming > 0 ? upcoming : 2;
+}
 
-    return Math.floor(Math.random() * Math.min(29, maxStart + 1));
+/**
+ * Random start anywhere on the track, leaving enough audio for the next glitch
+ * segment at the given playback rate (segmentEnd uses duration × rate).
+ */
+function pickHardcoreStart(audioPlayer, playbackRate) {
+    const duration = getPlayableDuration(audioPlayer);
+    const rate = Number.isFinite(playbackRate) && playbackRate > 0 ? playbackRate : 1;
+    const neededSeconds = getHardcoreSegmentSeconds() * rate;
+    const trackLength = Number.isFinite(duration) ? duration : 30;
+    const maxStart = Math.max(0, trackLength - neededSeconds);
+
+    if (maxStart <= 0) {
+        return 0;
+    }
+
+    return Math.random() * maxStart;
 }
 
 export function getRoundDuration() {
@@ -126,8 +142,9 @@ export function setupAudioListeners($, { audioPlayer, audioPlayerHardcore, jsAud
                         gameState.playedTracks - 1 >= gameState.tracksByGame / 2
                             ? shuffleArray(gameState.segmentDurations2)
                             : shuffleArray(gameState.segmentDurations1);
-                    gameState.currentAudioTime = pickHardcoreStart(audioPlayerHardcore);
-                    audioPlayerHardcore.playbackRate = setPlaybackRate();
+                    const playbackRate = setPlaybackRate();
+                    audioPlayerHardcore.playbackRate = playbackRate;
+                    gameState.currentAudioTime = pickHardcoreStart(audioPlayerHardcore, playbackRate);
                     audioPlayerHardcore.currentTime = gameState.currentAudioTime;
                 } else {
                     gameState.currentAudioTime = audioPlayerHardcore.currentTime;
@@ -188,9 +205,10 @@ function beginRoundPlayback($, audioPlayer, audioPlayerHardcore) {
     }
 
     if (gameState.difficultyLevel >= 4) {
-        gameState.currentAudioTime = pickHardcoreStart(audioPlayer);
+        const playbackRate = setPlaybackRate();
+        audioPlayerHardcore.playbackRate = playbackRate;
+        gameState.currentAudioTime = pickHardcoreStart(audioPlayer, playbackRate);
         audioPlayerHardcore.currentTime = gameState.currentAudioTime;
-        audioPlayerHardcore.playbackRate = setPlaybackRate();
     }
 
     if (usesRandomTrackStart()) {
