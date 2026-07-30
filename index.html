@@ -10,8 +10,23 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>  
-    <div id="wrapper" class="js-wrapper">
-        <div class="bar_top js-bar-top">
+    <div id="wrapper" class="page_wrapper js-wrapper">
+        <div class="content_box">
+            <label class="content_box__label">Mode</label>
+            <div class="settings_difficulty__inputs">
+                <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--1 js-input-game-mode" name="gameMode" id="gameModeCodex" value="codex" checked/>
+                <label class="default_transition" for="gameModeCodex">
+                    <span class="default_transition">Codex</span>
+                </label>
+                <div class="settings_difficulty__option js-vignettes-option is-locked">
+                    <input type="radio" class="settings_difficulty__radio settings_difficulty__radio--2 js-input-game-mode" name="gameMode" id="gameModeVignettes" value="vignettes" disabled/>
+                    <label class="default_transition" for="gameModeVignettes">
+                        <span class="default_transition">Vignettes</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <!--<div class="bar_top js-bar-top">
             <button class="bar_top__logout js-logout-button" aria-label="Déconnexion" title="Déconnexion">
                 <img class="bar_top__icon" src="assets/icons/logout.svg"  role="decoration"/>
             </button>
@@ -100,14 +115,6 @@
                         </div>
                         <div class="settings_difficulty__row">
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-1">
-                                <!-- <div class="settings_panel__description">
-                                    <ul class="settings_difficulty__description">
-                                        <li><span><b><u style="color: green">20</u></b> rounds</span></li>
-                                        <li><span>Les extraits durent <b><u style="color: green">30 secondes</u></b></span></li>
-                                        <li><span>Points de base : <b><u style="color: green">1</u></b></span></li>
-                                    </ul>
-                                </div> -->
-
                                 <div class="settings_panel__grid">
                                     <div class="settings_panel__cell">
                                         <strong>30</strong> sec
@@ -121,14 +128,6 @@
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-2">
-                                <!-- <div class="settings_panel__description">
-                                    <ul class="settings_difficulty__description">
-                                        <li><span><b><u style="color: #0000FF">40</u></b> rounds</span></li>
-                                        <li><span>Les extraits durent <b><u style="color: #0000FF">20 secondes</u></b></span></li>
-                                        <li><span>La portion jouée de chaque extrait est <b><u style="color: #0000FF">aléatoire</u></b></span></li>
-                                        <li><span>Points de base : <b><u style="color: #0000FF">2</u></b></span></li>
-                                    </ul>
-                                </div> -->
                                 <div class="settings_panel__grid">
                                     <div class="settings_panel__cell">
                                         <strong>20</strong> sec
@@ -145,15 +144,6 @@
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-3">
-                                <!-- <div class="settings_panel__description">
-                                    <ul class="settings_difficulty__description">
-                                        <li><span><b><u style="color: #FF0000">40</u></b> rounds</span></li>
-                                        <li><span>Les extraits durent <b><u style="color: #FF0000">10 secondes</u></b></span></li>
-                                        <li><span>La portion jouée de chaque extrait est <b><u style="color: #FF0000">aléatoire</u></b></span></li>
-                                        <li><span>Des <b><u style="color: #FF0000">images alternatives</u></b></span> peuvent être affichées</li>
-                                        <li><span>Points de base : <b><u style="color: #FF0000">3</u></b></span></li>
-                                    </ul>
-                                </div> -->
                                 <div class="settings_panel__grid">
                                     <div class="settings_panel__cell">
                                         <strong>10</strong> sec
@@ -173,15 +163,6 @@
                                 </div>
                             </div>
                             <div class="settings_difficulty__details js-difficulty-details js-difficulty-details-4">
-                                <!-- <div class="settings_panel__description">
-                                    <ul class="settings_difficulty__description">
-                                        <li><span><b><u>60</u></b> rounds</span></li>
-                                        <li><span>Les extraits durent <b><u>10 secondes</u></b></span></li>
-                                        <li><span>Extraits de plus en plus <b><u style="color: #000000">glitchés</u></b> et portions aléatoires</span></li>
-                                        <li><span>Les images deviennent progresivement <b><u style="color: #000000">corrompues</u></b></span></li>
-                                        <li><span>Points de base : <b><u style="color: #000000">4</u></b></span></li>
-                                    </ul>
-                                </div> -->
                                 <div class="settings_panel__grid">
                                     <div class="settings_panel__cell">
                                         <strong>10</strong> sec
@@ -247,15 +228,6 @@
                             </div>
                         </div>
                     </dialog>
-                    <!-- Track count is forced by mode/difficulty (STANDARD_TRACKS_BY_SCORE_KEY).
-                    <div class="settings_panel__line">
-                        <div class="settings_panel__label_wrapper">
-                            <label class="settings_panel__label panel_label" for="tracksAmount">Nombre de morceaux par partie</label>
-                            <span class="settings_panel__description">Pour une partie standard : 20</span>
-                        </div>
-                        <input class="settings_panel__number panel_input js-nb-tracks" type="number" id="tracksAmount" min="1" max="1000" value="40"/>
-                    </div>
-                    -->
                 </div>
                 <p class="settings_panel__vignettes_notice js-vignettes-pool-notice is-hidden">Trouvez au moins 20 morceaux en mode Codex pour jouer en Vignettes.</p>
                 <button class="start_game button_big js-play-track">Lancer la partie</button>
@@ -315,10 +287,6 @@
                             <span class="default_tooltip default_transition">Le bonus de chaîne</span>
                         </span>
                     </div>
-                    <!-- <button class="track_display__like default_tooltip__wrapper js-like-track js-like-button" data-liked="false">
-                        <span class="track_display__like_legend default_tooltip default_transition" data-liked="true">Retirer des favoris</span>
-                        <span class="track_display__like_legend default_tooltip default_transition" data-liked="false">Ajouter aux favoris</span>
-                    </button> -->
                 </span>
             </div>
             <form id="answer_form" class="answer_form js-answer-form" autocomplete="off">
@@ -336,7 +304,6 @@
                             title="Passer au morceau suivant"
                             disabled>Passer</button>
                 </div>
-                <!-- <p class="answer_form__feedback js-answer-feedback" aria-live="polite"></p> -->
             </form>
             <ul class="list_answers js-answers visually_hidden" aria-label="Choix de vignettes"></ul>
         </div>
@@ -346,7 +313,6 @@
                 <button class="panel_box__title panel_tabs__tab js-tab" rel="stats">Statistiques</button>
                 <button class="panel_box__title panel_tabs__tab js-tab" rel="found-tracks">Catalogue</button>
                 <button class="panel_box__title panel_tabs__tab js-tab" rel="trophies">Trophées</button>
-                <!-- <button class="panel_box__title panel_tabs__tab js-tab" rel="favorites">Favoris</button> -->
             </div>
             <div class="panel_tabs__section js-tab-section active" rel="leaderboard">
                 <div class="panel_box__box js-leaderboard-content"></div>
@@ -450,11 +416,9 @@
         </div>
         <div class="answer_reveal js-answer-reveal">
             <div class="answer_reveal__content">
-                <!-- Plain cover: shine / found-list (no flip) -->
                 <div class="answer_reveal__image answer_reveal__image--cover default_transition js-answer-reveal-cover">
                     <img class="js-answer-reveal-cover-img" src="" alt="">
                 </div>
-                <!-- Coin: first-discovery flip -->
                 <div class="answer_reveal__image answer_reveal__image--coin default_transition js-answer-reveal-flip">
                     <div class="answer_reveal__coin">
                         <img class="answer_reveal__face answer_reveal__face--back js-answer-reveal-back" src="" alt="">
@@ -479,7 +443,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="module" src="js/app.js"></script>
