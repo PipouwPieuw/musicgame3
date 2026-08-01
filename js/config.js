@@ -398,7 +398,23 @@ export const IMAGE_GLITCH_CLASSES = [
     'list_answers__avatar--glitch-noise',
     'list_answers__avatar--glitch-pixel',
     'list_answers__avatar--glitch-jitter',
+    'list_answers__avatar--glitch-half-fold',
 ];
+
+/**
+ * CSS modifiers for static cover alterations (Vignettes — Glitched).
+ * One class is picked at random (independent of glitch roll).
+ * Styles: scss/_image-glitch.scss
+ */
+export const IMAGE_ALTER_CLASSES = [
+    'list_answers__avatar--alter-greyscale',
+    'list_answers__avatar--alter-invert',
+    'list_answers__avatar--alter-mirror-x',
+    'list_answers__avatar--alter-mirror-y',
+    'list_answers__avatar--alter-rotate-cw',
+    'list_answers__avatar--alter-rotate-ccw',
+];
+
 /** Base points per correct answer by Vignettes difficulty level (1-indexed). */
 export const POINTS_BASE_BY_DIFFICULTY = {
     1: 1,

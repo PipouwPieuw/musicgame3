@@ -12,6 +12,11 @@
 		display: flex;
 		gap: 20px;
 		justify-content: space-between;
+
+		@media only screen and (max-width: 640px) {
+			flex-wrap: wrap;
+			gap: 10px 20px;
+		}
 	}
 
 	@media only screen and (min-width: 641px) {
@@ -40,7 +45,7 @@
 	.game_display {
 		padding-top: 20px;
 		padding-bottom: 0;
-		gap: 20px;
+		gap: 10px;
 	}
 	.track_display {
 		flex-wrap: wrap;
