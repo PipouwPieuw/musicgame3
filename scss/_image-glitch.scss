@@ -191,10 +191,10 @@
 // 6. Tear / vertical jitter — subtle shake + skew
 // ---------------------------------------------------------------------------
 .list_answers__avatar--glitch-jitter .list_answers__img {
-	--_amp: calc(1px + 4px * var(--glitch-intensity, 0.5));
-	--_skew: calc(0.4deg + 1.6deg * var(--glitch-intensity, 0.5));
+	--_amp: calc(0.5px + 2px * var(--glitch-intensity, 0.5));
+	--_skew: calc(0.15deg + 0.55deg * var(--glitch-intensity, 0.5));
 
-	animation: image-glitch-jitter calc(0.55s * var(--glitch-speed, 1)) steps(2, end)
+	animation: image-glitch-jitter calc(0.85s * var(--glitch-speed, 1)) steps(2, end)
 		var(--glitch-delay, 0s) infinite;
 }
 
@@ -204,32 +204,40 @@
 		transform: translate(0, 0) skewX(0deg);
 	}
 	25% {
-		transform: translate(0, calc(var(--_amp, 2px) * -1)) skewX(var(--_skew, 1deg));
+		transform: translate(0, calc(var(--_amp, 1px) * -1)) skewX(var(--_skew, 0.4deg));
 	}
 	50% {
-		transform: translate(calc(var(--_amp, 2px) * 0.5), var(--_amp, 2px)) skewX(calc(var(--_skew, 1deg) * -1));
+		transform: translate(calc(var(--_amp, 1px) * 0.4), calc(var(--_amp, 1px) * 0.7))
+			skewX(calc(var(--_skew, 0.4deg) * -1));
 	}
 	75% {
-		transform: translate(calc(var(--_amp, 2px) * -0.35), calc(var(--_amp, 2px) * 0.4)) skewX(calc(var(--_skew, 1deg) * 0.5));
+		transform: translate(calc(var(--_amp, 1px) * -0.25), calc(var(--_amp, 1px) * 0.3))
+			skewX(calc(var(--_skew, 0.4deg) * 0.5));
 	}
 }
 
 // ---------------------------------------------------------------------------
-// 7. Half-fold — one half mirrored upside-down
-// --glitch-half-top: 1 = top half, 0 = bottom half (set in JS)
+// 7. Half-fold — one half mirrored (8 variants via CSS vars set in JS)
+// --glitch-fold-vert: 0 = top/bottom split, 1 = left/right split
+// --glitch-fold-side: 0 = top or left, 1 = bottom or right
+// --glitch-fold-sx / --glitch-fold-sy: 1 or -1 (horizontal vs vertical mirror)
 // ---------------------------------------------------------------------------
 .list_answers__avatar--glitch-half-fold {
 	&::after {
 		content: '';
 		position: absolute;
-		left: 0;
-		width: 100%;
-		height: 50%;
-		top: calc((1 - var(--glitch-half-top, 1)) * 50%);
+		width: calc(100% - 50% * var(--glitch-fold-vert, 0));
+		height: calc(50% + 50% * var(--glitch-fold-vert, 0));
+		left: calc(var(--glitch-fold-vert, 0) * var(--glitch-fold-side, 0) * 50%);
+		top: calc((1 - var(--glitch-fold-vert, 0)) * var(--glitch-fold-side, 0) * 50%);
 		background-image: var(--cover-url);
-		background-size: 100% 200%;
-		background-position: center calc((1 - var(--glitch-half-top, 1)) * 100%);
-		transform: scaleY(-1);
+		background-size:
+			calc(100% + 100% * var(--glitch-fold-vert, 0))
+			calc(200% - 100% * var(--glitch-fold-vert, 0));
+		background-position:
+			calc(var(--glitch-fold-vert, 0) * var(--glitch-fold-side, 0) * 100%)
+			calc((1 - var(--glitch-fold-vert, 0)) * var(--glitch-fold-side, 0) * 100%);
+		transform: scaleX(var(--glitch-fold-sx, 1)) scaleY(var(--glitch-fold-sy, -1));
 	}
 }
 
@@ -241,12 +249,12 @@
 	overflow: hidden;
 }
 
-.list_answers__avatar--alter-greyscale {
+.list_answers__avatar--alter-greyscale img {
 	filter: grayscale(1);
 }
 
-.list_answers__avatar--alter-invert {
-	filter: invert(1);
+.list_answers__avatar--alter-invert img {
+	filter: invert(var(--alter-invert, 0.25));
 }
 
 .list_answers__avatar--alter-mirror-x {

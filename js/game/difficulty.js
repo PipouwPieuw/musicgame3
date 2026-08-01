@@ -43,6 +43,8 @@ export function updateAnswerModeUI($) {
     }
 
     $('.js-skip-round').toggleClass('visually_hidden', !isCodexMode());
+    // Speed-bonus markers are points-only; Codex does not score.
+    $('.js-countdown-lines').toggleClass('visually_hidden', !isImageAnswerMode());
 }
 
 export function updateDifficultyUI($, displayLabel) {

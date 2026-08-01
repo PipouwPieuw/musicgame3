@@ -10,6 +10,10 @@ import { getCoverPath, pickCoverStem } from '../lib/track-utils.js';
 import { gameState, usesAlternateCovers } from './state.js';
 
 const HALF_FOLD_CLASS = 'list_answers__avatar--glitch-half-fold';
+const ALTER_INVERT_CLASS = 'list_answers__avatar--alter-invert';
+/** invert() bands that stay readable — mid-range (~0.5) washes covers to grey */
+const ALTER_INVERT_LOW = { min: 0, max: 0.3 };
+const ALTER_INVERT_HIGH = { min: 0.7, max: 0.8 };
 
 /**
  * Build IMAGE_ANSWER_COUNT vignette choices for the playing track.
@@ -86,7 +90,7 @@ function rollGlitchedProgress() {
 /**
  * Per-image roll for Glitched mode animated effects.
  * delay / speed desync identical effects so they don't animate in lockstep.
- * @returns {{ className: string, intensity: number, delay: string, speed: number, halfTop?: number } | null}
+ * @returns {{ className: string, intensity: number, delay: string, speed: number, fold?: object } | null}
  */
 function rollImageGlitch() {
     if (IMAGE_GLITCH_CLASSES.length === 0) {
@@ -113,7 +117,14 @@ function rollImageGlitch() {
     };
 
     if (className === HALF_FOLD_CLASS) {
-        result.halfTop = Math.random() < 0.5 ? 1 : 0;
+        // 8 variants: axis (H/V split) × side × mirror axis (scaleX vs scaleY)
+        const mirrorHorizontal = Math.random() < 0.5;
+        result.fold = {
+            vert: Math.random() < 0.5 ? 1 : 0,
+            side: Math.random() < 0.5 ? 1 : 0,
+            sx: mirrorHorizontal ? -1 : 1,
+            sy: mirrorHorizontal ? 1 : -1,
+        };
     }
 
     return result;
@@ -122,21 +133,35 @@ function rollImageGlitch() {
 /**
  * Per-image roll for a static cover alteration (one at a time).
  * Independent of the glitch roll — can stack with a glitch on the same avatar.
- * @returns {{ className: string } | null}
+ * @returns {{ className: string, invertAmount?: number } | null}
  */
 function rollImageAlter() {
     if (IMAGE_ALTER_CLASSES.length === 0) {
         return null;
     }
 
-    if (!rollGlitchedProgress()) {
+    const progress = rollGlitchedProgress();
+    if (!progress) {
         return null;
     }
 
     const className =
         IMAGE_ALTER_CLASSES[Math.floor(Math.random() * IMAGE_ALTER_CLASSES.length)];
 
-    return { className };
+    const result = { className };
+
+    if (className === ALTER_INVERT_CLASS) {
+        // Skip mid-range (~0.5 greys out covers). High band likelier late-game.
+        const highBandChance = 0.25 + 0.55 * progress.intensity;
+        const band =
+            Math.random() < highBandChance ? ALTER_INVERT_HIGH : ALTER_INVERT_LOW;
+        // Within the band, bias toward the upper end as the game progresses.
+        const power = Math.max(0.2, 1 - progress.intensity);
+        const t = Math.pow(Math.random(), power);
+        result.invertAmount = Number((band.min + t * (band.max - band.min)).toFixed(3));
+    }
+
+    return result;
 }
 
 function escapeCssUrl(path) {
@@ -163,7 +188,7 @@ export async function renderImageChoices($, choices) {
                 '">' +
                 '<img class="list_answers__img" src="' +
                 coverPath +
-                '" alt="Pochette candidate" />' +
+                '" alt="Pochette mystère" />' +
                 '</button>' +
                 '</li>'
         );
@@ -178,14 +203,20 @@ export async function renderImageChoices($, choices) {
                 '--glitch-delay': glitch.delay,
                 '--glitch-speed': String(glitch.speed),
             };
-            if (glitch.halfTop !== undefined) {
-                cssVars['--glitch-half-top'] = String(glitch.halfTop);
+            if (glitch.fold) {
+                cssVars['--glitch-fold-vert'] = String(glitch.fold.vert);
+                cssVars['--glitch-fold-side'] = String(glitch.fold.side);
+                cssVars['--glitch-fold-sx'] = String(glitch.fold.sx);
+                cssVars['--glitch-fold-sy'] = String(glitch.fold.sy);
             }
             $avatar.css(cssVars);
         }
 
         if (alter) {
             $avatar.addClass(alter.className);
+            if (alter.invertAmount !== undefined) {
+                $avatar.css('--alter-invert', String(alter.invertAmount));
+            }
         }
 
         $item.find('img').on('error', function () {

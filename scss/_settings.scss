@@ -315,7 +315,7 @@
 				// width: 25%;
 				// max-width: 25%;
 
-				&.is-locked {
+				&.is-unavailable {
 					flex: 0;
 					width: 0;
 					max-width: 0;
@@ -347,7 +347,21 @@
 		// overflow: hidden;
 		// transition: flex 0.4s ease, max-width 0.4s ease, opacity 0.4s ease;
 
+		// Progress-locked: still visible so players see content left to unlock.
 		&.is-locked {
+			opacity: 0.45;
+
+			.settings_difficulty__radio + label {
+				cursor: pointer;
+			}
+
+			.settings_difficulty__radio:not(:checked) + label:hover span {
+				opacity: 0.5;
+			}
+		}
+
+		// Feature-disabled (VIGNETTES_DIFFICULTY_ENABLED): keep out of the UI entirely.
+		&.is-unavailable {
 			flex: 0;
 			max-width: 0;
 			opacity: 0;

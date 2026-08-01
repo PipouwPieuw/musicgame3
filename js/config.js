@@ -431,12 +431,13 @@ export const SPEED_BONUS_THRESHOLDS = [
     { minRemainingRatio: 0.5, bonus: 2 },
     { minRemainingRatio: 0.25, bonus: 1 },
 ];
-export const VIGNETTES_UNLOCK_THRESHOLD = 20;
+export const VIGNETTES_UNLOCK_THRESHOLD = 40;
 export const VIGNETTES_MIN_TRACKS_BY_GAME = 20;
 
 /**
  * Which Vignettes difficulty levels are currently offered (1-indexed).
- * Disabled levels stay out of settings, stats, and leaderboard until re-enabled.
+ * Disabled levels stay hidden (is-unavailable) in settings, stats, and leaderboard
+ * until re-enabled. Progress-locked levels remain visible (is-locked).
  */
 export const VIGNETTES_DIFFICULTY_ENABLED = {
     1: true,

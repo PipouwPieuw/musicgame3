@@ -56,6 +56,8 @@ import {
 } from './ui/leaderboard.js';
 import {
     clearUnlockNewHighlight,
+    getVignettesDifficultyUnlockMessage,
+    getVignettesModeUnlockMessage,
     getVignettesScoreKeyForLevel,
     lockVignettesMode,
     markVignettesUnlockIfNeeded,
@@ -475,6 +477,17 @@ function bindEvents() {
 
     $('.js-input-game-mode').on('change', function () {
         handleGameModeChange(String($(this).val()));
+    });
+
+    $(document).on('click', '.js-vignettes-option.is-locked', function (e) {
+        e.preventDefault();
+        alert(getVignettesModeUnlockMessage(gameState.playerData));
+    });
+
+    $(document).on('click', '.js-difficulty-option.is-locked', function (e) {
+        e.preventDefault();
+        const level = parseInt($(this).attr('data-difficulty-level'), 10);
+        alert(getVignettesDifficultyUnlockMessage(level, gameState.playerData));
     });
 
     $('.js-input-difficulty').on('change', function () {

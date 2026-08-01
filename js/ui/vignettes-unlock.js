@@ -89,6 +89,78 @@ function meetsUnlockCondition(condition, level, playerData) {
     return false;
 }
 
+/** French alert copy when the player taps a locked Vignettes mode button. */
+export function getVignettesModeUnlockMessage(playerData) {
+    const found = playerData?.foundTracksIds?.length || 0;
+    return (
+        'Le mode Vignettes est verrouillé.\n' +
+        'Trouvez ' +
+        VIGNETTES_UNLOCK_THRESHOLD +
+        ' morceaux en mode Codex pour le débloquer (' +
+        found +
+        '/' +
+        VIGNETTES_UNLOCK_THRESHOLD +
+        ').'
+    );
+}
+
+/** French alert copy when the player taps a locked Vignettes difficulty button. */
+export function getVignettesDifficultyUnlockMessage(level, playerData) {
+    const name = DIFFICULTYNAMES[level - 1] || ('niveau ' + level);
+
+    if (!VIGNETTES_DIFFICULTY_ENABLED[level]) {
+        return 'Le niveau ' + name + " n'est pas disponible pour le moment.";
+    }
+
+    if (!isVignettesUnlocked(playerData)) {
+        return (
+            'Le niveau ' +
+            name +
+            ' est verrouillé.\n' +
+            getVignettesModeUnlockMessage(playerData)
+        );
+    }
+
+    const condition = VIGNETTES_DIFFICULTY_UNLOCK[level];
+    if (condition == null) {
+        return 'Le niveau ' + name + ' est verrouillé.';
+    }
+
+    if (condition.type === 'perfectClearOnPrevious' || condition.type === 'perfectScoreOnPrevious') {
+        const previousName = DIFFICULTYNAMES[level - 2] || 'précédent';
+        const previousKey = getVignettesScoreKeyForLevel(level - 1);
+        const previousStandard = STANDARD_TRACKS_BY_SCORE_KEY[previousKey];
+        const scoreKey = getVignettesScoreKeyForLevel(level);
+        const requiredTracks = STANDARD_TRACKS_BY_SCORE_KEY[scoreKey];
+        const found = playerData?.foundTracksIds?.length || 0;
+
+        let message =
+            'Le niveau ' +
+            name +
+            ' est verrouillé.\nPour le débloquer : terminer une partie ' +
+            previousName +
+            ' complète';
+        if (previousStandard != null) {
+            message += ' (' + previousStandard + ' morceaux)';
+        }
+        message += ' sans erreur';
+        if (requiredTracks != null) {
+            message +=
+                ', et avoir trouvé au moins ' +
+                requiredTracks +
+                ' morceaux (' +
+                found +
+                '/' +
+                requiredTracks +
+                ')';
+        }
+        message += '.';
+        return message;
+    }
+
+    return 'Le niveau ' + name + ' est verrouillé.';
+}
+
 /**
  * Progressive difficulty unlock.
  * Disabled levels (VIGNETTES_DIFFICULTY_ENABLED) never unlock.
@@ -162,6 +234,7 @@ function syncVignettesDifficultyRadios($, options) {
 
     $('.js-input-difficulty').each(function () {
         const level = parseInt($(this).val(), 10);
+        const enabled = Boolean(VIGNETTES_DIFFICULTY_ENABLED[level]);
         const unlocked = isVignettesDifficultyUnlocked(level, gameState.playerData);
         const $radio = $(this);
         const $option = $radio.closest('.js-difficulty-option');
@@ -171,6 +244,18 @@ function syncVignettesDifficultyRadios($, options) {
         if (!$option.length) {
             return;
         }
+
+        if (!enabled) {
+            $option
+                .addClass('is-unavailable')
+                .removeClass('is-locked settings_difficulty__option--new');
+            if ($radio.prop('checked')) {
+                forceNormalDifficulty($);
+            }
+            return;
+        }
+
+        $option.removeClass('is-unavailable');
 
         if (!unlocked) {
             $option.addClass('is-locked').removeClass('settings_difficulty__option--new');
@@ -183,13 +268,8 @@ function syncVignettesDifficultyRadios($, options) {
         const pendingIndex = pendingDifficultyRevealLevels.indexOf(level);
         if (animate && pendingIndex !== -1) {
             pendingDifficultyRevealLevels.splice(pendingIndex, 1);
-            $option.addClass('is-locked');
-            requestAnimationFrame(function () {
-                requestAnimationFrame(function () {
-                    $option.removeClass('is-locked');
-                    syncDifficultyNewHighlight($option, level);
-                });
-            });
+            $option.removeClass('is-locked');
+            syncDifficultyNewHighlight($option, level);
             return;
         }
 
@@ -199,10 +279,11 @@ function syncVignettesDifficultyRadios($, options) {
 }
 
 /**
- * Sync Vignettes radio visibility with player progress.
+ * Sync Vignettes mode / difficulty lock state with player progress.
+ * Locked options stay visible (muted); feature-disabled options are hidden.
  * @param {JQueryStatic} $
  * @param {{ animate?: boolean }} [options]
- *   - animate: when true and newly unlocked, keep locked for one frame then expand
+ *   - animate: when true and newly unlocked this session, clear lock and show “new” highlight
  */
 export function syncVignettesModeUnlock($, options) {
     const animate = Boolean(options && options.animate);
@@ -230,12 +311,7 @@ export function syncVignettesModeUnlock($, options) {
 
     if (animate && pendingVignettesReveal) {
         pendingVignettesReveal = false;
-        $option.addClass('is-locked');
-        requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-                $option.removeClass('is-locked');
-            });
-        });
+        $option.removeClass('is-locked');
         return;
     }
 
