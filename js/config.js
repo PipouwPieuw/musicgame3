@@ -5,6 +5,12 @@ export const COVERS_MANIFEST_PATH = 'assets/covers/manifest.json';
 export const DEVMODE = false;
 export const SHUFFLE = true;
 
+/** When false, hide the Trophées tab and skip unlock/reveal processing. */
+export const ACHIEVEMENTS_ENABLED = false;
+
+/** Soft admin privilege: case-insensitive username match (client-side only). */
+export const ADMIN_USERNAME = 'admin';
+
 export const GAME_MODE_CODEX = 'codex';
 export const GAME_MODE_VIGNETTES = 'vignettes';
 
@@ -396,8 +402,7 @@ export const IMAGE_GLITCH_CLASSES = [
     'list_answers__avatar--glitch-slice',
     'list_answers__avatar--glitch-filter',
     'list_answers__avatar--glitch-noise',
-    'list_answers__avatar--glitch-pixel',
-    'list_answers__avatar--glitch-jitter',
+    // 'list_answers__avatar--glitch-jitter',
     'list_answers__avatar--glitch-half-fold',
 ];
 
@@ -409,10 +414,11 @@ export const IMAGE_GLITCH_CLASSES = [
 export const IMAGE_ALTER_CLASSES = [
     'list_answers__avatar--alter-greyscale',
     'list_answers__avatar--alter-invert',
+    'list_answers__avatar--alter-contrast',
     'list_answers__avatar--alter-mirror-x',
     'list_answers__avatar--alter-mirror-y',
-    'list_answers__avatar--alter-rotate-cw',
-    'list_answers__avatar--alter-rotate-ccw',
+    // 'list_answers__avatar--alter-rotate-cw',
+    // 'list_answers__avatar--alter-rotate-ccw',
 ];
 
 /** Base points per correct answer by Vignettes difficulty level (1-indexed). */

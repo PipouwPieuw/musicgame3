@@ -1,7 +1,8 @@
 import { migrateScoreKey, NOT_FOUND_COVER_PATH, SCORE_KEY_GROUPS, SCORE_KEYS } from '../config.js';
+import { getAdminFoundTrackIds, isAdminAccount } from '../lib/admin.js';
 import { returnBestScores } from '../lib/leaderboard-scores.js';
 import { getCoverPath, getTrackMetadata } from '../lib/track-utils.js';
-import { groupTrackIdsByGenre } from '../services/tracks-loader.js';
+import { getCatalogGenres, groupTrackIdsByGenre } from '../services/tracks-loader.js';
 import { gameState } from '../game/state.js';
 import {
     playAnswerRevealAppear,
@@ -16,6 +17,7 @@ import {
     isAchievementUnlocked,
 } from '../achievements/personal.js';
 import { getGlobalTrophiesForDisplay } from '../achievements/global.js';
+import { closeAdminGlitchGallery } from './admin-glitch-gallery.js';
 
 export { returnBestScores } from '../lib/leaderboard-scores.js';
 
@@ -245,7 +247,15 @@ export async function buildFoundTracks($) {
     const $container = $('.js-found-tracks-list');
     $container.empty();
 
-    const foundTracks = gameState.playerData.foundTracksIds || [];
+    let foundTracks = gameState.playerData.foundTracksIds || [];
+    if (isAdminAccount()) {
+        const genres = await getCatalogGenres();
+        foundTracks = getAdminFoundTrackIds(
+            genres.reduce(function (all, genre) {
+                return all.concat(genre.tracks || []);
+            }, [])
+        );
+    }
     $('.js-found-tracks-count').text(foundTracks.length);
 
     const genreGroups = await groupTrackIdsByGenre(foundTracks);
@@ -357,6 +367,21 @@ export function updateStatsGamesPlayed($) {
 }
 
 export function updateStatsCodexIdentified($) {
+    if (isAdminAccount()) {
+        getCatalogGenres()
+            .then(function (genres) {
+                const count = genres.reduce(function (total, genre) {
+                    return total + (genre.tracks ? genre.tracks.length : 0);
+                }, 0);
+                $('.js-codex-identified-count').text(count);
+            })
+            .catch(function (error) {
+                console.error('Failed to count catalog tracks for admin', error);
+                $('.js-codex-identified-count').text(0);
+            });
+        return;
+    }
+
     const count = Array.isArray(gameState.playerData?.foundTracksIds)
         ? gameState.playerData.foundTracksIds.length
         : 0;
@@ -399,6 +424,7 @@ export function updateStatsBestScore($) {
 
 export function openLeaderboard($) {
     $('.js-settings').removeClass('visible');
+    closeAdminGlitchGallery($);
     $('.js-leaderboard').addClass('visible');
     $('.js-close-leaderboard').addClass('visible');
     $('.js-logout-button').addClass('hidden');

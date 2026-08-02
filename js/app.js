@@ -1,4 +1,5 @@
 import {
+    ACHIEVEMENTS_ENABLED,
     LEADERBOARD_SCORE_KEYS,
     DEVMODE,
     GAME_MODE_VIGNETTES,
@@ -25,6 +26,7 @@ import { getAudioElements, resetStreak, syncBaseAndStreakCapUI, updateScoreUI } 
 import { gameState, resetGameState, getDisplayLabel, getScoreKey, isCodexMode, isImageAnswerMode } from './game/state.js';
 import { getAvailableGenreIds, loadTracksFromGenres } from './services/tracks-loader.js';
 import { filterPlayableTracks, getPreviewPath, loadCoversManifest, migrateLikedTracksToIds } from './lib/track-utils.js';
+import { isAdminAccount } from './lib/admin.js';
 import {
     clearStoredUsername,
     getStoredUsername,
@@ -71,6 +73,10 @@ import {
     syncGenreSettingsVisibility,
     syncGenreSettingsUI,
 } from './ui/genre-selection.js';
+import {
+    closeAdminGlitchGallery,
+    initAdminGlitchGallery,
+} from './ui/admin-glitch-gallery.js';
 
 const $ = window.jQuery;
 
@@ -116,6 +122,7 @@ async function applyPlayerSession(profile) {
     syncStatsDifficultyColumns($);
     syncTracksByGameToCatalog();
     showLoggedInUI();
+    $('body').toggleClass('is-admin', isAdminAccount());
     $('.js-username-display').text("Bienvenue " + gameState.username);
     return true;
 }
@@ -236,6 +243,7 @@ function startGame() {
     $('.js-track-total').text(gameState.tracksByGame);
     $('.js-wrapper').removeClass('game_ended');
     $('.js-settings').removeClass('visible');
+    closeAdminGlitchGallery($);
     $('.js-wrapper').addClass('game_started');
     if (!isCodexMode()) {
         $('.js-score-wrapper').addClass('visible');
@@ -415,6 +423,8 @@ function logout() {
     gameState.username = '';
     gameState.playerData = {};
     clearStoredUsername();
+    $('body').removeClass('is-admin');
+    closeAdminGlitchGallery($);
     lockVignettesMode($);
     closeLeaderboard($);
     $('.js-settings').removeClass('visible');
@@ -570,8 +580,10 @@ function bindEvents() {
         });
 
         buildFavorites($);
-        buildAchievementsTab($);
-        buildGlobalTrophies($);
+        if (ACHIEVEMENTS_ENABLED) {
+            buildAchievementsTab($);
+            buildGlobalTrophies($);
+        }
         buildFoundTracks($);
     });
 
@@ -609,11 +621,17 @@ function init() {
     syncGenreSettingsVisibility($);
     updateAnswerModeUI($);
     syncStatsDifficultyColumns($);
-    loadAllAchievementDefinitions().catch(function (error) {
-        console.error('Failed to load achievement definitions', error);
-    });
+    if (ACHIEVEMENTS_ENABLED) {
+        loadAllAchievementDefinitions().catch(function (error) {
+            console.error('Failed to load achievement definitions', error);
+        });
+    } else {
+        $('.js-tab[rel="trophies"]').hide();
+        $('.js-tab-section[rel="trophies"]').hide();
+    }
     bindEvents();
     initFoundTracksReveal($);
+    initAdminGlitchGallery($);
 
     loadCoversManifest().catch(function (error) {
         console.warn('Failed to load covers manifest', error);

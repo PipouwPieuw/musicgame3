@@ -1,4 +1,5 @@
 import { filterPlayableTracks } from '../lib/track-utils.js';
+import { isAdminAccount } from '../lib/admin.js';
 import { gameState, isCodexMode } from '../game/state.js';
 import { getCatalogGenres } from '../services/tracks-loader.js';
 
@@ -10,6 +11,10 @@ function getFoundTrackIdsSet() {
 }
 
 function getGenreUnfoundCount(genre) {
+    if (isAdminAccount()) {
+        return 0;
+    }
+
     const foundIds = getFoundTrackIdsSet();
 
     return genre.playableTrackIds.filter(function (trackId) {

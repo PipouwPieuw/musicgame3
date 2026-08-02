@@ -1,12 +1,18 @@
 import { SHUFFLE } from '../config.js';
+import { isAdminAccount } from '../lib/admin.js';
 import { shuffleArray } from '../lib/shuffle.js';
 import { gameState, isCodexMode, isImageAnswerMode } from './state.js';
 
 /**
  * Playable catalog tracks that the player has found in Codex mode.
  * Used as the exclusive pool for Vignettes setlist and image distractors.
+ * Admin: full current catalog (virtual found, no profile mutation).
  */
 export function getFoundPlayableTracks() {
+    if (isAdminAccount()) {
+        return gameState.tracks;
+    }
+
     const foundIds = new Set(gameState.playerData?.foundTracksIds || []);
 
     return gameState.tracks.filter(function (track) {
@@ -28,6 +34,11 @@ export function getUnfoundPlayableTracks() {
 
 /** Catalog pool for the active mode. */
 export function getTracksForCurrentMode() {
+    // Admin: full catalog in both modes so Codex stays playable for testing.
+    if (isAdminAccount()) {
+        return gameState.tracks;
+    }
+
     if (isImageAnswerMode()) {
         return getFoundPlayableTracks();
     }

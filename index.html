@@ -261,6 +261,23 @@
                 <button class="start_game button_big js-play-track">Lancer la partie</button>
             </div>
         </div>
+        <div class="settings_panel panel_box js-settings js-admin-settings">
+            <span class="panel_box__title">Admin</span>
+            <div class="settings_panel__box panel_box__box">
+                <div class="settings_panel__inner">
+                    <div class="settings_panel__line">
+                        <button type="button" class="button_default js-toggle-glitch-gallery">Voir tous les effets du mode glitch</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="glitch_gallery js-glitch-gallery">
+            <div class="glitch_gallery__header">
+                <span class="glitch_gallery__title">Effets du mode glitch</span>
+                <button type="button" class="button_default js-close-glitch-gallery" aria-label="Fermer" title="Fermer">Fermer</button>
+            </div>
+            <ul class="list_answers glitch_gallery__list js-glitch-gallery-list is-ready" aria-label="Galerie des effets du mode glitch"></ul>
+        </div>
         <div class="end_game">
             <span class="end_game__title">Jeu terminé</span>
             <div class="end_game__score_wrapper">

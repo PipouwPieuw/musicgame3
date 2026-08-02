@@ -1,0 +1,86 @@
+// Admin-only settings panel + glitch variation gallery.
+
+body:not(.is-admin) .js-admin-settings {
+	display: none;
+}
+
+.glitch_gallery {
+	display: none;
+	position: fixed;
+	inset: 0;
+	z-index: 40;
+	flex-direction: column;
+	gap: 12px;
+	padding: 70px 15px 15px;
+	background: rgba(255, 255, 255, 0.97);
+	overflow: auto;
+
+	@media only screen and (max-width: 640px) {
+		padding-top: 55px;
+	}
+
+	&.visible {
+		display: flex;
+	}
+}
+
+.glitch_gallery__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	flex-shrink: 0;
+	max-width: 800px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.glitch_gallery__title {
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.glitch_gallery__list.list_answers {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	pointer-events: auto;
+	max-width: 800px;
+	width: 100%;
+	margin: 0 auto;
+	height: auto;
+	row-gap: 18px;
+}
+
+// Override menu-mode hide of .list_answers (see _wrapper.scss).
+#wrapper:not(.game_started) .glitch_gallery .list_answers {
+	display: flex;
+}
+
+// Beat .list_answers__item--avatar (aspect-ratio + mobile max-height) so the
+// label sits in the item flow and is not covered by the next row.
+.glitch_gallery__item.list_answers__item--avatar {
+	aspect-ratio: auto;
+	max-height: none;
+	height: auto;
+	flex-direction: column;
+	align-items: stretch;
+	overflow: visible;
+
+	.list_answers__avatar {
+		aspect-ratio: 1 / 1;
+		width: 100%;
+		height: auto;
+		flex-shrink: 0;
+	}
+}
+
+.glitch_gallery__label {
+	display: block;
+	flex-shrink: 0;
+	margin-top: 4px;
+	font-size: 10px;
+	line-height: 1.2;
+	text-align: center;
+	word-break: break-word;
+}

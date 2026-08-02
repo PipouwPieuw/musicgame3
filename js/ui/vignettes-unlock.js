@@ -9,6 +9,7 @@ import {
 } from '../config.js';
 import { applyDifficulty, updateDifficultyUI } from '../game/difficulty.js';
 import { gameState, isImageAnswerMode } from '../game/state.js';
+import { isAdminAccount } from '../lib/admin.js';
 
 /** Set when unlock happens mid-session so the expand animation can play on return to settings. */
 let pendingVignettesReveal = false;
@@ -17,6 +18,9 @@ let pendingVignettesReveal = false;
 let pendingDifficultyRevealLevels = [];
 
 export function isVignettesUnlocked(playerData) {
+    if (isAdminAccount()) {
+        return true;
+    }
     return (playerData?.foundTracksIds?.length || 0) >= VIGNETTES_UNLOCK_THRESHOLD;
 }
 
@@ -169,6 +173,10 @@ export function getVignettesDifficultyUnlockMessage(level, playerData) {
 export function isVignettesDifficultyUnlocked(level, playerData) {
     if (!VIGNETTES_DIFFICULTY_ENABLED[level]) {
         return false;
+    }
+
+    if (isAdminAccount()) {
+        return true;
     }
 
     if (!isVignettesUnlocked(playerData)) {

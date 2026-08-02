@@ -1,5 +1,6 @@
 import { getAchievementDefinitions } from './loader.js';
 import { evaluateCondition } from './evaluator.js';
+import { isAdminAccount } from '../lib/admin.js';
 
 function getUnlockedIds(playerData) {
     return new Set((playerData.unlockedAchievements || []).map(function (entry) {
@@ -40,6 +41,9 @@ export function checkPersonalAchievements(playerData, sessionContext) {
 }
 
 export function isAchievementUnlocked(playerData, achievementId) {
+    if (isAdminAccount()) {
+        return true;
+    }
     return getUnlockedIds(playerData).has(achievementId);
 }
 

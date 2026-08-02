@@ -1,3 +1,4 @@
+import { ACHIEVEMENTS_ENABLED } from '../config.js';
 import { savePlayerProfile } from '../services/player-api.js';
 import { gameState } from '../game/state.js';
 import { checkGlobalTrophyChanges } from './global.js';
@@ -5,6 +6,9 @@ import { checkPersonalAchievements } from './personal.js';
 import { playRevealQueue } from './reveal.js';
 
 export async function processPostGameAchievements($, sessionContext) {
+    if (!ACHIEVEMENTS_ENABLED) {
+        return;
+    }
     if (!gameState.username || !gameState.playerData) {
         return;
     }

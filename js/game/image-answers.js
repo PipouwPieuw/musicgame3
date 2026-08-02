@@ -168,6 +168,88 @@ function escapeCssUrl(path) {
     return String(path).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
 
+function isHalfFoldGlitch(glitch) {
+    return Boolean(glitch && glitch.className === HALF_FOLD_CLASS);
+}
+
+/** Map whole-avatar alter class to a per-side class (--alter-X → --alter-base-X / --alter-fold-X). */
+function sideAlterClass(className, side) {
+    return String(className || '').replace('--alter-', '--alter-' + side + '-');
+}
+
+function applyFoldAlterTransformVars($avatar, className) {
+    if (className === 'list_answers__avatar--alter-mirror-x') {
+        $avatar.css('--alter-fold-sx', '-1');
+    } else if (className === 'list_answers__avatar--alter-mirror-y') {
+        $avatar.css('--alter-fold-sy', '-1');
+    } else if (className === 'list_answers__avatar--alter-rotate-cw') {
+        $avatar.css('--alter-fold-rotate', '90deg');
+    } else if (className === 'list_answers__avatar--alter-rotate-ccw') {
+        $avatar.css('--alter-fold-rotate', '-90deg');
+    }
+}
+
+function applySideAlter($avatar, alter, side) {
+    if (!alter || !alter.className) {
+        return;
+    }
+
+    $avatar.addClass(sideAlterClass(alter.className, side));
+
+    if (alter.invertAmount !== undefined) {
+        $avatar.css('--alter-' + side + '-invert', String(alter.invertAmount));
+    }
+
+    if (side === 'fold') {
+        applyFoldAlterTransformVars($avatar, alter.className);
+    }
+}
+
+/**
+ * Apply Glitched-mode CSS classes + vars onto a vignette avatar.
+ * Shared by in-game rounds and the admin glitch gallery.
+ * @param {JQuery} $avatar
+ * @param {string} coverPath
+ * @param {{ className: string, intensity: number, delay: string, speed: number, fold?: object } | null} glitch
+ * @param {{ className: string, invertAmount?: number } | { base?: object|null, fold?: object|null } | null} alter
+ *   Single alter = whole avatar (non half-fold). Dual `{ base, fold }` = per half on half-fold.
+ */
+export function applyAvatarEffects($avatar, coverPath, glitch, alter) {
+    if (glitch) {
+        $avatar.addClass(glitch.className);
+        const cssVars = {
+            '--cover-url': 'url("' + escapeCssUrl(coverPath) + '")',
+            '--glitch-intensity': String(glitch.intensity),
+            '--glitch-delay': glitch.delay,
+            '--glitch-speed': String(glitch.speed),
+        };
+        if (glitch.fold) {
+            cssVars['--glitch-fold-vert'] = String(glitch.fold.vert);
+            cssVars['--glitch-fold-side'] = String(glitch.fold.side);
+            cssVars['--glitch-fold-sx'] = String(glitch.fold.sx);
+            cssVars['--glitch-fold-sy'] = String(glitch.fold.sy);
+        }
+        $avatar.css(cssVars);
+    }
+
+    if (!alter) {
+        return;
+    }
+
+    // Dual per-half alters (half-fold).
+    if (Object.prototype.hasOwnProperty.call(alter, 'base') || Object.prototype.hasOwnProperty.call(alter, 'fold')) {
+        applySideAlter($avatar, alter.base, 'base');
+        applySideAlter($avatar, alter.fold, 'fold');
+        return;
+    }
+
+    // Whole-avatar alter (non half-fold glitches).
+    $avatar.addClass(alter.className);
+    if (alter.invertAmount !== undefined) {
+        $avatar.css('--alter-invert', String(alter.invertAmount));
+    }
+}
+
 export async function renderImageChoices($, choices) {
     const $list = $('.js-answers');
     $list.empty().removeClass('is-ready');
@@ -179,7 +261,10 @@ export async function renderImageChoices($, choices) {
     choices.forEach(function (choice, index) {
         const coverPath = coverPaths[index];
         const glitch = rollImageGlitch();
-        const alter = rollImageAlter();
+        // Half-fold: each half rolls its own alteration chance / type.
+        const alter = isHalfFoldGlitch(glitch)
+            ? { base: rollImageAlter(), fold: rollImageAlter() }
+            : rollImageAlter();
 
         const $item = $(
             '<li class="list_answers__item list_answers__item--avatar">' +
@@ -194,36 +279,13 @@ export async function renderImageChoices($, choices) {
         );
 
         const $avatar = $item.find('.list_answers__avatar');
-
-        if (glitch) {
-            $avatar.addClass(glitch.className);
-            const cssVars = {
-                '--cover-url': 'url("' + escapeCssUrl(coverPath) + '")',
-                '--glitch-intensity': String(glitch.intensity),
-                '--glitch-delay': glitch.delay,
-                '--glitch-speed': String(glitch.speed),
-            };
-            if (glitch.fold) {
-                cssVars['--glitch-fold-vert'] = String(glitch.fold.vert);
-                cssVars['--glitch-fold-side'] = String(glitch.fold.side);
-                cssVars['--glitch-fold-sx'] = String(glitch.fold.sx);
-                cssVars['--glitch-fold-sy'] = String(glitch.fold.sy);
-            }
-            $avatar.css(cssVars);
-        }
-
-        if (alter) {
-            $avatar.addClass(alter.className);
-            if (alter.invertAmount !== undefined) {
-                $avatar.css('--alter-invert', String(alter.invertAmount));
-            }
-        }
+        applyAvatarEffects($avatar, coverPath, glitch, alter);
 
         $item.find('img').on('error', function () {
             $(this).attr('src', DEFAULT_COVER_PATH);
             const $errAvatar = $(this).closest('.list_answers__avatar');
             if ($errAvatar.is('[class*="--glitch-"]')) {
-                $errAvatar.css('--cover-url', 'url("' + DEFAULT_COVER_PATH + '")');
+                $errAvatar.css('--cover-url', 'url("' + escapeCssUrl(DEFAULT_COVER_PATH) + '")');
             }
         });
 

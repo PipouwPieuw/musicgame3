@@ -1,4 +1,5 @@
 import { DEFAULT_COVER_PATH, NOT_FOUND_COVER_PATH } from '../config.js';
+import { isAdminAccount } from '../lib/admin.js';
 import { preloadImage } from '../lib/preload-image.js';
 import { gameState, isCodexMode } from '../game/state.js';
 
@@ -133,6 +134,9 @@ export function playAnswerRevealDismiss($) {
 }
 
 export function isTrackDiscovery(trackId) {
+    if (isAdminAccount()) {
+        return false;
+    }
     return (
         isCodexMode() &&
         !(gameState.playerData.foundTracksIds || []).includes(trackId)

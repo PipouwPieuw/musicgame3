@@ -26,11 +26,13 @@
 
 // ---------------------------------------------------------------------------
 // 1. Chromatic aberration — RGB channel split via drop-shadow
+// Filter is re-applied after alterations (see bottom) so --alter-img-filter stacks.
 // ---------------------------------------------------------------------------
 .list_answers__avatar--glitch-chroma .list_answers__img {
 	--_shift: calc(2px + 10px * var(--glitch-intensity, 0.5));
 
 	filter:
+		var(--alter-img-filter, brightness(1))
 		drop-shadow(calc(var(--_shift) * -1) 0 0 rgba(255, 0, 60, 0.75))
 		drop-shadow(var(--_shift) 0 0 rgba(0, 220, 255, 0.75));
 	animation: image-glitch-chroma calc(1.1s * var(--glitch-speed, 1)) steps(2, end)
@@ -93,11 +95,14 @@
 
 // ---------------------------------------------------------------------------
 // 3. Filter stack — contrast / hue / saturation corruption
+// --alter-img-filter is composed in so greyscale / invert / contrast still apply
+// (keyframes must include it too, or they would wipe the alteration).
 // ---------------------------------------------------------------------------
 .list_answers__avatar--glitch-filter .list_answers__img {
-	--_i: calc(10 * var(--glitch-intensity, 0.5));
+	--_i: calc(2 * var(--glitch-intensity, 0.5));
 
 	filter:
+		var(--alter-img-filter, brightness(1))
 		contrast(calc(1 + 0.7 * var(--_i)))
 		saturate(calc(1.3 - 0.9 * var(--_i)))
 		brightness(calc(1 + 0.12 * var(--_i)))
@@ -110,6 +115,7 @@
 	0%,
 	100% {
 		filter:
+			var(--alter-img-filter, brightness(1))
 			contrast(calc(1 + 0.7 * var(--_i, 0.5)))
 			saturate(calc(1.3 - 0.9 * var(--_i, 0.5)))
 			brightness(calc(1 + 0.12 * var(--_i, 0.5)))
@@ -117,6 +123,7 @@
 	}
 	50% {
 		filter:
+			var(--alter-img-filter, brightness(1))
 			contrast(calc(1 + 0.9 * var(--_i, 0.5)))
 			saturate(calc(0.5 + 0.3 * var(--_i, 0.5)))
 			brightness(calc(0.95 + 0.05 * var(--_i, 0.5)))
@@ -156,39 +163,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// 5. Pixelation — low-res paint + scale up with image-rendering
-// ---------------------------------------------------------------------------
-.list_answers__avatar--glitch-pixel .list_answers__img {
-	/* Mild ≈ 28% source size; heavy ≈ 10% (chunkier pixels) */
-	--_res: calc(28 - 18 * var(--glitch-intensity, 0.5));
-	--intensity: calc(10 * var(--glitch-intensity, 0.5));
-
-	width: calc(var(--_res) * 1%);
-	height: calc(var(--_res) * 1%);
-	max-width: none;
-	object-fit: cover;
-	image-rendering: pixelated;
-	transform: scale(calc(100 / var(--_res)));
-	// transform-origin: top left;
-	animation: image-glitch-pixel calc(1.6s * var(--glitch-speed, 1)) steps(1, end)
-		var(--glitch-delay, 0s) infinite;
-}
-
-@keyframes image-glitch-pixel {
-	0%,
-	100% {
-		filter: none;
-	}
-	10% {
-		filter: contrast(calc(1.25 * var(--intensity))) brightness(calc(1.05 * var(--intensity)));
-	}
-	50% {
-		filter: contrast(calc(1.1 * var(--intensity) / 2)) saturate(calc(0.85 * var(--intensity) / 2));
-	}
-}
-
-// ---------------------------------------------------------------------------
-// 6. Tear / vertical jitter — subtle shake + skew
+// 5. Tear / vertical jitter — subtle shake + skew
 // ---------------------------------------------------------------------------
 .list_answers__avatar--glitch-jitter .list_answers__img {
 	--_amp: calc(0.5px + 2px * var(--glitch-intensity, 0.5));
@@ -217,10 +192,11 @@
 }
 
 // ---------------------------------------------------------------------------
-// 7. Half-fold — one half mirrored (8 variants via CSS vars set in JS)
+// 6. Half-fold — one half mirrored (8 variants via CSS vars set in JS)
 // --glitch-fold-vert: 0 = top/bottom split, 1 = left/right split
 // --glitch-fold-side: 0 = top or left, 1 = bottom or right
 // --glitch-fold-sx / --glitch-fold-sy: 1 or -1 (horizontal vs vertical mirror)
+// --alter-fold-sx / --alter-fold-sy / --alter-fold-rotate: per-side fold alterations
 // ---------------------------------------------------------------------------
 .list_answers__avatar--glitch-half-fold {
 	&::after {
@@ -237,24 +213,79 @@
 		background-position:
 			calc(var(--glitch-fold-vert, 0) * var(--glitch-fold-side, 0) * 100%)
 			calc((1 - var(--glitch-fold-vert, 0)) * var(--glitch-fold-side, 0) * 100%);
-		transform: scaleX(var(--glitch-fold-sx, 1)) scaleY(var(--glitch-fold-sy, -1));
+		transform: scaleX(calc(var(--glitch-fold-sx, 1) * var(--alter-fold-sx, 1)))
+			scaleY(calc(var(--glitch-fold-sy, -1) * var(--alter-fold-sy, 1)))
+			rotate(var(--alter-fold-rotate, 0deg));
 	}
 }
 
 // ---------------------------------------------------------------------------
-// Static alterations (one at a time) — applied on the avatar so they nest
-// with animated filter/transform on .list_answers__img
+// Static alterations — whole avatar (non half-fold), or per half on half-fold
+// (base = img, fold = ::after). Mirror/rotate on the avatar still flip both.
 // ---------------------------------------------------------------------------
 .list_answers__avatar[class*='--alter-'] {
 	overflow: hidden;
 }
 
-.list_answers__avatar--alter-greyscale img {
+.list_answers__avatar--alter-greyscale,
+.list_answers__avatar--alter-base-greyscale {
+	--alter-img-filter: grayscale(1);
+}
+
+.list_answers__avatar--alter-greyscale img,
+.list_answers__avatar--alter-base-greyscale img {
 	filter: grayscale(1);
+}
+
+.list_answers__avatar--alter-fold-greyscale {
+	--alter-fold-filter: grayscale(1);
+}
+
+.list_answers__avatar--alter-fold-greyscale.list_answers__avatar--glitch-half-fold::after {
+	filter: grayscale(1);
+}
+
+.list_answers__avatar--alter-invert {
+	--alter-img-filter: invert(var(--alter-invert, 0.25));
 }
 
 .list_answers__avatar--alter-invert img {
 	filter: invert(var(--alter-invert, 0.25));
+}
+
+.list_answers__avatar--alter-base-invert {
+	--alter-img-filter: invert(var(--alter-base-invert, 0.25));
+}
+
+.list_answers__avatar--alter-base-invert img {
+	filter: invert(var(--alter-base-invert, 0.25));
+}
+
+.list_answers__avatar--alter-fold-invert {
+	--alter-fold-filter: invert(var(--alter-fold-invert, 0.25));
+}
+
+.list_answers__avatar--alter-fold-invert.list_answers__avatar--glitch-half-fold::after {
+	filter: invert(var(--alter-fold-invert, 0.25));
+}
+
+// High contrast / brightness punch (formerly glitch-pixel’s static filter).
+.list_answers__avatar--alter-contrast,
+.list_answers__avatar--alter-base-contrast {
+	--intensity: calc(30 * var(--glitch-intensity, 0.5));
+	--alter-img-filter: contrast(calc(1.25 * var(--intensity))) brightness(calc(1.05 * var(--intensity)));
+}
+
+.list_answers__avatar--alter-fold-contrast {
+	--intensity: calc(30 * var(--glitch-intensity, 0.5));
+	--alter-fold-filter: contrast(calc(1.25 * var(--intensity))) brightness(calc(1.05 * var(--intensity)));
+}
+
+.list_answers__avatar--alter-contrast img,
+.list_answers__avatar--alter-base-contrast img,
+.list_answers__avatar--alter-fold-contrast.list_answers__avatar--glitch-half-fold::after {
+	--intensity: calc(30 * var(--glitch-intensity, 0.5));
+	filter: contrast(calc(1.25 * var(--intensity))) brightness(calc(1.05 * var(--intensity)));
 }
 
 .list_answers__avatar--alter-mirror-x {
@@ -271,4 +302,29 @@
 
 .list_answers__avatar--alter-rotate-ccw {
 	transform: rotate(-90deg);
+}
+
+.list_answers__avatar--alter-base-mirror-x .list_answers__img {
+	transform: scaleX(-1);
+}
+
+.list_answers__avatar--alter-base-mirror-y .list_answers__img {
+	transform: scaleY(-1);
+}
+
+.list_answers__avatar--alter-base-rotate-cw .list_answers__img {
+	transform: rotate(90deg);
+}
+
+.list_answers__avatar--alter-base-rotate-ccw .list_answers__img {
+	transform: rotate(-90deg);
+}
+
+// Chroma re-declares `filter` after alteration rules so drop-shadows are not
+// replaced by greyscale / invert / contrast (composed via --alter-img-filter).
+.list_answers__avatar--glitch-chroma .list_answers__img {
+	filter:
+		var(--alter-img-filter, brightness(1))
+		drop-shadow(calc(var(--_shift) * -1) 0 0 rgba(255, 0, 60, 0.75))
+		drop-shadow(var(--_shift) 0 0 rgba(0, 220, 255, 0.75));
 }
